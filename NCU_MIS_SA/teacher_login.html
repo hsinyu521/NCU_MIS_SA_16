@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新老師會員登入</title>
+    <link rel="stylesheet" type="text/css" href="statics/css/design_register.css">
+    <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+
+</head>
+<body>
+<div id="container">
+    <div id="header">
+        <a href="test.html"><img src="statics/img/Logo.png" alt="Logo" width="200" height="100"></a>
+    </div>
+
+    <div id="content">
+        <h1>老師會員登入</h1>
+        <div id="flashMessage" class="message" style="display: none;"></div>
+        <h3>請輸入您的會員資料</h3>
+
+            <form id="form" accept-charset="UTF-8" >
+                <div style="display:none;"><input type="hidden" name="_method" value="POST"></div>
+                <div id="input" style="border: none">
+
+                    <div class="input email required">
+                        <label for="member_email">email</label>
+                        <input type="email" name="email" maxlength="50" id="member_email" required="required">
+                    </div>
+
+                    <div class="input password required">
+                        <label for="member_password">密碼</label>
+                        <input type="password" name="password" maxlength="30" id="member_password" required="required">
+                    </div>
+                </div>
+                <div class="submit"><input type="button" value="登入" id="submit"></div>
+            </form>
+    </div>
+
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            var $form = $('#submit');
+            $form.click(function(){
+                submit();
+            });
+
+            function submit(){
+                var email = $('#member_email').val();
+                var password = $('#member_password').val();
+
+                var email_rule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+                var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+                if (!email_rule.test(email)) {
+                    alert("Email格式不符！");
+                }
+                else if(!password_rule.test(password)) {
+                    alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
+                }
+                else{
+                	
+                    // 將資料組成JSON格式
+                    var data_object = {
+                        "email":email,
+                        "password":password,
+                    };
+                    // 將JSON格式轉換成字串
+                    var data_string = JSON.stringify(data_object);
+                 
+                    alert(email);
+                    alert(password);
+                    alert("good!要比對資料");
+				  
+				  
+                    // 發出POST的AJAX請求
+                   /* $.ajax({
+                        type: "POST",
+                        url: "api/teacher.do",
+                        data: data_string,
+                        crossDomain: true,
+                        cache: false,
+                        dataType: 'json',
+                        timeout: 5000,
+                        success: function (response) {
+                            alert("get respose");
+                            $('#flashMessage').html(response.message);
+                            $('#flashMessage').show();
+                            if(response.status == 200){
+                                updateSQLTable(response.response);
+                            }
+                        },
+                        error: function () {
+                            alert("無法連線到伺服器！");
+                        }
+                    
+                    });*/
+                }
+
+
+            }
+
+        });
+
+    </script>
+
+</div>
+</body>
+</html>

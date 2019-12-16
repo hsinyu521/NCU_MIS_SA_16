@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>家長面試管理</title>
+    <link rel="stylesheet" type="text/css" href="statics/css/design_register.css">
+    <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+
+</head>
+<body>
+<div id="container">
+    <div id="header">
+        <a href="index.html"><img src="statics/img/Logo.png" alt="Logo" width="200" height="100" align="left"></a>
+        <h1>家長面試管理</h1>
+    </div>
+    <div id="content">
+    	<form id="caseID">
+			<select name="YourLocation">
+　				<option value="Taipei">台北</option>
+　				<option value="Taoyuan">桃園</option>
+　				<option value="Hsinchu">新竹</option>
+　				<option value="Miaoli">苗栗</option>
+			</select>
+		</form>
+		
+        <h3>請選擇欲成交之老師姓名</h3>
+  
+        <div id="flashMessage" class="message" style="display: none;"></div>
+
+        <table id="table">
+            <thead>
+            <tr>
+                <th>老師會員姓名</th>
+                <th>老師會員手機</th>    
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <hr>
+        
+ 		
+   			 <div class="item">
+  	 			 <div class="main">家長會員中心</div>
+  					 <div class="sub">
+        				<ul>
+         			  	 <li><a href="index.html">修改家長會員資料</a></li>
+          			 	 <li><a href="index.html">新增案件</a></li>
+          			 	 <li><a href="index.html">面試管理</a></li>
+          			 	 <li><a href="index.html">管理案件狀態</a></li>
+          			 	 <li><a href="index.html">成交紀錄</a></li>
+       					 </ul>
+   					 </div>
+   			 </div>    
+   			
+        
+        <script type="text/javascript">
+            // 全域變數紀錄SQL指令下的次數
+            var sql_num = 0;
+
+            function getAllMember() {
+                // 發出POST的GET請求取得所有會員列表
+                $.ajax({
+                    type: "GET",
+                    url: "api/member.do",
+                    crossDomain: true,
+                    cache: false,
+                    dataType: 'json',
+                    timeout: 5000,
+                    success: function (response) {
+                        if(response.status == 200){
+                            updateTable(response.response.data);
+                            updateSQLTable(response.response);
+                        }
+                        console.log(response);
+                    },
+                    error: function () {
+                        alert("無法連線到伺服器！");
+                    }
+                });
+            }
+
+            // 更新會員列表表格
+            function updateTable(data) {
+                $("#table > tbody").empty();
+                var table_html = '';
+                $.each(data, function(index, value) {
+                    table_html += '<tr><td scope="row">' + value['name'] + '</td>';
+                    table_html += '<td>' + value['status'] + '</td>';
+                })
+
+                $("#table > tbody").append(table_html);
+            }
+
+            // 更新SQL指令歷史表格
+            function updateSQLTable(data) {
+                $("#sql_log > tbody").empty();
+                var time = (data.time / 1000000).toFixed(2);
+                var table_html = "";
+
+                sql_num = 0;
+                sql_num += 1
+
+                table_html += '<tr>';
+                table_html += '<td>' + sql_num + '</td>';
+                table_html += '<td>' + data.sql + '</td>';
+                table_html += '<td style="text-align: right">' + '0' + '</td>';
+                table_html += '<td style="text-align: right">' + data.row + '</td>';
+                table_html += '<td style="text-align: right">' + data.row + '</td>';
+                table_html += '<td style="text-align: right">' + time + '</td>';
+                table_html += '</tr>';
+                $("#sql_log > tbody").append(table_html);
+                $("#sql_summary").html("(default) " + data.row + " queries took " + time + " ms");
+            }
+            $(document).ready(function() {
+                getAllMember();
+            });
+        </script>
+    </div>
+    
+</div>
+
+</body>
+</html>
