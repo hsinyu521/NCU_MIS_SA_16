@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>家長會員登入</title>
+
+    <script src="statics/jquery-3.4.1.min.js" ></script>
+    <link rel="stylesheet" type="text/css" href="statics/css/design_register.css">
+
+</head>
+
+
+<body>	
+	<div id="container">
+
+		<div id="header">
+			<img src="logo.png" alt="Italian Trulli" width="80" height="60">		
+		</div>
+
+		<div id="content">
+			<h1>登入家長會員</h1>
+
+			<div id="next_content">
+				<h3>請輸入您的帳號(email)密碼</h3>
+
+				<form id="form" accept-charset="UTF-8" >
+
+					<div style="display:none;"><input type="hidden" name="_method" value="POST"></div>
+
+					<div id="input" style="border: none">
+						<div class="input email required">
+							<label for="member_email">email</label>
+							<input type="email" name="email" maxlength="50" id="member_email" required="required">
+						</div>
+
+						<div class="input password required">
+							<label for="member_password">密碼</label>
+							<input type="passward" name="passward" maxlength="30" id="member_password" required="required">
+						</div>
+					</div>
+
+					<div class="submit"><input type="button" value="登入" id="submit"></div>
+			
+
+				</form>
+			</div>
+		</div>
+	
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+				var $form = $('#submit');
+				$form.click(function () {
+					submit();
+				});
+
+				function submit() {
+					var email = $('#member_email').val();
+					var password = $('#member_passward').val();
+
+					var email_rule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+					var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+					if (!email_rule.test(email)) {
+						alert("Email格式不符！");
+					} else if (!password_rule.test(password)) {
+						alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
+					} else {
+						var data_object = {
+							"email": email,
+							"password": password,
+						};
+
+						var data_string = JSON.stringify(data_object);
+
+						$.ajax({
+							type: "POST",
+							url: "api/member.do",
+							data: data_string,
+							crossDomain: true,
+							cache: false,
+							dataType: 'json',
+							timeout: 5000,
+							success: function (response) {
+								$('#flashMessage').html(response.message);
+								$('#flashMessage').show();
+								if (response.status == 200) {
+									updateSQLTable(response.response);
+								}
+							},
+							error: function () {
+								alert("無法連線到伺服器！");
+							}
+						});
+					}
+				}
+			})
+			
+		</script>
+
+	</div>
+</body>
+</html>

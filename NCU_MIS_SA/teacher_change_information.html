@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>老師會員更改資訊</title>
+
+    <script src="statics/jquery-3.4.1.min.js" ></script>
+    <link rel="stylesheet" type="text/css" href="statics/css/teacher_change.css">
+
+</head>
+
+
+<body>	
+	<div id="container">
+		<div id="header">
+			<img src="logo.png" alt="Italian Trulli" width="80" height="60"><h1>老師會員更改資訊</h1><h5>XXX老師您好</h5>
+		</div>
+			
+		<div id="content">
+
+					<form>
+						
+						<div style="display:none;"><input type="hidden" name="_method" value="POST"></div>
+
+					<div id="input" style="border: none">
+
+						<div class="input email required">
+							<label for="member_email">請輸入舊密碼</label>
+							<input type="email" name="email" maxlength="50" id="member_email" required="required">
+						</div>
+
+						<div class="input password required">
+							<label for="member_password">請輸入新密碼</label>
+							<input type="passward" name="passward" maxlength="30" id="member_password" required="required">
+						</div>
+
+						<div class="input tel required">
+							<label for="member_tel">請輸入新手機</label>
+							<input type="tel" name="tel" maxlength="10" id="member_tel" required="required">
+						</div>
+
+					</div>
+
+					<div class="submit"><input type="button" value="修改" id="submit"></div>
+						
+
+
+						
+
+					</form>
+
+			
+		</div>
+
+		<div id="table2">
+			<a href="log_in.html" class="button"><input type="button" value="修改老師會員資訊"  id="teacher_information"></a><br>
+			<a href="log_in.html" class="button"><input type="button" value="面試管理"  id="interview"></a><br>
+			<a href="log_in.html" class="button"><input type="button" value="成交紀錄"  id="closing"></a>
+
+
+		</div>
+	</div>
+</body>
+</html>
