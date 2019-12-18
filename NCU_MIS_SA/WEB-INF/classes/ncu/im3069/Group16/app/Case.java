@@ -48,8 +48,8 @@ public class Case{
     private CaseHelper ch = CaseHelper.getHelper();
 
     /**
-     * 實例化（Instantiates）一個新的（new）Order 物件<br>
-     * 採用多載（overload）方法進行，此建構子用於建立案件資料時，產生一個新的案件
+     * *實例化（Instantiates）一個新的（new）Order 物件<br>
+     ** 採用多載（overload）方法進行，此建構子用於建立案件資料時，產生一個新的案件
      *
      * @param parent_id 外鍵：家長id
      * @param grade 教學對象 
@@ -65,6 +65,7 @@ public class Case{
      */
     public Case(int parent_id,String grade,int subject,int teach_county, int teach_region
     		,int wage,String teachtime, int state) {
+    	//1218 min 我覺得不需要state, create, modify，少了teachExperience,多了state
     			this.parent_id=parent_id;
     			this.grade=grade;
     			this.subject=subject;
@@ -75,8 +76,8 @@ public class Case{
     }
 
     /**
-     * 實例化（Instantiates）一個新的（new）Order 物件<br>
-     * 採用多載（overload）方法進行，此建構子用於修改案件資料時，新改資料庫已存在的案件
+     * *實例化（Instantiates）一個新的（new）Order 物件<br>
+     * *採用多載（overload）方法進行，此建構子用於修改案件資料時，新改資料庫已存在的案件
      *
      * @param parent_id 外鍵：家長id
      * @param grade 教學對象 
@@ -92,6 +93,7 @@ public class Case{
      */
     public Case(int id,String grade,int subject,int teach_county, int teach_region
     		,int wage,String teachtime, int state,Timestamp modified,Timestamp created) {
+    	//1218 min 這感覺不會有最後兩個時間的參數，在helper中直接把當下時間塞進sql語法就好(可以參考更新老師會員資料)
         this.id = id;
 		this.grade=grade;
 		this.subject=subject;
@@ -102,18 +104,17 @@ public class Case{
 		this.state=state;
 		this.modified=modified;
 		this.created=created;
-
     }
 
     /**
-     * 設定案件id和編號
+     * *設定案件id和編號
      */
     public void setId(int id) {
         this.id = id;
     }
 
     /**
-     * 取得案件id編號
+     * *取得案件id編號
      *
      * @return int 回傳訂單編號
      */
@@ -122,7 +123,7 @@ public class Case{
     }
 
     /**
-     * 取得案件家長聯絡人
+     * *取得案件家長聯絡人
      *
      * @return int 回傳家長id
      */
@@ -131,7 +132,7 @@ public class Case{
     }
 
     /**
-     * 取得案件教學對象
+     * *取得案件教學對象
      *
      * @return String 回傳教學對象
      */
@@ -140,7 +141,7 @@ public class Case{
     }
     
     /**
-     * 取得案件科目
+     * *取得案件科目
      *
      * @return int 回傳案件科目
      */
@@ -149,7 +150,7 @@ public class Case{
     }
 
     /**
-     * 取得案件教學縣市
+     * *取得案件教學縣市
      *
      * @return int 回傳案件教學地點
      */
@@ -158,7 +159,7 @@ public class Case{
     }
     
     /**
-     * 取得案件教學地點
+     * *取得案件教學地點
      *
      * @return int 回傳案件教學地點
      */
@@ -167,7 +168,7 @@ public class Case{
     }
     
     /**
-     * 取得案件時薪
+     ** 取得案件時薪
      *
      * @return int 回傳時薪
      */
@@ -176,7 +177,7 @@ public class Case{
     }
     
     /**
-     * 取得案件教學時間
+     * *取得案件教學時間
      *
      * @return String 回傳案件教學時間
      */
@@ -185,7 +186,7 @@ public class Case{
     }
     
     /**
-     * 取得案件教學經驗要求
+     * *取得案件教學經驗要求
      *
      * @return int 回傳教學經驗要求
      */
@@ -194,7 +195,7 @@ public class Case{
     }
     
     /**
-     * 取得案件狀態
+     * *取得案件狀態
      *
      * @return int 回傳案件狀態
      */
@@ -203,7 +204,7 @@ public class Case{
     }
 
     /**
-     * 取得案件創建時間
+     ** 取得案件創建時間
      *
      * @return Timestamp 回傳案件創建時間
      */
@@ -220,11 +221,30 @@ public class Case{
         return this.modified;
     }
 
-
-
+    /**
+     * *更新案件資料
+     *
+     * @return the JSON object 回傳SQL更新之結果與相關封裝之資料
+     */
+    public JSONObject update() {	//1218 min
+        /** 新建一個JSONObject用以儲存更新後之資料 */
+        JSONObject data = new JSONObject();
+        /** 檢查該名會員是否已經在資料庫 */
+        if(this.id != 0) {
+        	/** 若有則將目前更新後之資料更新至資料庫中 */
+        	//ch.updateLoginTimes(this);
+        	
+        	/** 透過CaseHelper物件，更新目前之老師會員資料置資料庫中
+        	 * *傳入此Case物件並回傳一個JSONObject物件
+        	 */
+        	data = ch.update(this);
+        }
+        
+        return data;
+    }
 
     /**
-     * 取得案件基本資料
+     * *取得案件基本資料
      *
      * @return JSONObject 取得案件基本資料
      */
