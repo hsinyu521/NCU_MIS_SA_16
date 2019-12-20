@@ -18,36 +18,32 @@
 			
 		<div id="content">
 
-					<form>
+					<form id='form'>
 						
 						<div style="display:none;"><input type="hidden" name="_method" value="POST"></div>
 
-					<div id="input" style="border: none">
+						<div id="input" style="border: none">
 
-						<div class="input email required">
-							<label for="member_email">請輸入舊密碼</label>
-							<input type="email" name="email" maxlength="50" id="member_email" required="required">
+							<div class="input oldpwd required">
+								<label for="member_oldpwd">輸入新密碼</label>
+								<input type="password" name="member_oldpwd" maxlength="50" id="member_oldpwd" required="required">
+							</div>
+
+							<div class="input newpwd required">
+								<label for="member_newpwd">確認新密碼</label>
+								<input type="password" name="member_newpwd" maxlength="30" id="member_newpwd" required="required">
+							</div>
+
+							<div class="input tel required">
+								<label for="member_tel">輸入新手機</label>
+								<input type="text" name="tel" maxlength="10" id="member_tel" required="required">
+							</div>
+
 						</div>
 
-						<div class="input password required">
-							<label for="member_password">請輸入新密碼</label>
-							<input type="passward" name="passward" maxlength="30" id="member_password" required="required">
-						</div>
-
-						<div class="input tel required">
-							<label for="member_tel">請輸入新手機</label>
-							<input type="tel" name="tel" maxlength="10" id="member_tel" required="required">
-						</div>
-
-					</div>
-
-					<div class="submit"><input type="button" value="修改" id="submit"></div>
+						<div class="submit"><input type="button" value="修改" id="submit"></div>
 						
-
-
-						
-
-					</form>
+				</form>
 
 			
 		</div>
@@ -56,9 +52,72 @@
 			<a href="log_in.html" class="button"><input type="button" value="修改老師會員資訊"  id="teacher_information"></a><br>
 			<a href="log_in.html" class="button"><input type="button" value="面試管理"  id="interview"></a><br>
 			<a href="log_in.html" class="button"><input type="button" value="成交紀錄"  id="closing"></a>
-
-
 		</div>
 	</div>
 </body>
+
+		<script type="text/javascript">
+		$(document).ready(function(){
+				var $form = $('#submit');
+				$form.click(function(){
+					submit();
+				});
+			//	gettel();
+			});
+               function gettel(){
+					$.ajax({
+							type: "POST",
+							url: "api/member.do",
+							cache: false,
+							dataType: 'json',
+							timeout: 5000,
+							success: function (response) {
+								$('#member_tel').val(response.tel);
+							},
+							error: function () {
+								alert("無法連線到伺服器！");
+							}
+					});//ajax end
+			   }
+				function submit(){
+
+					var member_oldpwd = $('#member_oldpwd').val();
+					var member_newpwd = $('#member_newpwd').val();
+				    var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+					if (member_oldpwd!=member_newpwd){
+					   alert("密碼確認錯誤，請重新輸入！");
+					}
+                    else if(!password_rule.test(member_newpwd)) {
+                            alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
+                        }
+                    else{
+
+					   var form = $('#form');
+                    	$.ajax({
+                                    type: "POST",
+                                    url: "api/member.do",
+                                    data: form.serialize(),
+                                    cache: false,
+                                    dataType: 'json',
+                                    timeout: 5000,
+                                    success: function (response) {
+                                        $('#flashMessage').html(response.message);
+                                        $('#flashMessage').show();
+                                        if(response.status == 200){
+                                            updateSQLTable(response.response);
+                                        }
+                                    },
+                                    error: function () {
+                                        alert("無法連線到伺服器！");
+                                    }
+                            });//ajax end
+                    }//else end
+				}//submit end
+
+
+		</script>
+
+
+
+		
 </html>

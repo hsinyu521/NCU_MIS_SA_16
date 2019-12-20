@@ -18,7 +18,7 @@
 			<img src="logo.png" alt="Italian Trulli" width="80" height="60">	
 		</div>
 	
-
+		 <form id="form" method="post" name="fmadd" accept-charset="UTF-8">
 		<div id="content">
 			<h1 id="new">新增案件</h1>
 <!-- 			<div id="next_content"></div> -->
@@ -30,13 +30,13 @@
 		  
 		  <tr>
 		    <td>對象:
-		    	<select>
+		    	<select name="school">
 		  			<option value="primary">國小</option>
 		  			<option value="junior">國中</option>
 		  			<option value="senior">高中</option>
 		  			<option value="university">大學</option>
 				</select>
-		        <select>
+		        <select name="years">
 		  			<option value="one">一年級</option>
 		  			<option value="two">二年級</option>
 		  			<option value="three">三年級</option>
@@ -46,7 +46,7 @@
 				</select>
 		    </td>
 		    <td>教學經歷:
-		    	<select>
+		    	<select name="express">
 		  			<option value="no">無經驗</option>
 		  			<option value="one_year">一年以下</option>
 		  			<option value="two_years">兩年以下</option>
@@ -59,65 +59,19 @@
 		  
 		  <tr>
 		    <td>上課科目:
-		    	國<input type="radio" name="subject">
-		        英<input type="radio" name="subject">
-		        數<input type="radio" name="subject">
-		        物<input type="radio" name="subject">
-		        化<input type="radio" name="subject">
-		        生<input type="radio" name="subject">
+		    	國<input type="radio" value="國" name="subject">
+		        英<input type="radio" value="英" name="subject">
+		        數<input type="radio" value="數" name="subject">
+		        物<input type="radio" value="物" name="subject">
+		        化<input type="radio" value="化" name="subject">
+		        生<input type="radio" value="生" name="subject">
 		    </td>
 		  </tr>
 		  
 		  <tr>
 		    <td>上課地點:
-
-		    	<form>
-					<select id="county-list" onchange="changeCollege(this.selectedIndex)"></select>
-					<select id="area-list"></select>
-				</form>
-		
-				<script type="text/javascript">
-					var colleges=['台北市','新北市','桃園市','新竹','苗栗縣','台中市','彰化縣','雲林縣','嘉義','台南市','高雄市','屏東縣','基隆市','宜蘭縣','花蓮縣','台東縣','南投縣','澎湖縣','金門縣','連江縣'];
-					var collegeSelect=document.getElementById("county-list");
-					var inner="";
-					for(var i=0;i<colleges.length;i++){
-						inner=inner+'<option value=i>'+colleges[i]+'</option>';
-					}
-					collegeSelect.innerHTML=inner;
-					
-					
-					var sectors=new Array();
-					sectors[0]=['士林區','大同區','大安區','中山區','中正區','內湖區','文山區','北投區','松山區','信義區','南港區','萬華區'];
-					sectors[1]=['板橋區','中和區','永和區','土城區','三峽區','鶯歌區','樹林區','新莊區','三重區','蘆洲區','五股區','泰山區','林口區','八里區','淡水區','三芝區','石門區','金山區','萬里區','汐止區','瑞芳區	','貢寮區','平溪區','雙溪區','新店區','深坑區','石碇區','坪林區	','烏來區'];	
-					sectors[2]=['桃園區','八德區','龜山區','蘆竹區','大園區','大溪區','中壢區','平鎮區','楊梅區','龍潭區','新屋區','觀音區','復興區'];	
-					sectors[3]=['竹北市','關西鎮','新埔鎮','竹東鎮','湖口鄉','橫山鄉','新豐鄉','芎林鄉','寶山鄉','北埔鄉','峨眉鄉	','尖石鄉','五峰鄉','東區','北區','香山區'];
-					sectors[4]=['苗栗市','頭份市','苑裡鎮','通霄鎮','竹南鎮','後龍鎮','卓蘭鎮','大湖鄉','公館鄉','銅鑼鄉','南庄鄉','頭屋鄉','三義鄉','西湖鄉','造橋鄉','三灣鄉','獅潭鄉','獅潭鄉']
-					sectors[5]=['中區','東區','南區','西區','北區','北屯區','西屯區','南屯區','太平區','大里區','霧峰區','烏日區','豐原區','后里區','石岡區','東勢區','和平區','新社區','潭子區','大雅區','神岡區','大肚區','龍井區','沙鹿區','梧棲區','清水區','大甲區','外埔區','大安區'];
-					sectors[6]=['彰化市','員林市','鹿港鎮','和美鎮','北斗鎮','溪湖鎮','田中鎮','二林鎮','線西鄉','伸港鄉','福興鄉','秀水鄉','花壇鄉','芬園鄉','大村鄉','埔鹽鄉','埔心鄉','永靖鄉','社頭鄉','二水鄉','田尾鄉','埤頭鄉','芳苑鄉','大城鄉','竹塘鄉','溪州鄉'];
-					sectors[7]=['斗六市','斗南鎮','虎尾鎮','西螺鎮','土庫鎮','北港鎮','古坑鄉','大埤鄉','莿桐鄉','林內鄉','二崙鄉','崙背鄉','麥寮鄉','東勢鄉','褒忠鄉','臺西鄉','元長鄉','四湖鄉','口湖鄉','水林鄉'];
-					sectors[8]=['太保市','朴子市','布袋鎮','大林鎮','民雄鄉','溪口鄉','新港鄉','六腳鄉','東石鄉','義竹鄉','鹿草鄉','水上鄉','中埔鄉','竹崎鄉','梅山鄉','番路鄉','大埔鄉','阿里山鄉','東區','西區'];
-					sectors[9]=['中西區','東區','南區','北區','安平區','安南區','新營區','鹽水區','白河區','柳營區','後壁區','東山區','麻豆區','下營區','六甲區','官田區','大內區','佳里區','學甲區','西港區','七股區','將軍區','北門區','新化區','善化區','新市區','安定區','山上區','玉井區','楠西區','南化區','左鎮區','仁德區','歸仁區','關廟區','龍崎區','永康區'];
-					sectors[10]=['鹽埕區','鼓山區','左營區','楠梓區','三民區','新興區','前金區','苓雅區','前鎮區','旗津區','小港區','鳳山區','林園區','大寮區','大樹區','大社區','仁武區','鳥松區','岡山區','橋頭區','燕巢區','田寮區','阿蓮區','路竹區','湖內區','茄萣區','永安區','彌陀區','梓官區','旗山區','美濃區','六龜區','甲仙區','杉林區','內門區','茂林區','桃源區','那瑪夏區'];
-					sectors[11]=['屏東市','潮州鎮','東港鎮','恆春鎮','萬丹鄉','長治鄉','麟洛鄉','九如鄉','里港鄉','鹽埔鄉','高樹鄉','萬巒鄉','內埔鄉','竹田鄉','新埤鄉','枋寮鄉','新園鄉','崁頂鄉','林邊鄉','南州鄉','佳冬鄉','琉球鄉','車城鄉','滿州鄉','枋山鄉','三地門鄉','霧臺鄉','瑪家鄉','泰武鄉','來義鄉','春日鄉','獅子鄉','牡丹鄉'];
-		            sectors[12]=['中正區','七堵區','暖暖區','仁愛區','中山區','安樂區','信義區']
-		            sectors[13]=['宜蘭市','羅東鎮','蘇澳鎮','頭城鎮','礁溪鄉','壯圍鄉','員山鄉','冬山鄉','五結鄉','三星鄉','大同鄉','南澳鄉']
-		            sectors[14]=['花蓮市','鳳林鎮','玉里鎮','新城鄉','吉安鄉','壽豐鄉','光復鄉','豐濱鄉','瑞穗鄉','富里鄉','秀林鄉','萬榮鄉','卓溪鄉']
-		            sectors[15]=['臺東市','成功鎮','關山鎮','卑南鄉','大武鄉','太麻里鄉','東河鄉','長濱鄉','鹿野鄉','池上鄉','綠島鄉','延平鄉','海端鄉','達仁鄉','金峰鄉','蘭嶼鄉']
-		            sectors[16]=['南投市','埔里鎮','草屯鎮','竹山鎮','集集鎮','名間鄉','鹿谷鄉','中寮鄉','魚池鄉','國姓鄉','水里鄉','信義鄉','仁愛鄉']
-		            sectors[17]=['馬公市','湖西鄉','白沙鄉','西嶼鄉','望安鄉','七美鄉']
-		            sectors[18]=['金城鎮','金湖鎮','金沙鎮','金寧鄉','烈嶼鄉','烏坵鄉']
-		            sectors[19]=['南竿鄉','北竿鄉','莒光鄉','東引鄉']
-					function changeCollege(index){
-						var Sinner="";
-						for(var i=0;i<sectors[index].length;i++){
-							Sinner=Sinner+'<option value=i>'+sectors[index][i]+'</option>';
-						}
-						var sectorSelect=document.getElementById("area-list");
-						sectorSelect.innerHTML=Sinner;
-					}
-					changeCollege(document.getElementById("county-list").selectedIndex);
-				</script>
-
+					<select id="county-list" name="county-list" onchange="changeCollege(this.selectedIndex)"></select>
+					<select id="area-list" name="area-list"></select>
 			</td>
 		  </tr>
 		  
@@ -126,21 +80,94 @@
 		  </tr>
 		  
 		  <tr>
-		   <td>上課時間: <input type="datetime" name="teachtime" style="width:160px"></td>
+		   <td>上課時間: <input type="datetime" name="teachtime" style="width:160px">(hh:mm)</td>
 		  </tr>
 		  
 		   <tr>
 		    <td>
 		    </td>
-		    <td>				<div class="submit"><input type="button" value="完成案件" id="submit"></div></td>
+		    <td>				
+				<div class="submit"><input type="button" value="完成案件" id="submit"></div>
+			</td>
 		  </tr>
 
 			</table>
 				<!-- <div class="submit"><input type="button" value="完成案件" id="submit"></div> -->
 		</div>
+		</form>
 	</div>
 
-
-
 </body>
+<script type="text/javascript">
+	var colleges=['台北市','新北市','桃園市','新竹','苗栗縣','台中市','彰化縣','雲林縣','嘉義','台南市','高雄市','屏東縣','基隆市','宜蘭縣','花蓮縣','台東縣','南投縣','澎湖縣','金門縣','連江縣'];
+	var collegeSelect=document.getElementById("county-list");
+	var inner="";
+	for(var i=0;i<colleges.length;i++){
+		inner=inner+'<option value='+colleges[i]+'>'+colleges[i]+'</option>';
+	}
+	collegeSelect.innerHTML=inner;
+	
+	
+	var sectors=new Array();
+	sectors[0]=['士林區','大同區','大安區','中山區','中正區','內湖區','文山區','北投區','松山區','信義區','南港區','萬華區'];
+	sectors[1]=['板橋區','中和區','永和區','土城區','三峽區','鶯歌區','樹林區','新莊區','三重區','蘆洲區','五股區','泰山區','林口區','八里區','淡水區','三芝區','石門區','金山區','萬里區','汐止區','瑞芳區	','貢寮區','平溪區','雙溪區','新店區','深坑區','石碇區','坪林區	','烏來區'];	
+	sectors[2]=['桃園區','八德區','龜山區','蘆竹區','大園區','大溪區','中壢區','平鎮區','楊梅區','龍潭區','新屋區','觀音區','復興區'];	
+	sectors[3]=['竹北市','關西鎮','新埔鎮','竹東鎮','湖口鄉','橫山鄉','新豐鄉','芎林鄉','寶山鄉','北埔鄉','峨眉鄉	','尖石鄉','五峰鄉','東區','北區','香山區'];
+	sectors[4]=['苗栗市','頭份市','苑裡鎮','通霄鎮','竹南鎮','後龍鎮','卓蘭鎮','大湖鄉','公館鄉','銅鑼鄉','南庄鄉','頭屋鄉','三義鄉','西湖鄉','造橋鄉','三灣鄉','獅潭鄉','獅潭鄉']
+	sectors[5]=['中區','東區','南區','西區','北區','北屯區','西屯區','南屯區','太平區','大里區','霧峰區','烏日區','豐原區','后里區','石岡區','東勢區','和平區','新社區','潭子區','大雅區','神岡區','大肚區','龍井區','沙鹿區','梧棲區','清水區','大甲區','外埔區','大安區'];
+	sectors[6]=['彰化市','員林市','鹿港鎮','和美鎮','北斗鎮','溪湖鎮','田中鎮','二林鎮','線西鄉','伸港鄉','福興鄉','秀水鄉','花壇鄉','芬園鄉','大村鄉','埔鹽鄉','埔心鄉','永靖鄉','社頭鄉','二水鄉','田尾鄉','埤頭鄉','芳苑鄉','大城鄉','竹塘鄉','溪州鄉'];
+	sectors[7]=['斗六市','斗南鎮','虎尾鎮','西螺鎮','土庫鎮','北港鎮','古坑鄉','大埤鄉','莿桐鄉','林內鄉','二崙鄉','崙背鄉','麥寮鄉','東勢鄉','褒忠鄉','臺西鄉','元長鄉','四湖鄉','口湖鄉','水林鄉'];
+	sectors[8]=['太保市','朴子市','布袋鎮','大林鎮','民雄鄉','溪口鄉','新港鄉','六腳鄉','東石鄉','義竹鄉','鹿草鄉','水上鄉','中埔鄉','竹崎鄉','梅山鄉','番路鄉','大埔鄉','阿里山鄉','東區','西區'];
+	sectors[9]=['中西區','東區','南區','北區','安平區','安南區','新營區','鹽水區','白河區','柳營區','後壁區','東山區','麻豆區','下營區','六甲區','官田區','大內區','佳里區','學甲區','西港區','七股區','將軍區','北門區','新化區','善化區','新市區','安定區','山上區','玉井區','楠西區','南化區','左鎮區','仁德區','歸仁區','關廟區','龍崎區','永康區'];
+	sectors[10]=['鹽埕區','鼓山區','左營區','楠梓區','三民區','新興區','前金區','苓雅區','前鎮區','旗津區','小港區','鳳山區','林園區','大寮區','大樹區','大社區','仁武區','鳥松區','岡山區','橋頭區','燕巢區','田寮區','阿蓮區','路竹區','湖內區','茄萣區','永安區','彌陀區','梓官區','旗山區','美濃區','六龜區','甲仙區','杉林區','內門區','茂林區','桃源區','那瑪夏區'];
+	sectors[11]=['屏東市','潮州鎮','東港鎮','恆春鎮','萬丹鄉','長治鄉','麟洛鄉','九如鄉','里港鄉','鹽埔鄉','高樹鄉','萬巒鄉','內埔鄉','竹田鄉','新埤鄉','枋寮鄉','新園鄉','崁頂鄉','林邊鄉','南州鄉','佳冬鄉','琉球鄉','車城鄉','滿州鄉','枋山鄉','三地門鄉','霧臺鄉','瑪家鄉','泰武鄉','來義鄉','春日鄉','獅子鄉','牡丹鄉'];
+	sectors[12]=['中正區','七堵區','暖暖區','仁愛區','中山區','安樂區','信義區']
+	sectors[13]=['宜蘭市','羅東鎮','蘇澳鎮','頭城鎮','礁溪鄉','壯圍鄉','員山鄉','冬山鄉','五結鄉','三星鄉','大同鄉','南澳鄉']
+	sectors[14]=['花蓮市','鳳林鎮','玉里鎮','新城鄉','吉安鄉','壽豐鄉','光復鄉','豐濱鄉','瑞穗鄉','富里鄉','秀林鄉','萬榮鄉','卓溪鄉']
+	sectors[15]=['臺東市','成功鎮','關山鎮','卑南鄉','大武鄉','太麻里鄉','東河鄉','長濱鄉','鹿野鄉','池上鄉','綠島鄉','延平鄉','海端鄉','達仁鄉','金峰鄉','蘭嶼鄉']
+	sectors[16]=['南投市','埔里鎮','草屯鎮','竹山鎮','集集鎮','名間鄉','鹿谷鄉','中寮鄉','魚池鄉','國姓鄉','水里鄉','信義鄉','仁愛鄉']
+	sectors[17]=['馬公市','湖西鄉','白沙鄉','西嶼鄉','望安鄉','七美鄉']
+	sectors[18]=['金城鎮','金湖鎮','金沙鎮','金寧鄉','烈嶼鄉','烏坵鄉']
+	sectors[19]=['南竿鄉','北竿鄉','莒光鄉','東引鄉']
+	function changeCollege(index){
+		var Sinner="";
+		for(var i=0;i<sectors[index].length;i++){
+			Sinner=Sinner+'<option value='+sectors[index][i]+'>'+sectors[index][i]+'</option>';
+		}
+		var sectorSelect=document.getElementById("area-list");
+		sectorSelect.innerHTML=Sinner;
+	}
+	changeCollege(document.getElementById("county-list").selectedIndex);
+</script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				var $form = $('#submit');
+				$form.click(function () {
+					submit();
+				});
+				function submit() {
+					   var form = $('#form');
+						$.ajax({
+							type: "POST",
+							url: "api/member.do",
+							data: form.serialize(),
+							cache: false,
+							dataType: 'json',
+							timeout: 5000,
+							success: function (response) {
+							/**
+								$('#flashMessage').html(response.message);
+								$('#flashMessage').show();
+								if (response.status == 200) {
+								//	updateSQLTable(response.response);
+								}
+								**/
+							},
+							error: function () {
+								alert("無法連線到伺服器！");
+							}
+						});
+					}
+				})
+		</script>
 </html>

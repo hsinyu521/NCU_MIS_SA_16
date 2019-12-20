@@ -30,12 +30,12 @@
 					<div id="input" style="border: none">
 						<div class="input email required">
 							<label for="member_email">email</label>
-							<input type="email" name="email" maxlength="50" id="member_email" required="required">
+							<input type="email" name="member_email" maxlength="50" id="member_email" required="required">
 						</div>
 
 						<div class="input password required">
 							<label for="member_password">密碼</label>
-							<input type="passward" name="passward" maxlength="30" id="member_password" required="required">
+							<input type="password" name="member_password" maxlength="30" id="member_password" required="required">
 						</div>
 					</div>
 
@@ -56,7 +56,7 @@
 
 				function submit() {
 					var email = $('#member_email').val();
-					var password = $('#member_passward').val();
+					var password = $('#member_password').val();
 
 					var email_rule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
 					var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
@@ -68,16 +68,15 @@
 					} else {
 						var data_object = {
 							"email": email,
-							"password": password,
+							"password": password
 						};
 
-						var data_string = JSON.stringify(data_object);
+						//var data_string = JSON.stringify(data_object);
 
 						$.ajax({
 							type: "POST",
 							url: "api/member.do",
-							data: data_string,
-							crossDomain: true,
+							data: data_object,
 							cache: false,
 							dataType: 'json',
 							timeout: 5000,
@@ -85,8 +84,10 @@
 								$('#flashMessage').html(response.message);
 								$('#flashMessage').show();
 								if (response.status == 200) {
-									updateSQLTable(response.response);
+								//	updateSQLTable(response.response);
 								}
+								//要連接到哪個畫面
+								//回傳蛇哦
 							},
 							error: function () {
 								alert("無法連線到伺服器！");
