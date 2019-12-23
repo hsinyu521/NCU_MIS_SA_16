@@ -51,8 +51,12 @@
 
                 var email_rule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
                 var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-
-                if (!email_rule.test(email)) {
+                
+                //在前端就先確認欄位都填了
+                if(email.length==0 || password.length==0){
+                	alert("所有欄位皆必填!!!");
+                }
+                else if (!email_rule.test(email)) {
                     alert("Email格式不符！");
                 }
                 else if(!password_rule.test(password)) {
@@ -74,7 +78,7 @@
 				  
 				  
                     // 發出POST的AJAX請求
-                   /* $.ajax({
+                   	$.ajax({
                         type: "POST",
                         url: "api/teacher.do",
                         data: data_string,
@@ -94,7 +98,7 @@
                             alert("無法連線到伺服器！");
                         }
                     
-                    });*/
+                    });
                 }
 
 

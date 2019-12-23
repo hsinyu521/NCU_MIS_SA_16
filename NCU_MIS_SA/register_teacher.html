@@ -95,12 +95,16 @@
 					
 					var email_rule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
                     var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-
-                    if (!email_rule.test(email)) {
-                            alert("Email格式不符！");
+					
+                    //先在前端確認資料皆填了(value長度皆不為0)再送去後端
+                    if(name.length==0 || email.length==0 || password.length==0 || tel.length==0){
+                    	alert("所有欄位皆必填!!!");
+                    }
+                    else if (!email_rule.test(email)) {
+						alert("Email格式不符！");
                     }
                     else if(!password_rule.test(password)) {
-                            alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
+						alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
                     }
                     else{
                     	var data_object = {

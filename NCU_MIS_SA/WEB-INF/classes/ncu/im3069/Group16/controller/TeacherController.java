@@ -46,8 +46,15 @@ public class TeacherController extends HttpServlet {
         String cellphone = jso.getString("cellphone");
         int gender = jso.getInt("gender");
         
+        
+        
+        
+        
         /** 建立一個新的會員物件 */
         Teacher t = new Teacher(name, email, password, cellphone, gender);	//建構子1
+        
+        
+        
         
         /** 後端檢查是否有欄位為空值，若有則回傳錯誤訊息 */
         if(email.isEmpty() || password.isEmpty() || name.isEmpty() || cellphone.isEmpty() ) {	//
