@@ -90,7 +90,39 @@ public class TeacherController extends HttpServlet {
         	String password = jso.getString("password");
         	//建一個新的老師會員物件 (建構子4)
         	Teacher t = new Teacher(email, password);
+        	String realPwd = th.getPwdByEmail(email);
+        	System.out.printf("real: %s, your: %s\n", realPwd, password);
         	
+        	//要先確認email存在、找密碼
+        	if(realPwd.isEmpty()) {	//此email不存在，故realPwd為空
+        		System.out.printf("email not exist\n");
+        		
+        		/** 以字串組出JSON格式之資料 */
+                String resp = "{\"status\": \'400\', \"message\": \'登入失敗，無此老師會員帳號！\', \'response\': \'\'}";
+                /** 透過JsonReader物件回傳到前端（以字串方式） */
+                jsr.response(resp, response);
+        	}
+        	else if(password.equals(realPwd)) {	//密碼正確
+        		System.out.printf("login success.\n");
+        		/** 透過TeacherHelper物件的create()方法新建一個會員至資料庫 */
+                //JSONObject data = th.create(t);
+                
+                /** 新建一個JSONObject用於將回傳之資料進行封裝 */
+                JSONObject resp = new JSONObject();
+                resp.put("status", "200");
+                resp.put("message", "登入成功!");
+                //resp.put("response", data);
+                
+                /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
+                jsr.response(resp, response);
+        	}
+        	else {	//密碼錯誤
+        		System.out.printf("pwd error.\n");
+        		/** 以字串組出JSON格式之資料 */
+                String resp = "{\"status\": \'400\', \"message\": \'登入失敗，密碼錯誤！\', \'response\': \'\'}";
+                /** 透過JsonReader物件回傳到前端（以字串方式） */
+                jsr.response(resp, response);
+        	}
         }
     }
 

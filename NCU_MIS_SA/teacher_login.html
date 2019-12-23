@@ -73,9 +73,9 @@
                     // 將JSON格式轉換成字串
                     var data_string = JSON.stringify(data_object);
                  
-                    alert(email);
-                    alert(password);
-                    alert("good!要比對資料");
+                    //alert(email);
+                    //alert(password);
+                    //alert("good!要比對資料");
 				  
 				  
                     // 發出POST的AJAX請求
@@ -88,11 +88,11 @@
                         dataType: 'json',
                         timeout: 5000,
                         success: function (response) {
-                            alert("get respose");
+                            //alert("get respose");
                             $('#flashMessage').html(response.message);
                             $('#flashMessage').show();
                             if(response.status == 200){
-                                updateSQLTable(response.response);
+                            	//updateSQLTable(response.response);
                             }
                         },
                         error: function () {

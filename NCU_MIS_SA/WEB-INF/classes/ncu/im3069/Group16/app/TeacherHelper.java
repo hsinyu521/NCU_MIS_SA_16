@@ -446,4 +446,50 @@ public class TeacherHelper {
       
       return response;
   }
+  
+  //由email去資料庫抓出該email的password的值並回傳
+  public String getPwdByEmail(String email) {
+	  String password = "";
+	  /** 記錄實際執行之SQL指令 */
+      String exexcute_sql = "";
+      /** 儲存JDBC檢索資料庫後回傳之結果，以 pointer 方式移動到下一筆資料 */
+      ResultSet rs = null;
+      
+	  try {
+          /** 取得資料庫之連線 */
+          conn = DBMgr.getConnection();
+          /** SQL指令 */
+          String sql = "SELECT `password` FROM `sa16`.`teachers` WHERE `email` = ? LIMIT 1";
+          
+          /** 將參數回填至SQL指令當中 */
+          pres = conn.prepareStatement(sql);
+          pres.setString(1, email);
+          /** 執行查詢之SQL指令並記錄其回傳之資料 */
+          rs = pres.executeQuery();
+          
+          //要有rs.next()在getString()才會成功!!!!!!
+          rs.next();
+          //System.out.printf("rs: %s\n", rs.next());
+          password = rs.getString("password");
+          
+          /** 紀錄真實執行的SQL指令，並印出 **/
+          exexcute_sql = pres.toString();
+          System.out.println(exexcute_sql);
+	  }
+	  catch (SQLException e) {
+		  /** 印出JDBC SQL指令錯誤 **/
+		  System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
+	  }
+	  catch (Exception e) {
+		  /** 若錯誤則印出錯誤訊息 */
+		  e.printStackTrace();
+	  }
+	  finally {
+		  /** 關閉連線並釋放所有資料庫相關之資源 **/
+		  DBMgr.close(pres, conn);
+	  }
+	  
+	  return password;
+  }
+  
 }
