@@ -72,7 +72,8 @@
                             "id": id,
                             "email": email,
                             "password": password,
-                            "cellphone":cellphone
+                            "cellphone":cellphone,
+                            "option":"update"
                         };
 
                         // 將JSON格式轉換成字串
@@ -122,11 +123,19 @@
                 }
 
                 function getMember() {
+                	// 將資料組成JSON格式
+                    var data_object = {
+                    	"id": id,
+                        "option":"getMember"
+                    };
+                    // 將JSON格式轉換成字串
+                    var data_string = JSON.stringify(data_object);
+                    alert("in edit.html getMember(), id= "+id);
                     $.ajax({
                         type: "GET",
                         url: "api/teacher.do",
                         crossDomain: true,
-                        data: "id=" + id,
+                        data: "id="+id,
                         cache: false,
                         dataType: 'json',
                         timeout: 5000,

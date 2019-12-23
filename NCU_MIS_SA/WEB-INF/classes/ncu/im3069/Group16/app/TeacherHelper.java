@@ -383,7 +383,7 @@ public class TeacherHelper {
   }
   
   /**
-	 * *更新一名老師會員之會員資料
+   * *更新一名老師會員之會員資料
    *
    * @param t 一名老師會員之Teacher物件
    * @return the JSONObject 回傳SQL指令執行結果與執行之資料
@@ -490,6 +490,99 @@ public class TeacherHelper {
 	  }
 	  
 	  return password;
+  }
+  
+  //若登入成功後，會呼叫他來更改DB中的login狀態
+  public JSONObject updateLogin(String email, boolean login) {	//1223 9pm, by min
+      /** 紀錄回傳之資料 */
+      JSONArray jsa = new JSONArray();	
+      /** 記錄實際執行之SQL指令 */
+      String exexcute_sql = "";
+      /** 紀錄程式開始執行時間 */ //這行應該不用 by min
+      long start_time = System.nanoTime();
+      /** 紀錄SQL總行數 */ //這行應該不用 by min
+      int row = 0;
+      
+      try {
+          /** 取得資料庫之連線 */
+          conn = DBMgr.getConnection();
+          /** SQL指令 */
+          String sql = "Update `sa16`.`teachers` SET `login` = ? WHERE `email` = ?";
+          int logIn = login ? 1:0;	//login若為true舊社logIn為1，若false設為0
+          
+          /** 將參數回填至SQL指令當中 */
+          pres = conn.prepareStatement(sql);
+          pres.setInt(1, logIn);
+          pres.setString(2, email);
+          
+          /** 執行更新之SQL指令並記錄影響之行數 */ //這行應該也不用 by min
+          row = pres.executeUpdate();
+          
+          /** 紀錄真實執行的SQL指令，並印出 **/
+          exexcute_sql = pres.toString();
+          System.out.println(exexcute_sql);
+
+      } catch (SQLException e) {
+      	/** 印出JDBC SQL指令錯誤 **/
+      	System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
+      } catch (Exception e) {
+      	/** 若錯誤則印出錯誤訊息 */
+      	e.printStackTrace();
+      } finally {
+      	/** 關閉連線並釋放所有資料庫相關之資源 **/
+      	DBMgr.close(pres, conn);
+      }
+      
+      /** 紀錄程式結束執行時間 */
+      long end_time = System.nanoTime();
+      /** 紀錄程式執行時間 */
+      long duration = (end_time - start_time);
+      
+      /** 將SQL指令、花費時間與影響行數，封裝成JSONObject回傳 */
+      JSONObject response = new JSONObject();
+      response.put("sql", exexcute_sql);
+      response.put("row", row);
+      response.put("time", duration);
+      response.put("data", jsa);
+      
+      return response;
+  }
+  
+  //回傳看哪個id登入
+  public String whoLogIn() {
+	  String id="";	//登入中的id
+      /** 儲存JDBC檢索資料庫後回傳之結果，以 pointer 方式移動到下一筆資料 */
+      ResultSet rs = null;
+      
+      try {
+          /** 取得資料庫之連線 */
+          conn = DBMgr.getConnection();
+          /** SQL指令 */
+          String sql = "SELECT `id` FROM `sa16`.`teachers` WHERE `login` = ?";
+          
+          /** 將參數回填至SQL指令當中 */
+          pres = conn.prepareStatement(sql);
+          pres.setInt(1, 1);
+          /** 執行查詢之SQL指令並記錄其回傳之資料 */
+          rs = pres.executeQuery();
+
+          /** 讓指標移往最後一列 */
+          rs.next();
+          id = rs.getString("id");
+          System.out.printf("Now, login t member is %s\n",id);
+
+      } catch (SQLException e) {
+          /** 印出JDBC SQL指令錯誤 **/
+          System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
+      } catch (Exception e) {
+          /** 若錯誤則印出錯誤訊息 */
+          e.printStackTrace();
+      } finally {
+          /** 關閉連線並釋放所有資料庫相關之資源 **/
+          DBMgr.close(rs, pres, conn);
+      }
+      
+      return id;	//若沒找到回傳的是""
   }
   
 }

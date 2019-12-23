@@ -20,6 +20,9 @@
             <h2>老師會員清單(單純測試後端用)</h2>
             <a href="register_teacher.html">新增老師會員</a>
             <a href="product.html">購物車模組</a>
+            <div id="loginOrNot">
+            	<label></label>
+            </div>>
 
             <div id="flashMessage" class="message" style="display: none;"></div>
 
@@ -73,11 +76,17 @@
                 }
 
                 function getAllMember() {
+                	// 將資料組成JSON格式
+                    /*var request = {"option": "getMembers"};
+                 	// 將JSON格式轉換成字串
+                    var data_string = JSON.stringify(request);*/
+                    
                     // 發出POST的GET請求取得所有會員列表
                     $.ajax({
                             type: "GET",
                             url: "api/teacher.do",
                             crossDomain: true,
+                            data: "option=getMembers",
                             cache: false,
                             dataType: 'json',
                             timeout: 5000,
@@ -92,6 +101,49 @@
                                 alert("無法連線到伺服器！");
                             }
                     });
+                }
+                
+                //看有沒有人登入
+                function checkLogIn(){
+                	// 將資料組成JSON格式
+                    var data_object = {
+                    	'option':"login"
+                    };
+                    // 將JSON格式轉換成字串
+                    var data_string = JSON.stringify(data_object);
+                    
+                	$.ajax({
+                        type: "GET",
+                        url: "api/teacher.do",
+                        crossDomain: true,
+                        data: "option=login",
+                        cache: false,
+                        dataType: 'json',
+                        timeout: 5000,
+                        success: function (response) {
+                            if(response.status == 200){
+                            	updateLogIn(response);
+                            }
+                            else{
+                            	$("#loginOrNot").empty();
+                             	var label_html = '<label> No login member </label>';
+                             	$("#loginOrNot").append(label_html);
+                            }
+                            console.log(response);
+                        },
+                        error: function () {
+                            alert("無法連線到伺服器！");
+                        }
+                	});
+                }
+                
+                //更新顯示登入會員的地方
+                function updateLogIn(response){
+                	$("#loginOrNot").empty();
+                	var label_html = "";
+                	var name = response['response']['data'][0]['name'];
+                	label_html += '<label> Hi, teacher '+ name +'</label>';
+                	$("#loginOrNot").append(label_html);
                 }
                 
                 // 更新會員列表表格
@@ -131,8 +183,10 @@
                     $("#sql_log > tbody").append(table_html);
                     $("#sql_summary").html("(default) " + data.row + " queries took " + time + " ms");
                 }
-                $(document).ready(function() {	//網頁在乎較前呼叫這個function
+                
+                $(document).ready(function() {
                     getAllMember();
+                    checkLogIn();
                 });
             </script>
         </div>
