@@ -4,7 +4,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>新增案件</title>
 
-    <script src="statics/jquery-3.4.1.min.js" ></script>
+    <script src="statics/js/jquery-3.4.1.min.js" ></script>
     <link rel="stylesheet" type="text/css" href="statics/css/design_add.css">
 
 </head>
@@ -21,6 +21,7 @@
 		 <form id="form" method="post" name="fmadd" accept-charset="UTF-8">
 		<div id="content">
 			<h1 id="new">新增案件</h1>
+			<div id="flashMessage" class="message" style="display: none;"></div>
 <!-- 			<div id="next_content"></div> -->
 			<table>
 		  <tr>
@@ -30,13 +31,13 @@
 		  
 		  <tr>
 		    <td>對象:
-		    	<select name="school">
+		    	<select id="school">
 		  			<option value="primary">國小</option>
 		  			<option value="junior">國中</option>
 		  			<option value="senior">高中</option>
 		  			<option value="university">大學</option>
 				</select>
-		        <select name="years">
+		        <select id="years">
 		  			<option value="one">一年級</option>
 		  			<option value="two">二年級</option>
 		  			<option value="three">三年級</option>
@@ -46,25 +47,25 @@
 				</select>
 		    </td>
 		    <td>教學經歷:
-		    	<select name="express">
-		  			<option value="no">無經驗</option>
-		  			<option value="one_year">一年以下</option>
-		  			<option value="two_years">兩年以下</option>
-		  			<option value="three_years">三年以下</option>
-		            <option value="four_years">四年以下</option>
-		  			<option value="five_years">五年以上</option>
+		    	<select id="express" name="express">
+		  			<option value="0">無經驗</option>
+		  			<option value="1">一年以下</option>
+		  			<option value="2">兩年以下</option>
+		  			<option value="3">三年以下</option>
+		            <option value="4">四年以下</option>
+		  			<option value="5">五年以上</option>
 				</select>
 		    </td>
 		  </tr>
 		  
 		  <tr>
 		    <td>上課科目:
-		    	國<input type="radio" value="國" name="subject">
-		        英<input type="radio" value="英" name="subject">
-		        數<input type="radio" value="數" name="subject">
-		        物<input type="radio" value="物" name="subject">
-		        化<input type="radio" value="化" name="subject">
-		        生<input type="radio" value="生" name="subject">
+				國<input type="radio" value="1" name="subject">
+				英<input type="radio" value="2" name="subject">
+				數<input type="radio" value="3" name="subject">
+				物<input type="radio" value="4" name="subject">
+				化<input type="radio" value="5" name="subject">
+				生<input type="radio" value="6" name="subject">
 		    </td>
 		  </tr>
 		  
@@ -76,11 +77,11 @@
 		  </tr>
 		  
 		  <tr>
-		    <td>薪資待遇: <input type="text" name="wage" style="width:70px"> 元/hr</td>
+		    <td>薪資待遇: <input type="text" id="wage" name="wage" style="width:70px"> 元/hr</td>
 		  </tr>
 		  
 		  <tr>
-		   <td>上課時間: <input type="datetime" name="teachtime" style="width:160px">(hh:mm)</td>
+		   <td>上課時間: <input type="datetime" id="teachtime" name="teachtime" style="width:160px">(hh:mm)</td>
 		  </tr>
 		  
 		   <tr>
@@ -139,35 +140,84 @@
 	}
 	changeCollege(document.getElementById("county-list").selectedIndex);
 </script>
-		<script type="text/javascript">
-			$(document).ready(function() {
-				var $form = $('#submit');
-				$form.click(function () {
-					submit();
-				});
-				function submit() {
-					   var form = $('#form');
-						$.ajax({
-							type: "POST",
-							url: "api/member.do",
-							data: form.serialize(),
-							cache: false,
-							dataType: 'json',
-							timeout: 5000,
-							success: function (response) {
-							/**
-								$('#flashMessage').html(response.message);
-								$('#flashMessage').show();
-								if (response.status == 200) {
-								//	updateSQLTable(response.response);
-								}
-								**/
-							},
-							error: function () {
-								alert("無法連線到伺服器！");
-							}
-						});
-					}
-				})
+<script type="text/javascript">
+		$(document).ready(function(){
+			var $form = $('#submit');
+			$form.click(function(){
+				submit();
+			});
+		});
+		
+		function submit(){
+			var parent_id = 1;
+			var g1 = document.getElementById("school");
+			var g2 = document.getElementById("years");
+			var grade = g1.value + g2.value;
+			
+			var subject = $('input[name=subject]:checked').val();
+			
+			var county = document.getElementById("county-list");
+			var teachCounty = county.value;
+			
+			var region = document.getElementById("area-list");
+			var teachRegion = region.value;
+			
+			var wage = $('#wage').val();
+			var teachTime = $('#teachtime').val();
+			var e = document.getElementById("express");
+			var teachExperience = e.value;
+			
+			alert(grade);
+			alert(subject);
+			alert(teachCounty);
+			alert(teachRegion);
+			alert(wage);
+			alert(teachTime);
+			alert(teachExperience);
+            //先在前端確認資料皆填了(value長度皆不為0)再送去後端
+            //grade.length==0 || subject.length==0 || teachCounty.length==0 || teachRegion.length==0 || wage.length==0 || teachTime.length==0 || teachExperience.length==0
+            if(2>3){
+            	alert("所有欄位皆必填!!!");
+            }
+            else{
+            	var data_object = {
+            		"parent_id": parent_id,
+            		"grade": grade,
+            		"subject": subject,
+            		"teachCounty": teachCounty,
+            		"teachRegion": teachRegion,
+            		"wage": wage,
+            		"teachTime": teachTime,
+            		"teachExperience": teachExperience
+            	};
+
+            	var data_string = JSON.stringify(data_object);
+
+            	$.ajax({
+                            type: "POST",
+                            url: "api/case.do",
+                            data: data_string,
+                            crossDomain: true,
+                            cache: false,
+                            dataType: 'json',
+                            timeout: 5000,
+                            success: function (response) {
+                            	alert("get respose");
+                                $('#flashMessage').html(response.message);
+                                $('#flashMessage').show();
+                                /*if(response.status == 200){
+                                    updateSQLTable(response.response);
+                                }*/
+                            },
+                            error: function () {
+                                alert("無法連線到伺服器！");
+                            }
+                    });
+            }
+
+
+         }
+
+
 		</script>
 </html>

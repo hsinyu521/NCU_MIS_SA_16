@@ -23,24 +23,24 @@ public class CaseHelper {
     public JSONObject create(Case ca) {
         /** 記錄實際執行之SQL指令 */
         String exexcute_sql = "";
-        int id = -1;
         
         try {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "INSERT INTO `sa16`.`cases`(`parent_id`, `grade`, `subject`, `teachCounty`, `teachRegion`, `wage`, `teachTime`, `teachExperience`, `modified`, `created`)"
-                    + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO `sa16`.`cases`(`parent_id`, `grade`, `subject`, `teachCounty`, `teachRegion`, `wage`, `teachTime`, `teachExperience`, `state`, `modified`, `created`)"
+                    + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
             
             /** 取得所需之參數 */
             int parent_id = ca.getParent_id();
             String grade = ca.getGrade();
             int subject = ca.getSubject();
-            int teachCounty = ca.getCounty();
-            int teachRegion = ca.getRegion();
+            String teachCounty = ca.getCounty();
+            String teachRegion = ca.getRegion();
             int wage = ca.getWage();
             String teachTime = ca.getTeachTime();
             int teachExperience = ca.getTeachExperience();
+            int state = ca.getState();
 
             
             /** 將參數回填至SQL指令當中 */
@@ -48,13 +48,14 @@ public class CaseHelper {
             pres.setInt(1, parent_id);
             pres.setString(2, grade);
             pres.setInt(3, subject);
-            pres.setInt(4, teachCounty);
-            pres.setInt(5, teachRegion);
+            pres.setString(4, teachCounty);
+            pres.setString(5, teachRegion);
             pres.setInt(6, wage);
             pres.setString(7, teachTime);
             pres.setInt(8, teachExperience);
-            pres.setTimestamp(9, Timestamp.valueOf(LocalDateTime.now()));
+            pres.setInt(9, state); 
             pres.setTimestamp(10, Timestamp.valueOf(LocalDateTime.now()));
+            pres.setTimestamp(11, Timestamp.valueOf(LocalDateTime.now()));
             
             /** 執行新增之SQL指令並記錄影響之行數 */
             pres.executeUpdate();
@@ -102,8 +103,8 @@ public class CaseHelper {
             int id = c.getId();            		
             String grade = c.getGrade();
             int subject = c.getSubject();
-            int teachCounty = c.getCounty();
-            int teachRegion = c.getRegion();
+            String teachCounty = c.getCounty();
+            String teachRegion = c.getRegion();
             int wage = c.getWage();
             String teachTime = c.getTeachTime();
             int teachExperience = c.getTeachExperience();
@@ -112,8 +113,8 @@ public class CaseHelper {
             pres = conn.prepareStatement(sql);
             pres.setString(1, grade);
             pres.setInt(2, subject);
-            pres.setInt(3, teachCounty);
-            pres.setInt(4, teachRegion);
+            pres.setString(3, teachCounty);
+            pres.setString(4, teachRegion);
             pres.setInt(5, wage);
             pres.setString(6, teachTime);
             pres.setInt(7, teachExperience);
@@ -168,8 +169,8 @@ public class CaseHelper {
                 int id = rs.getInt("id");            		
                 String grade = rs.getString("grade");
                 int subject = rs.getInt("subject");
-                int teachCounty = rs.getInt("teachCounty");
-                int teachRegion = rs.getInt("teachRegion");
+                String teachCounty = rs.getString("teachCounty");
+                String teachRegion = rs.getString("teachRegion");
                 int wage = rs.getInt("wage");
                 String teachTime = rs.getString("teachTime");
                 int teachExperience = rs.getInt("teachExperience");
@@ -230,8 +231,8 @@ public class CaseHelper {
                 int id = rs.getInt("id");            		
                 String grade = rs.getString("grade");
                 int subject = rs.getInt("subject");
-                int teachCounty = rs.getInt("teachCounty");
-                int teachRegion = rs.getInt("teachRegion");
+                String teachCounty = rs.getString("teachCounty");
+                String teachRegion = rs.getString("teachRegion");
                 int wage = rs.getInt("wage");
                 String teachTime = rs.getString("teachTime");
                 int teachExperience = rs.getInt("teachExperience");

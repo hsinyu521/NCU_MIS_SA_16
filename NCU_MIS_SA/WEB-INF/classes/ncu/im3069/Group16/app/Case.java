@@ -21,10 +21,10 @@ public class Case{
     private int subject;
 
     /** teach_county，上課縣市 */
-    private int teach_county;
+    private String teach_county;
 
     /** teach_region，上課地區 */
-    private int teach_region;
+    private String teach_region;
 
     /** wage，時薪 */
     private int wage;
@@ -63,9 +63,10 @@ public class Case{
      * @param create 案件創建時間
      * @param modify 案件修改時間
      */
-    public Case(int parent_id,String grade,int subject,int teach_county, int teach_region
-    		,int wage,String teachtime, int state) {
+    public Case(int parent_id,String grade,int subject,String teach_county, String teach_region
+    		,int wage,String teachtime,int teachExperience) {
     	//1218 min 我覺得不需要state, create, modify，少了teachExperience,多了state
+    	//1223 hsin 應該還是要state(不用放在參數)，然後每次新增都是0
     			this.parent_id=parent_id;
     			this.grade=grade;
     			this.subject=subject;
@@ -73,6 +74,8 @@ public class Case{
     			this.teach_region=teach_region;
     			this.wage=wage;
     			this.teachtime=teachtime;
+    			this.teachExperience=teachExperience;
+    			this.state=0;
     }
 
     /**
@@ -91,7 +94,7 @@ public class Case{
      * @param create 案件創建時間
      * @param modify 案件修改時間
      */
-    public Case(int id,String grade,int subject,int teach_county, int teach_region
+    public Case(int id,String grade,int subject,String teach_county, String teach_region
     		,int wage,String teachtime, int state,Timestamp modified,Timestamp created) {
     	//1218 min 這感覺不會有最後兩個時間的參數，在helper中直接把當下時間塞進sql語法就好(可以參考更新老師會員資料)
         this.id = id;
@@ -154,7 +157,7 @@ public class Case{
      *
      * @return int 回傳案件教學地點
      */
-    public int getCounty() {
+    public String getCounty() {
         return this.teach_county;
     }
     
@@ -163,7 +166,7 @@ public class Case{
      *
      * @return int 回傳案件教學地點
      */
-    public int getRegion() {
+    public String getRegion() {
         return this.teach_region;
     }
     

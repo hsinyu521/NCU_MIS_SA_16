@@ -1,6 +1,10 @@
 package ncu.im3069.Group16.controller;
 
 import java.io.IOException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,18 +13,18 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
+import ncu.im3069.Group16.app.Case;
 import ncu.im3069.Group16.app.CaseHelper;
-import ncu.im3069.demo.app.MemberHelper;
 import ncu.im3069.tools.JsonReader;
 
 /**
  * Servlet implementation class CaseController
  */
-@WebServlet("/Case.do")
+@WebServlet("/api/case.do")
 public class CaseController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-	/** ch，CaseHelper之物件與Member相關之資料庫方法（Sigleton） */
+    /** ch，MemberHelper之物件與Member相關之資料庫方法（Sigleton） */
     private CaseHelper ch =  CaseHelper.getHelper();
     /**
      * @see HttpServlet#HttpServlet()
@@ -33,49 +37,54 @@ public class CaseController extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException {
-		
-		/** 透過JsonReader類別將Request之JSON格式資料解析並取回 */
-        JsonReader jsr = new JsonReader(request);
-        /** 若直接透過前端AJAX之data以key=value之字串方式進行傳遞參數，可以直接由此方法取回資料 */
-        String id = jsr.getParameter("id");
-        
-        /** 判斷該字串是否存在，若存在代表要取回個別會員之資料，否則代表要取回全部資料庫內會員之資料 */
-        if (id.isEmpty()) {
-            /** 透過MemberHelper物件之getAll()方法取回所有會員之資料，回傳之資料為JSONObject物件 */
-            JSONObject query = ch.getAll();
-            
-            /** 新建一個JSONObject用於將回傳之資料進行封裝 */
-            JSONObject resp = new JSONObject();
-            resp.put("status", "200");
-            resp.put("message", "所有會員資料取得成功");
-            resp.put("response", query);
-    
-            /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
-            jsr.response(resp, response);
-        }
-        else {
-            /** 透過MemberHelper物件的getByID()方法自資料庫取回該名會員之資料，回傳之資料為JSONObject物件 */
-            JSONObject query = ch.getById(id);
-            
-            /** 新建一個JSONObject用於將回傳之資料進行封裝 */
-            JSONObject resp = new JSONObject();
-            resp.put("status", "200");
-            resp.put("message", "會員資料取得成功");
-            resp.put("response", query);
-    
-            /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
-            jsr.response(resp, response);
-        }
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		// TODO Auto-generated method stub
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+	       /** 透過JsonReader類別將Request之JSON格式資料解析並取回 */
+        JsonReader jsr = new JsonReader(request);
+        JSONObject jso = jsr.getObject();
+        
+        
+        int parent_id = jso.getInt("parent_id");
+        String grade = jso.getString("grade");
+        int subject = jso.getInt("subject");
+        String teach_county = jso.getString("teachCounty");
+        String teach_region = jso.getString("teachRegion");
+        int wage  = jso.getInt("wage");
+        String teachtime = jso.getString("teachTime");
+        int teachExperience = jso.getInt("teachExperience");
+        
+        /** 建立一個新的案件物件 */
+        Case c =new Case(parent_id,grade,subject,teach_county,teach_region
+        		,wage,teachtime,teachExperience);
+
+        
+        /** 後端檢查是否有欄位為空值，若有則回傳錯誤訊息 */
+        if(grade.isEmpty()) {
+            /** 以字串組出JSON格式之資料 */
+            String resp = "{\"status\": \'400\', \"message\": \'欄位不能有空值\', \'response\': \'\'}";
+            /** 透過JsonReader物件回傳到前端（以字串方式） */
+            jsr.response(resp, response);
+        }else {
+            /** 透過MemberHelper物件的create()方法新建一個會員至資料庫 */
+            JSONObject data = ch.create(c);
+            
+            /** 新建一個JSONObject用於將回傳之資料進行封裝 */
+            JSONObject resp = new JSONObject();
+            resp.put("status", "200");
+            resp.put("response", data);
+            
+            /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
+            jsr.response(resp, response);
+        }
+
 	}
 
 	/**
