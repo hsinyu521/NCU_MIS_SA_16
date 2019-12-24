@@ -33,38 +33,73 @@ public class ParentController extends HttpServlet {
 			throws ServletException, IOException {	//1216 1am by min
 		/** 透過JsonReader類別將Request之JSON格式資料解析並取回 */
 		JsonReader jsr = new JsonReader(request);
+		
 		/** 若直接透過前端AJAX之data以key=value之字串方式進行傳遞參數，可以直接由此方法取回資料* */
 		String id = jsr.getParameter("id");
+		String option = jsr.getParameter("option");
 		
-		/**判斷該字串是否存在
-		 * *若存在代表要取回個別家長會員之資料 否則會取回全部資料庫內家長會員之資料
-		 * */
-        if (id.isEmpty()) {	//沒傳id進來，代表要取得所有會員資料，呼叫getAll()
-            /** 透過TeacherHelper物件之getAll()方法取回所有會員之資料，回傳之資料為JSONObject物件 */
-            JSONObject query = ph.getAll();
-            
-            /** 新建一個JSONObject用於將回傳之資料進行封裝 */
-            JSONObject resp = new JSONObject();
-            resp.put("status", "200");
-            resp.put("message", "所有家長會員資料取得成功");
-            resp.put("response", query);
-    
-            /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
-            jsr.response(resp, response);
+		//ajax中的GET有傳入login這個參數且值為true的話，會去找登入的是誰
+        if(option.equals("login")) {
+        	String loginId = ph.whoLogIn();
+        	
+        	if(loginId.equals("0")) {	//若沒人登入
+        		/** 新建一個JSONObject用於將回傳之資料進行封裝 */
+                JSONObject resp = new JSONObject();
+        		//回傳訊息告訴前端正常顯示
+        		resp.put("status", "400");
+                resp.put("message", "沒人登入哦");
+                
+                /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
+                jsr.response(resp, response);
+        	}
+        	else {
+        		JSONObject query = ph.getByID(loginId);
+        		
+        		/** 新建一個JSONObject用於將回傳之資料進行封裝 */
+                JSONObject resp = new JSONObject();
+                resp.put("status", "200");
+                resp.put("message", "老師會員資料取得成功");
+                resp.put("response", query);
+        
+                /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
+                jsr.response(resp, response);
+        	}
         }
+        
         else {
-            /** 透過TeacherHelper物件的getByID()方法自資料庫取回該名會員之資料，回傳之資料為JSONObject物件 */
-            JSONObject query = ph.getByID(id);
+        	/**判斷該字串是否存在
+        	 * *若存在代表要取回個別家長會員之資料 否則會取回全部資料庫內家長會員之資料
+        	 * */
+        	if (id.isEmpty()) {	//沒傳id進來，代表要取得所有會員資料，呼叫getAll()
+        		/** 透過TeacherHelper物件之getAll()方法取回所有會員之資料，回傳之資料為JSONObject物件 */
+        		JSONObject query = ph.getAll();
             
-            /** 新建一個JSONObject用於將回傳之資料進行封裝 */
-            JSONObject resp = new JSONObject();
-            resp.put("status", "200");
-            resp.put("message", "家長會員資料取得成功");
-            resp.put("response", query);
+        		/** 新建一個JSONObject用於將回傳之資料進行封裝 */
+        		JSONObject resp = new JSONObject();
+        		resp.put("status", "200");
+        		resp.put("message", "所有家長會員資料取得成功");
+        		resp.put("response", query);
+    
+        		/** 透過JsonReader物件回傳到前端（以JSONObject方式） */
+        		jsr.response(resp, response);
+        	}
+        	else {
+        		/** 透過TeacherHelper物件的getByID()方法自資料庫取回該名會員之資料，回傳之資料為JSONObject物件 */
+        		JSONObject query = ph.getByID(id);
             
-            /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
-            jsr.response(resp, response);
+        		/** 新建一個JSONObject用於將回傳之資料進行封裝 */
+        		JSONObject resp = new JSONObject();
+        		resp.put("status", "200");
+        		resp.put("message", "家長會員資料取得成功");
+        		resp.put("response", query);
+            
+        		/** 透過JsonReader物件回傳到前端（以JSONObject方式） */
+        		jsr.response(resp, response);
+        	}
+        	
         }
+		
+		
 	}
 
 	 /*
@@ -106,7 +141,7 @@ public class ParentController extends HttpServlet {
             /** 新建一個JSONObject用於將回傳之資料進行封裝 */
             JSONObject resp = new JSONObject();
             resp.put("status", "200");
-            resp.put("message", "成功! 註冊家長會員資料...");
+            resp.put("message", "成功!註冊家長會員資料");
             resp.put("response", data);
             
             /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
@@ -114,7 +149,7 @@ public class ParentController extends HttpServlet {
         }
         else {
             /** 以字串組出JSON格式之資料 */
-            String resp = "{\"status\": \'400\', \"message\": \'新增家長會員帳號失敗，此E-Mail帳號重複！\', \'response\': \'\'}";
+            String resp = "{\"status\": \'400\', \"message\": \'新增家長會員帳號失敗，此email帳號重複！\', \'response\': \'\'}";
             /** 透過JsonReader物件回傳到前端（以字串方式） */
             jsr.response(resp, response);
         }
@@ -134,26 +169,71 @@ public class ParentController extends HttpServlet {
         JsonReader jsr = new JsonReader(request);
         JSONObject jso = jsr.getObject();
         
-        /** 取出經解析到JSONObject之Request參數 */
-        int id = jso.getInt("id");
-        String email = jso.getString("email");
-        String password = jso.getString("password");
-        String cellphone = jso.getString("cellphone");
-
-        /** 透過傳入之參數，新建一個以這些參數之會員Parent物件 建構子3*/
-        Parent p = new Parent(id, email, password, cellphone);
+        //看要登入還註冊
+        String option = jso.getString("option");
         
-        /** 透過Parent物件的update()方法至資料庫更新該名家長會員資料，回傳之資料為JSONObject物件 */
-        JSONObject data = p.update();
+        if(option.equals("update")) {
+        	/** 取出經解析到JSONObject之Request參數 */
+        	int id = jso.getInt("id");
+        	//String email = jso.getString("email");
+        	String password = jso.getString("password");
+        	String cellphone = jso.getString("cellphone");
+        	
+        	/** 透過傳入之參數，新建一個以這些參數之會員Parent物件 建構子3*/
+        	Parent p = new Parent(id, password, cellphone);
+        	
+        	/** 透過Parent物件的update()方法至資料庫更新該名家長會員資料，回傳之資料為JSONObject物件 */
+        	JSONObject data = p.update();
+        	
+        	/** 新建一個JSONObject用於將回傳之資料進行封裝 */
+        	JSONObject resp = new JSONObject();
+        	resp.put("status", "200");
+        	resp.put("message", "成功!更新家長會員資料");
+        	resp.put("response", data);
         
-        /** 新建一個JSONObject用於將回傳之資料進行封裝 */
-        JSONObject resp = new JSONObject();
-        resp.put("status", "200");
-        resp.put("message", "成功!更新家長會員資料...");
-        resp.put("response", data);
+        	/** 透過JsonReader物件回傳到前端（以JSONObject方式） */
+        	jsr.response(resp, response);
+        }
         
-        /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
-        jsr.response(resp, response);
+      //若為登入
+      else if(option.equals("login")) {	
+    	  System.out.printf("----------parent登入---------\n");
+    	  String email = jso.getString("email");
+    	  String password = jso.getString("password");
+    	  
+    	  String realPwd = ph.getPwdByEmail(email);
+    	  System.out.printf("real: %s, your: %s\n", realPwd, password);
+		        	
+    	  //要先確認email存在、找密碼
+    	  if(realPwd.isEmpty()) {	//此email不存在，故realPwd為空
+    		  System.out.printf("email not exist\n");
+    		  
+    		  /** 以字串組出JSON格式之資料 */
+    		  String resp = "{\"status\": \'400\', \"message\": \'登入失敗，無此家長會員帳號！\', \'response\': \'\'}";
+    		  /** 透過JsonReader物件回傳到前端（以字串方式） */
+    		  jsr.response(resp, response);
+    	  }
+    	  else if(password.equals(realPwd)) {	//密碼正確
+    		  System.out.printf("login success.\n");
+    		  ph.updateLogin(email, true);
+        		
+    		  /** 新建一個JSONObject用於將回傳之資料進行封裝 */
+    		  JSONObject resp = new JSONObject();
+    		  resp.put("status", "200");
+    		  resp.put("message", "登入成功!");
+    		  //resp.put("response", data);
+                
+    		  /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
+    		  jsr.response(resp, response);
+    	  }
+    	  else {	//密碼錯誤
+    		  System.out.printf("pwd error.\n");
+    		  /** 以字串組出JSON格式之資料 */
+    		  String resp = "{\"status\": \'400\', \"message\": \'登入失敗，密碼錯誤！\', \'response\': \'\'}";
+    		  /** 透過JsonReader物件回傳到前端（以字串方式） */
+    		  jsr.response(resp, response);
+    	  }
+      }
 	}
 
 	 /*

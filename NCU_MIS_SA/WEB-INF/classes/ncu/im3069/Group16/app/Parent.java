@@ -74,9 +74,8 @@ public class Parent {
      * @param password 家長會員密碼
      * @param cellphone 家長會員姓手機
      */
-	public Parent(int id, String email, String password, String cellphone) {
+	public Parent(int id, String password, String cellphone) {
 		this.id = id;
-		this.email = email;
 		this.password = password;
 		this.cellphone = cellphone;
 	}

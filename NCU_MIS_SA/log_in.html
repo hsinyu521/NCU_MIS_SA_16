@@ -4,18 +4,17 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>家長會員登入</title>
 
-    <script src="statics/jquery-3.4.1.min.js" ></script>
     <link rel="stylesheet" type="text/css" href="statics/css/design_register.css">
+    <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
 
 </head>
 
 
 <body>	
 	<div id="container">
-
 		<div id="header">
-			<img src="logo.png" alt="Italian Trulli" width="80" height="60">		
-		</div>
+        	<a href="test.html"><img src="statics/img/Logo.png" alt="Logo" width="200" height="100"></a>
+    	</div>
 
 		<div id="content">
 			<h1>登入家長會員</h1>
@@ -59,32 +58,41 @@
 					var password = $('#member_password').val();
 
 					var email_rule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
-					var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-
-					if (!email_rule.test(email)) {
-						alert("Email格式不符！");
-					} else if (!password_rule.test(password)) {
+					//var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+					
+					//在前端就先確認欄位都填了
+	                if(email.length==0 || password.length==0){
+	                	alert("所有欄位皆必填!!!");
+	                }
+	                else if (!email_rule.test(email)) {
+						alert("email格式不符！");
+					}
+					//登入還要管密碼型態的話感覺太奇怪
+	                /*else if (!password_rule.test(password)) {
 						alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
-					} else {
+					}*/
+	                else {
+	                	// 將資料組成JSON格式
 						var data_object = {
 							"email": email,
-							"password": password
+							"password": password,
+							"option":"login"
 						};
-
-						//var data_string = JSON.stringify(data_object);
+						// 將JSON格式轉換成字串
+						var data_string = JSON.stringify(data_object);
 
 						$.ajax({
-							type: "POST",
-							url: "api/member.do",
-							data: data_object,
+							type: "PUT",
+							url: "api/parent.do",
+							data: data_string,
 							cache: false,
 							dataType: 'json',
 							timeout: 5000,
 							success: function (response) {
-								$('#flashMessage').html(response.message);
-								$('#flashMessage').show();
+								//如果你們前端登入成功要新跳視窗出來就打在這
+								alert(response.message);
 								if (response.status == 200) {
-								//	updateSQLTable(response.response);
+									
 								}
 								//要連接到哪個畫面
 								//回傳蛇哦

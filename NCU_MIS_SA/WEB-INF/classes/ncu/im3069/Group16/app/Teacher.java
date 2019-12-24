@@ -74,9 +74,8 @@ public class Teacher {
      * @param password 老師會員密碼
      * @param cellphone 老師會員姓手機
      */
-	public Teacher(int id, String email, String password, String cellphone) {
+	public Teacher(int id, String password, String cellphone) {
 		this.id = id;
-		this.email = email;
 		this.password = password;
 		this.cellphone = cellphone;
 	}

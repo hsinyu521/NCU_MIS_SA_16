@@ -19,10 +19,10 @@
         <div id="content">
             <h2>老師會員清單(單純測試後端用)</h2>
             <a href="register_teacher.html">新增老師會員</a>
-            <a href="product.html">購物車模組</a>
+            <a href="register_parents.html">註冊家長會員</a>
             <div id="loginOrNot">
             	<label></label>
-            </div>>
+            </div>
 
             <div id="flashMessage" class="message" style="display: none;"></div>
 
@@ -51,7 +51,7 @@
                         var data_string = JSON.stringify(request);
                         $.ajax({
                             type: "DELETE",
-                            url: "api/teacher.do",
+                            url: "api/parent.do",
                             crossDomain: true,
                             data: data_string,
                             cache: false,
@@ -84,7 +84,7 @@
                     // 發出POST的GET請求取得所有會員列表
                     $.ajax({
                             type: "GET",
-                            url: "api/teacher.do",
+                            url: "api/parent.do",
                             crossDomain: true,
                             data: "option=getMembers",
                             cache: false,
@@ -114,7 +114,7 @@
                     
                 	$.ajax({
                         type: "GET",
-                        url: "api/teacher.do",
+                        url: "api/parent.do",
                         crossDomain: true,
                         data: "option=login",
                         cache: false,

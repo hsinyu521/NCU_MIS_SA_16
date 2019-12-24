@@ -4,8 +4,8 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>家長會員更改資訊</title>
 
-    <script src="statics/jquery-3.4.1.min.js" ></script>
     <link rel="stylesheet" type="text/css" href="statics/css/parent_change.css">
+    <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
 
 </head>
 
@@ -13,8 +13,12 @@
 <body>	
 	<div id="container">
 		<div id="header">
-			<img src="logo.png" alt="Italian Trulli" width="80" height="60"><h1>家長會員更改資訊</h1><h5>XXX家長您好</h5>
-		</div>
+        	<a href="test.html"><img src="statics/img/Logo.png" alt="Logo" width="200" height="100"></a>
+    	</div>
+    	
+    	<div id="loginOrNot">
+			<label></label>
+        </div>
 			
 		<div id="content">
 					
@@ -35,7 +39,7 @@
 							</div>
 
 							<div class="input tel required">
-								<label for="member_tel">輸入新手機</label>
+								<label for="member_tel">輸入手機</label>
 								<input type="text" name="tel" maxlength="10" id="member_tel" required="required">
 							</div>
 
@@ -49,9 +53,9 @@
 		</div>
 
 		<div id="table2">
-			<a href="log_in.html" class="button"><input type="button" value="修改家長會員資訊"  id="parent_information"></a><br>
-			<a href="log_in.html" class="button"><input type="button" value="新增案件"  id="add_case"></a><br>
-			<a href="log_in.html" class="button"><input type="button" value="面試管理"  id="interview"></a><br>
+			<a href="parent_change_information.html" class="button"><input type="button" value="修改家長會員資訊"  id="parent_information"></a><br>
+			<a href="add_case.html" class="button"><input type="button" value="新增案件"  id="add_case"></a><br>
+			<a href="parent_interview.html" class="button"><input type="button" value="面試管理"  id="interview"></a><br>
 			<a href="log_in.html" class="button"><input type="button" value="管理案件狀態"  id="management"></a><br>
 			<a href="log_in.html" class="button"><input type="button" value="成交紀錄"  id="closing"></a>
 
@@ -61,64 +65,111 @@
 </body>
 
 		<script type="text/javascript">
-		$(document).ready(function(){
+			$(document).ready(function(){
+				var id;
+				checkLogIn();
 				var $form = $('#submit');
 				$form.click(function(){
 					submit();
 				});
-			//	gettel();
 			});
-               function gettel(){
+			
+			function submit(){
+				var member_oldpwd = $('#member_oldpwd').val();
+				var member_newpwd = $('#member_newpwd').val();
+				var cellphone = $('#member_tel').val();
+				var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+				
+				if(member_oldpwd.length==0 || member_newpwd.length==0 || cellphone.length==0){
+					alert("所有欄位皆為必填");
+				}
+				else if (member_oldpwd!=member_newpwd){
+					alert("密碼不相同，請重新輸入！");
+				}
+				else if(!password_rule.test(member_newpwd)) {
+					alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
+				}
+				else{
+					// 將資料組成JSON格式
+                    var data_object = {
+                        "id": id,
+                        "password": member_newpwd,
+                        "cellphone": cellphone,
+                        "option":"update"
+                    };
+
+                    // 將JSON格式轉換成字串
+                    var data_string = JSON.stringify(data_object);
+                    
 					$.ajax({
-							type: "POST",
-							url: "api/member.do",
-							cache: false,
-							dataType: 'json',
-							timeout: 5000,
-							success: function (response) {
-								$('#member_tel').val(response.tel);
-							},
-							error: function () {
-								alert("無法連線到伺服器！");
+						type: "PUT",
+						url: "api/parent.do",
+						data: data_string,
+						cache: false,
+						dataType: 'json',
+						timeout: 5000,
+						success: function (response) {
+							alert(response.message);
+							//$('#flashMessage').html(response.message);
+							//$('#flashMessage').show();
+							if(response.status == 200){
+								document.getElementById("member_oldpwd").value="";
+								document.getElementById("member_newpwd").value="";
+								document.getElementById("member_tel").value="";
 							}
+						},
+						error: function () {
+							alert("無法連線到伺服器！");
+						}
 					});//ajax end
-			   }
-				function submit(){
-
-					var member_oldpwd = $('#member_oldpwd').val();
-					var member_newpwd = $('#member_newpwd').val();
-				    var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-					if (member_oldpwd!=member_newpwd){
-					   alert("密碼確認錯誤，請重新輸入！");
-					}
-                    else if(!password_rule.test(member_newpwd)) {
-                            alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
+				}//else end
+			}//submit end
+			
+			//看有沒有人登入
+            function checkLogIn(){
+            	// 將資料組成JSON格式
+                var data_object = {
+                	'option':"login"
+                };
+                // 將JSON格式轉換成字串
+                var data_string = JSON.stringify(data_object);
+                
+            	$.ajax({
+                    type: "GET",
+                    url: "api/parent.do",
+                    crossDomain: true,
+                    data: "option=login",
+                    cache: false,
+                    dataType: 'json',
+                    timeout: 5000,
+                    success: function (response) {
+                        if(response.status == 200){
+                        	updateLogIn(response);
+                        	
                         }
-                    else{
-
-					   var form = $('#form');
-                    	$.ajax({
-                                    type: "POST",
-                                    url: "api/member.do",
-                                    data: form.serialize(),
-                                    cache: false,
-                                    dataType: 'json',
-                                    timeout: 5000,
-                                    success: function (response) {
-                                        $('#flashMessage').html(response.message);
-                                        $('#flashMessage').show();
-                                        if(response.status == 200){
-                                            updateSQLTable(response.response);
-                                        }
-                                    },
-                                    error: function () {
-                                        alert("無法連線到伺服器！");
-                                    }
-                            });//ajax end
-                    }//else end
-				}//submit end
-
-
+                        else{
+                        	$("#loginOrNot").empty();
+                        	//這裡要再改
+                         	var label_html = '<label> No login member </label>';
+                         	$("#loginOrNot").append(label_html);
+                        }
+                        console.log(response);
+                    },
+                    error: function () {
+                        alert("無法連線到伺服器！");
+                    }
+            	});
+            }
+			
+			//更新顯示登入會員的地方
+			function updateLogIn(response){
+            	$("#loginOrNot").empty();
+            	var label_html = "";
+            	var name = response['response']['data'][0]['name'];
+            	id = response['response']['data'][0]['id'];
+            	label_html += '<label> 編號: '+ id + ', ' + name +' 家長會員，您好</label>';
+            	$("#loginOrNot").append(label_html);
+            }
 		</script>
 
 

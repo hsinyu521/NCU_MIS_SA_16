@@ -3,9 +3,9 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>家長會員註冊</title>
-
-    <script src="statics/jquery-3.4.1.min.js" ></script>
+	
     <link rel="stylesheet" type="text/css" href="statics/css/design_register.css">
+    <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
 
 </head>
 
@@ -14,7 +14,7 @@
 	<div id="container">
 
 		<div id="header">
-			<img src="logo.png" alt="Italian Trulli" width="80" height="60">			
+			<img src="statics/img/Logo.png" alt="Italian Trulli" width="200" height="100">			
 		</div>
 
 		<div id="content">
@@ -45,10 +45,15 @@
 							<label for="member_tel">手機</label>
 							<input type="tel" name="tel" maxlength="10" id="member_tel" required="required">
 						</div>
-
+						
 						<div class="input gender">
-							<label>性別 男<input type="radio" name="gender" value="male"> 女<input type="radio" name="gender" value="female"></label>
+						<label for="member_gender">性別</label>
+							<select id="select_gender">
+  								<option value="1" selected="selected">男</option>
+  								<option value="2">女</option>
+							</select>
 						</div>
+						
 					</div>
 
 					<div class="submit"><input type="button" value="註冊" id="submit"></div>
@@ -60,63 +65,66 @@
 				</form>
 			</div>
 		
-
-
-<script type="text/javascript">
-	
-
-</script>
-
-
-
-
 		<script type="text/javascript">
-		$(document).ready(function(){
+			$(document).ready(function(){
 				var $form = $('#submit');
 				$form.click(function(){
 					submit();
 				});
 			});
 
-				function submit(){
+			function submit(){
+				var name = $('#member_name').val();
+				var email = $('#member_email').val();
+				var password = $('#member_password').val();
+				var tel = $('#member_tel').val();
+				var e = document.getElementById("select_gender");
+				var gender = e.options[e.selectedIndex].value;
 
-					var email = $('#member_email').val();
-					var password = $('#member_password').val();
+				var email_rule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+                var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+              	
+                //先在前端確認資料皆填了(value長度皆不為0)再送去後端
+                if(name.length==0 || email.length==0 || password.length==0 || tel.length==0){
+                	alert("所有欄位皆必填!!!");
+                }
+                else if (!email_rule.test(email)) {
+					alert("Email格式不符！");
+                }
+                else if(!password_rule.test(password)) {
+					alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
+             	}
+                else{
+                	var data_object = {
+                    		"name":name,
+                    		"email":email,
+                    		"password":password,
+                    		"cellphone":tel,
+                    		"gender":gender,
+                    		"option":"register"
+                    	};
+                	
+                	var data_string = JSON.stringify(data_object);
 
-
-					var email_rule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
-                    var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-
-                    if (!email_rule.test(email)) {
-                            alert("Email格式不符！");
-                        }
-                    else if(!password_rule.test(password)) {
-                            alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
-                        }
-                    else{
-
-					   var form = $('#form');
-                    	$.ajax({
-                                    type: "POST",
-                                    url: "api/member.do",
-                                    data: form.serialize(),
-                                    cache: false,
-                                    dataType: 'json',
-                                    timeout: 5000,
-                                    success: function (response) {
-                                        $('#flashMessage').html(response.message);
-                                        $('#flashMessage').show();
-                                        if(response.status == 200){
-                                            updateSQLTable(response.response);
-                                        }
-                                    },
-                                    error: function () {
-                                        alert("無法連線到伺服器！");
-                                    }
-                            });//ajax end
-                    }//else end
-				}//submit end
-
+                	$.ajax({
+                		type: "POST",
+                        url: "api/parent.do",
+                        data: data_string,
+                        crossDomain: true,
+                        cache: false,
+                        dataType: 'json',
+                        timeout: 5000,
+                        success: function (response) {
+                        	//顯示錯誤訊息，法一
+                        	var errormsg = response.message;
+                        	alert(errormsg);
+                        },
+                        error: function () {
+                        	alert("無法連線到伺服器！");
+                       	}
+                    });
+                }//else end
+			}//submit end
 
 		</script>
 

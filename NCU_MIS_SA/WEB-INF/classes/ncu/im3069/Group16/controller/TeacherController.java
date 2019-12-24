@@ -64,7 +64,7 @@ public class TeacherController extends HttpServlet {
         	/** 新建一個JSONObject用於將回傳之資料進行封裝 */
         	JSONObject resp = new JSONObject();
         	resp.put("status", "200");
-        	resp.put("message", "成功! 註冊老師會員資料...");
+        	resp.put("message", "成功! 註冊老師會員資料");
         	resp.put("response", data);
                 
         	/** 透過JsonReader物件回傳到前端（以JSONObject方式） */
@@ -72,7 +72,7 @@ public class TeacherController extends HttpServlet {
         }
         else {
         	/** 以字串組出JSON格式之資料 */
-        	String resp = "{\"status\": \'400\', \"message\": \'新增老師會員帳號失敗，此E-Mail帳號重複！\', \'response\': \'\'}";
+        	String resp = "{\"status\": \'400\', \"message\": \'新增老師會員帳號失敗，此email帳號重複！\', \'response\': \'\'}";
         	/** 透過JsonReader物件回傳到前端（以字串方式） */
         	jsr.response(resp, response);
         }
@@ -137,7 +137,7 @@ public class TeacherController extends HttpServlet {
         		/** 新建一個JSONObject用於將回傳之資料進行封裝 */
         		JSONObject resp = new JSONObject();
         		resp.put("status", "200");
-        		resp.put("message", "所有會員資料取得成功");
+        		resp.put("message", "所有老師會員資料取得成功");
         		resp.put("response", query);
     
         		/** 透過JsonReader物件回傳到前端（以JSONObject方式） */
@@ -210,12 +210,11 @@ public class TeacherController extends HttpServlet {
         if(option.equals("update")) {
         	/** 取出經解析到JSONObject之Request參數 */
         	int id = jso.getInt("id");
-        	String email = jso.getString("email");
         	String password = jso.getString("password");
         	String cellphone = jso.getString("cellphone");
 
         	/** 透過傳入之參數，新建一個以這些參數之會員Teacher物件 建構子3*/
-        	Teacher t = new Teacher(id, email, password, cellphone);
+        	Teacher t = new Teacher(id, password, cellphone);
         
         	/** 透過Teacher物件的update()方法至資料庫更新該名會員資料，回傳之資料為JSONObject物件 */
         	JSONObject data = t.update();

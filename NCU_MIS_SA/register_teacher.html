@@ -127,12 +127,9 @@
                                     dataType: 'json',
                                     timeout: 5000,
                                     success: function (response) {
-                                    	//alert("get respose");
+                                    	//顯示錯誤訊息，法二
                                         $('#flashMessage').html(response.message);
                                         $('#flashMessage').show();
-                                        /*if(response.status == 200){
-                                            updateSQLTable(response.response);
-                                        }*/
                                     },
                                     error: function () {
                                         alert("無法連線到伺服器！");

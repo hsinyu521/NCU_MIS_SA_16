@@ -402,9 +402,10 @@ public class TeacherHelper {
           /** 取得資料庫之連線 */
           conn = DBMgr.getConnection();
           /** SQL指令 */
-          String sql = "Update `sa16`.`teachers` SET `password` = ? ,`cellphone` = ? , `modified` = ? WHERE `email` = ?";
+          String sql = "Update `sa16`.`teachers` SET `password` = ? ,`cellphone` = ? , `modified` = ? WHERE `id` = ?";
           /** 取得所需之參數 */
-          String email = t.getEmail();
+          //String email = t.getEmail();
+          int id = t.getID();
           String password = t.getPassword();
           String cellphone = t.getCellphone();
           
@@ -413,7 +414,7 @@ public class TeacherHelper {
           pres.setString(1, password);
           pres.setString(2, cellphone);
           pres.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
-          pres.setString(4, email);
+          pres.setInt(4, id);
           /** 執行更新之SQL指令並記錄影響之行數 */ //這行應該也不用 by min
           row = pres.executeUpdate();
           

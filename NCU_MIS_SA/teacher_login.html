@@ -57,7 +57,7 @@
                 	alert("所有欄位皆必填!!!");
                 }
                 else if (!email_rule.test(email)) {
-                    alert("Email格式不符！");
+                    alert("email格式不符！");
                 }
                 else if(!password_rule.test(password)) {
                     alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
@@ -78,7 +78,7 @@
                     //alert("good!要比對資料");
 				  
 				  
-                    // 發出POST的AJAX請求
+                    // 發出PUT的AJAX請求
                    	$.ajax({
                         type: "PUT",
                         url: "api/teacher.do",
