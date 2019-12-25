@@ -1,0 +1,68 @@
+@charset "UTF-8";
+
+#Header{
+    height:120px;
+    font-size:100%;
+    font-weight:bold;
+    font-family:'lucida grande',verdana,helvetica,arial,sans-serif;
+    color:#fffaf3;
+    background-color:#ff8000;
+    margin: 0; //上右下左
+}
+
+#Sidebar{
+    width:300px;
+    height:400px;
+    float:left;
+    text-align:left;
+    font-size:15px;
+    color:#ffffff;
+    font-weight:bold;
+    background-color:#cecece;
+    padding: 0px 10px 0px 10px;
+}
+
+#Body{
+    height:400px;
+    font-size:15px;
+    color:#f9c81e;
+    font-weight:bold;
+    float:left;
+    padding: 0px 10px 0px 10px;
+
+}
+#Footer{
+    height:80px;
+    text-align:center;
+    line-height:80px;
+    font-size:15px;
+    color:#fffaf3;
+    font-weight:bold;
+    background-color:#ff8000;
+}
+
+#submit{
+    margin: -10px 0px 0px 270px;
+    font-size: 20px;
+    padding: 0px 20px 0px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    float:right;
+}
+
+img{
+    float:left;
+    width:200px;
+    height:100px;
+    vertical-align:middle;
+}
+
+#parent_name{
+    float:right;
+}
+
+form{
+    padding: 0px 0px 0px 150px; //上右下左
+color:black;
+    width: 100%;
+}

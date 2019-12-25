@@ -1,16 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="statics/css/p_interview.css">
     <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
-    <title>家長面試管理</title>
+    <title>家長成交紀錄</title>
 </head>
 <body>
-
 <div id="Header">
     <a href="home.html"><img src="statics/img/Logo.png" alt="Logo"></a>
-    <h1>家長面試管理</h1>
+    <h1>家長成交紀錄</h1>
     <label id="parent_name">XXX家長，您好</label>
 </div>
 
@@ -30,34 +29,20 @@
 
 <div id="Body">
     <div id="flashMessage" class="message" style="display: none;"></div>
-
-    <form>
-        <select id="caseID">
-            <option>請選擇案件編號</option>
-        </select>
-    </form>
-
-    <h3>請選擇欲成交之老師姓名</h3>
+    <h3>所有案件配對成功之老師名單</h3>
 
     <table id="table">
         <thead>
         <tr>
-            <th></th>
-            <th>老師會員姓名</th>
-            <th>老師會員手機</th>
+            <th>案件編號</th>
+            <th>錄取老師姓名</th>
+            <th>面談時薪</th>
         </tr>
         </thead>
         <tbody>
         </tbody>
-        <tr>
-            <td><input type="radio" name="teacher" value="id_2"></td>
-            <td>以上皆不適任</td>
-            <td></td>
-        </tr>
 
     </table>
-
-    <div class="submit"><input type="button" value="送出" id="submit"></div>
 
 </div>
 
@@ -96,7 +81,7 @@
         $("#table > tbody").empty();
         var table_html = '';
         $.each(data, function(index, value) {
-            table_html += '<tr><td scope="row">' + '<input type="radio" name="teacher" value="'+value['id']+'">' + '</td>';
+            table_html += '<tr><td scope="row">' + value['id']+ '</td>';
             table_html += '<td>' + value['name'] + '</td>';
             table_html += '<td>' + value['cellphone'] + '</td>';
         })
@@ -126,12 +111,6 @@
     }
     $(document).ready(function() {
         getAllMember();
-
-        var $submit = $('#submit');
-
-        $submit.click(function(){
-            alert('你確定要選擇該名老師嗎？');
-        });
     });
 </script>
 
