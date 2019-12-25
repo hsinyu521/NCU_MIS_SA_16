@@ -56,7 +56,44 @@
                     <select id="area-list"></select>
                 </form>
 
-	<script type="text/javascript">
+
+                </div>
+                <div>
+                    <h3>&bull;教學經驗</h3>
+                    <select id="select" οnfοcus="selectFocus()">
+	                    <option οnclick="selectClick()">無經驗</option>
+	                    <option οnclick="selectClick()">一年以下</option>
+	                    <option οnclick="selectClick()">二年以下</option>
+	                    <option οnclick="selectClick()">三年以下</option>
+	                    <option οnclick="selectClick()">四年以下</option>
+	                    <option οnclick="selectClick()">五年以上</option>
+                    </select>
+                </div>
+            </nav>
+            <div id="case">
+            <div>
+                <h2>最近案件</h2>
+                <hr/>
+            </div>
+                <table id="case_list" border="1" solid #888888>
+                <thead>
+                    <tr>
+                            <td>案件編號</td>
+                            <td>聯絡人</td>
+                            <td>科目</td>
+                            <td>對象</td>
+                            <td>上課地點</td>
+                            <td>教學經驗</td>
+                            <td>時薪</td>
+                    </tr>
+                 </thead>
+                 <tbody>
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    	<script type="text/javascript">
 		var colleges=['台北市','新北市','桃園市','新竹','苗栗縣','台中市','彰化縣','雲林縣','嘉義','台南市','高雄市','屏東縣','基隆市','宜蘭縣','花蓮縣','台東縣','南投縣','澎湖縣','金門縣','連江縣'];
 		var collegeSelect=document.getElementById("county-list");
 		var inner="";
@@ -97,80 +134,45 @@
 		}
 		changeCollege(document.getElementById("county-list").selectedIndex);
                     
-        /*function getAllCASE() {
-            $.ajax({
-                type: "GET",
-                url: "api/product.do",
-                crossDomain: true,
-                cache: false,
-                dataType: 'json',
-                timeout: 5000,
-                success: function (response) {
-                    if (response.status == 200) {
-                	var product_panel = '';
+	    function getAllCaseData() {
+	    	$.ajax({
+	              type: "GET",
+	              url: "api/case.do",
+	              crossDomain: true,
+	              cache: false,
+	              dataType: 'json',
+	              timeout: 5000,
+	              success: function (response) {
+	                  if(response.status == 200){
+	                	  updateTable(response.response.data);
+	                  }
+	                  console.log(response);
+	              },
+	              error: function () {
+	                  alert("無法連線到伺服器！");
+	              }
+	        });
+	      }
+	      
+	      getAllCaseData();
+	      
+	      function updateTable(data) {
+	          $("#case_list > tbody").empty();
+	          var table_html = '';
+	          $.each(data, function(index, value) {
+	              table_html += '<tr><td>'+ '<a href="case_detail.html?id=' + value['id'] + '">' + value['id'] + '</a></td>';
+	              table_html += '<td>' + value['parent_id'] + '</td>';
+	              table_html += '<td>' + value['subject'] + '</td>';
+	              table_html += '<td>' + value['grade'] + '</td>';
+	              table_html += '<td>' + value['teach_county'] +value['teach_region'] + '</td>';
+	              table_html += '<td>' + value['teachExperience'] + '</td>';
+	              table_html += '<td>' + value['wage'] + '</td></tr>';
+	              
+	          })
 
-                	$.each(response.response.data, function (){
-                		product_panel += addProduct(this);
-                	})
-
-                	$("#product_panel").append(product_panel);
-                	setButtonFunction();
-                	checkIfExistInCart();
-                    }
-                },
-                error: function () {
-                    alert("無法連線到伺服器！");
-                }
-            });
-        }*/
-		
-		$(document).ready(function() {
-			alert("ready");
-		});
-                    
-		/*$(document).ready(function (){
-			$("#loginLabel").click(function(){
-				alert("you click");
-				$("#registLabel").fadeIn("slow");
- 			})
-		};*/
-	</script>
-                </div>
-                <div>
-                    <h3>&bull;教學經驗</h3>
-                    <select id="select" οnfοcus="selectFocus()">
-	                    <option οnclick="selectClick()">無經驗</option>
-	                    <option οnclick="selectClick()">一年以下</option>
-	                    <option οnclick="selectClick()">二年以下</option>
-	                    <option οnclick="selectClick()">三年以下</option>
-	                    <option οnclick="selectClick()">四年以下</option>
-	                    <option οnclick="selectClick()">五年以上</option>
-                    </select>
-                </div>
-            </nav>
-            <div id="case">
-            <div>
-                <h2>最近案件</h2>
-                <hr/>
-            </div>
-                <table id="table" border="1" solid #888888>
-                <thead>
-                    <tr>
-                            <td>案件編號</td>
-                            <td>聯絡人</td>
-                            <td>科目</td>
-                            <td>對象</td>
-                            <td>上課地點</td>
-                            <td>教學經驗</td>
-                            <td>時薪</td>
-                    </tr>
-                 </thead>
-                 <tbody>
-                </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+	          $("#case_list > tbody").append(table_html);
+	      }
+	      </script>
 
 </body>
 </html>

@@ -148,6 +148,8 @@ public class CaseHelper {
     public JSONObject getAll() {
         Case c = null;
         JSONArray jsa = new JSONArray();
+        /** 記錄實際執行之SQL指令 */
+        String exexcute_sql = "";
         /** 儲存JDBC檢索資料庫後回傳之結果，以 pointer 方式移動到下一筆資料 */
         ResultSet rs = null;
         
@@ -161,12 +163,17 @@ public class CaseHelper {
             pres = conn.prepareStatement(sql);
             /** 執行查詢之SQL指令並記錄其回傳之資料 */
             rs = pres.executeQuery();
+
+            /** 紀錄真實執行的SQL指令，並印出 **/
+            exexcute_sql = pres.toString();
+            System.out.println(exexcute_sql);
             
             /** 透過 while 迴圈移動pointer，取得每一筆回傳資料 */
             while(rs.next()) {
                 
                 /** 將 ResultSet 之資料取出 */
-                int id = rs.getInt("id");            		
+                int id = rs.getInt("id");    
+                int parent_id = rs.getInt("parent_id");
                 String grade = rs.getString("grade");
                 int subject = rs.getInt("subject");
                 String teachCounty = rs.getString("teachCounty");
@@ -174,8 +181,12 @@ public class CaseHelper {
                 int wage = rs.getInt("wage");
                 String teachTime = rs.getString("teachTime");
                 int teachExperience = rs.getInt("teachExperience");
+                int state = rs.getInt("state");
+                Timestamp modified = rs.getTimestamp("modified");
+                Timestamp created = rs.getTimestamp("created");
+                
                 /** 將每一筆商品資料產生一名新Product物件 */
-                c = new Case(id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience);
+                c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state, modified, created);
                 /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
                 jsa.put(c.getCaseData());
             }
@@ -194,8 +205,8 @@ public class CaseHelper {
         
         /** 將SQL指令、花費時間、影響行數與所有會員資料之JSONArray，封裝成JSONObject回傳 */
         JSONObject response = new JSONObject();
+        response.put("sql", exexcute_sql);
         response.put("data", jsa);
-
         return response;
     }
     
@@ -228,7 +239,8 @@ public class CaseHelper {
                 /** 每執行一次迴圈表示有一筆資料 */
                 
                 /** 將 ResultSet 之資料取出 */
-                int id = rs.getInt("id");            		
+                int id = rs.getInt("id");    
+                int parent_id = rs.getInt("parent_id");
                 String grade = rs.getString("grade");
                 int subject = rs.getInt("subject");
                 String teachCounty = rs.getString("teachCounty");
@@ -236,9 +248,12 @@ public class CaseHelper {
                 int wage = rs.getInt("wage");
                 String teachTime = rs.getString("teachTime");
                 int teachExperience = rs.getInt("teachExperience");
+                int state = rs.getInt("state");
+                Timestamp modified = rs.getTimestamp("modified");
+                Timestamp created = rs.getTimestamp("created");
                 
                 /** 將每一筆商品資料產生一名新Product物件 */
-                c = new Case(id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience);
+                c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state, modified, created);
                 /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
                 data = c.getCaseData();
             }

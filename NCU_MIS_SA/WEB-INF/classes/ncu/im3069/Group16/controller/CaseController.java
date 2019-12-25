@@ -39,8 +39,33 @@ public class CaseController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+	       /** 透過 JsonReader 類別將 Request 之 JSON 格式資料解析並取回 */
+        JsonReader jsr = new JsonReader(request);
+
+        /** 取出經解析到 JsonReader 之 Request 參數 */
+        String id = jsr.getParameter("id");
+
+        /** 新建一個 JSONObject 用於將回傳之資料進行封裝 */
+        JSONObject resp = new JSONObject();
+
+        /** 判斷該字串是否存在，若存在代表要取回個別訂單之資料，否則代表要取回全部資料庫內訂單之資料 */
+        if (!id.isEmpty()) {
+          /** 透過 orderHelper 物件的 getByID() 方法自資料庫取回該筆訂單之資料，回傳之資料為 JSONObject 物件 */
+          JSONObject query = ch.getById(id);
+          resp.put("status", "200");
+          resp.put("message", "單筆案件資料取得成功");
+          resp.put("response", query);
+        }
+        else {
+          /** 透過 orderHelper 物件之 getAll() 方法取回所有訂單之資料，回傳之資料為 JSONObject 物件 */
+          JSONObject query = ch.getAll();
+          resp.put("status", "200");
+          resp.put("message", "所有案件資料取得成功");
+          resp.put("response", query);
+        }
+
+        /** 透過 JsonReader 物件回傳到前端（以 JSONObject 方式） */
+        jsr.response(resp, response);
 	}
 
 	/**

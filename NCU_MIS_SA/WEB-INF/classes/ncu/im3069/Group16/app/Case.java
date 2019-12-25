@@ -94,16 +94,19 @@ public class Case{
      * @param create 案件創建時間
      * @param modify 案件修改時間
      */
-    public Case(int id,String grade,int subject,String teach_county, String teach_region
-    		,int wage,String teachtime, int state,Timestamp modified,Timestamp created) {
+    public Case(int id,int parent_id,String grade,int subject,String teach_county, String teach_region
+    		,int wage,String teachtime,int teachExperience,int state,Timestamp modified,Timestamp created) {
     	//1218 min 這感覺不會有最後兩個時間的參數，在helper中直接把當下時間塞進sql語法就好(可以參考更新老師會員資料)
+    	//1224 hsin老師更改和顯示都是用這個建構子，所以所有的資料都要有(外鍵、狀態、時間)
         this.id = id;
+        this.parent_id = parent_id;
 		this.grade=grade;
 		this.subject=subject;
 		this.teach_county=teach_county;
 		this.teach_region=teach_region;
 		this.wage=wage;
 		this.teachtime=teachtime;
+		this.teachExperience=teachExperience;
 		this.state=state;
 		this.modified=modified;
 		this.created=created;
@@ -261,9 +264,10 @@ public class Case{
         jso.put("teach_region", getRegion());
         jso.put("wage", getWage());
         jso.put("teachtime", getTeachTime());
+        jso.put("teach_experience", getTeachExperience());
         jso.put("state", getState());
-//        jso.put("modified", getModifyTime());
-//        jso.put("created", getCreated());
+        jso.put("modified", getModifyTime());
+        jso.put("created", getCreated());
 
         return jso;
     }
