@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>新老師會員登入</title>
+    <title>老師會員登入</title>
     <link rel="stylesheet" type="text/css" href="statics/css/design_register.css">
     <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
 
@@ -10,7 +10,7 @@
 <body>
 <div id="container">
     <div id="header">
-        <a href="test.html"><img src="statics/img/Logo.png" alt="Logo" width="200" height="100"></a>
+        <a href="home.html"><img src="statics/img/Logo.png" alt="Logo" width="200" height="100"></a>
     </div>
 
     <div id="content">
@@ -90,7 +90,8 @@
                         success: function (response) {
                             //alert("get respose");
                             $('#flashMessage').html(response.message);
-                            $('#flashMessage').show();
+                            $('#flashMessage').show();           
+                            window.location.assign("home.html"); //跳轉到首頁 Chu 12/25 8:03pm
                             if(response.status == 200){
                             	//updateSQLTable(response.response);
                             }
