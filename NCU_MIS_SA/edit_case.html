@@ -33,8 +33,11 @@
     </div>
 
     <div id="Body">
-
-        <h2 id="caseID">案件編號No.</h2>
+		<form id="caseID">
+        	<select>
+            	<option>請選擇案件編號</option>
+        	</select>
+    	</form>
         <div id="flashMessage" class="message" style="display: none;"></div>
         <div id="case_state">
             <div>
@@ -46,7 +49,7 @@
 
         <p></p>
 
-        <form id="form" accept-charset="utf-8">
+        <form id="content" accept-charset="utf-8">
             <div style="display:none;"><input type="hidden" name="_method" value="POST"></div>
             <div class="input text required">
                 <label for="student_grade">對象</label>
