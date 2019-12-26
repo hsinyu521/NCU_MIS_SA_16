@@ -318,7 +318,7 @@ public class TeacherHelper {
    * @param p 一名老師會員之Parent物件(建構子1)
    * @return the JSON object 回傳SQL指令執行之結果
    */
-  public JSONObject create(Teacher t) {	//1212 4pm by min
+  public JSONObject create(Teacher t) {	//1226 11am by min
       /** 記錄實際執行之SQL指令 */
       String exexcute_sql = "";
       /** 紀錄程式開始執行時間 */
@@ -330,8 +330,8 @@ public class TeacherHelper {
           /** 取得資料庫之連線 */
           conn = DBMgr.getConnection();
           /** SQL指令 */
-          String sql = "INSERT INTO `sa16`.`teachers`(`name`,`email`,`password`,`cellphone`,`gender`,`modified`, `created`)"
-                  + " VALUES(?, ?, ?, ?, ?, ?, ?)";
+          String sql = "INSERT INTO `sa16`.`teachers`(`name`,`email`,`password`,`cellphone`,`gender`,`modified`, `created`,`login`)"
+                  + " VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
           
           /** 取得所需之參數 */
           String name = t.getName();
@@ -349,6 +349,7 @@ public class TeacherHelper {
           pres.setInt(5, gender);
           pres.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
           pres.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
+          pres.setInt(8, 1);
           
           /** 執行新增之SQL指令並記錄影響之行數 */
           row = pres.executeUpdate();
@@ -570,7 +571,7 @@ public class TeacherHelper {
           /** 讓指標移往最後一列 */
           rs.next();
           id = rs.getString("id");
-          System.out.printf("Now, login t member is %s\n",id);
+          System.out.printf("(in TH)Now, login t member is %s\n",id);
 
       } catch (SQLException e) {
           /** 印出JDBC SQL指令錯誤 **/

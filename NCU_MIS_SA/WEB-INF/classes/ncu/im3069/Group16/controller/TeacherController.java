@@ -60,7 +60,7 @@ public class TeacherController extends HttpServlet {
         else if (!th.checkDuplicate(t)) {
         	/** 透過TeacherHelper物件的create()方法新建一個會員至資料庫 */
         	JSONObject data = th.create(t);
-                
+            
         	/** 新建一個JSONObject用於將回傳之資料進行封裝 */
         	JSONObject resp = new JSONObject();
         	resp.put("status", "200");
@@ -271,5 +271,23 @@ public class TeacherController extends HttpServlet {
                 jsr.response(resp, response);
         	}
         }
+        
+        //若為登出
+        else if(option.equals("logout")) {
+        	System.out.printf("----------teacher登出---------\n");
+        	String email = jso.getString("email");
+        	
+        	th.updateLogin(email, false);
+    		
+            /** 新建一個JSONObject用於將回傳之資料進行封裝 */
+            JSONObject resp = new JSONObject();
+            resp.put("status", "200");
+            resp.put("message", "老師會員登出成功!");
+            //resp.put("response", data);
+            
+            /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
+            jsr.response(resp, response);
+        }
+        
     }
 }

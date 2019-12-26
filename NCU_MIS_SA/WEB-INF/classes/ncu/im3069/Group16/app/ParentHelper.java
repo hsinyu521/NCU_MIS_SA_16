@@ -575,7 +575,7 @@ public class ParentHelper {
 	          /** 讓指標移往最後一列 */
 	          rs.next();
 	          id = rs.getString("id");
-	          System.out.printf("Now, login p member is %s\n",id);
+	          System.out.printf("(in PH)Now, login p member's id is %s\n",id);
 
 	      } catch (SQLException e) {
 	          /** 印出JDBC SQL指令錯誤 **/
