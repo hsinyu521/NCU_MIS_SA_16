@@ -79,12 +79,12 @@ public class CaseController extends HttpServlet {
         
         int parent_id = jso.getInt("parent_id");
         String grade = jso.getString("grade");
-        int subject = jso.getInt("subject");
+        String subject = jso.getString("subject");
         String teach_county = jso.getString("teachCounty");
         String teach_region = jso.getString("teachRegion");
         int wage  = jso.getInt("wage");
         String teachtime = jso.getString("teachTime");
-        int teachExperience = jso.getInt("teachExperience");
+        String teachExperience = jso.getString("teachExperience");
         
         /** 建立一個新的案件物件 */
         Case c =new Case(parent_id,grade,subject,teach_county,teach_region

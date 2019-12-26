@@ -34,12 +34,12 @@ public class CaseHelper {
             /** 取得所需之參數 */
             int parent_id = ca.getParent_id();
             String grade = ca.getGrade();
-            int subject = ca.getSubject();
+            String subject = ca.getSubject();
             String teachCounty = ca.getCounty();
             String teachRegion = ca.getRegion();
             int wage = ca.getWage();
             String teachTime = ca.getTeachTime();
-            int teachExperience = ca.getTeachExperience();
+            String teachExperience = ca.getTeachExperience();
             int state = ca.getState();
 
             
@@ -47,12 +47,12 @@ public class CaseHelper {
             pres = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pres.setInt(1, parent_id);
             pres.setString(2, grade);
-            pres.setInt(3, subject);
+            pres.setString(3, subject);
             pres.setString(4, teachCounty);
             pres.setString(5, teachRegion);
             pres.setInt(6, wage);
             pres.setString(7, teachTime);
-            pres.setInt(8, teachExperience);
+            pres.setString(8, teachExperience);
             pres.setInt(9, state); 
             pres.setTimestamp(10, Timestamp.valueOf(LocalDateTime.now()));
             pres.setTimestamp(11, Timestamp.valueOf(LocalDateTime.now()));
@@ -102,22 +102,22 @@ public class CaseHelper {
             /** 取得所需之參數 */
             int id = c.getId();            		
             String grade = c.getGrade();
-            int subject = c.getSubject();
+            String subject = c.getSubject();
             String teachCounty = c.getCounty();
             String teachRegion = c.getRegion();
             int wage = c.getWage();
             String teachTime = c.getTeachTime();
-            int teachExperience = c.getTeachExperience();
+            String teachExperience = c.getTeachExperience();
             
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
             pres.setString(1, grade);
-            pres.setInt(2, subject);
+            pres.setString(2, subject);
             pres.setString(3, teachCounty);
             pres.setString(4, teachRegion);
             pres.setInt(5, wage);
             pres.setString(6, teachTime);
-            pres.setInt(7, teachExperience);
+            pres.setString(7, teachExperience);
             pres.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
             pres.setInt(9, id);
 
@@ -175,12 +175,12 @@ public class CaseHelper {
                 int id = rs.getInt("id");    
                 int parent_id = rs.getInt("parent_id");
                 String grade = rs.getString("grade");
-                int subject = rs.getInt("subject");
+                String subject = rs.getString("subject");
                 String teachCounty = rs.getString("teachCounty");
                 String teachRegion = rs.getString("teachRegion");
                 int wage = rs.getInt("wage");
                 String teachTime = rs.getString("teachTime");
-                int teachExperience = rs.getInt("teachExperience");
+                String teachExperience = rs.getString("teachExperience");
                 int state = rs.getInt("state");
                 Timestamp modified = rs.getTimestamp("modified");
                 Timestamp created = rs.getTimestamp("created");
@@ -242,12 +242,12 @@ public class CaseHelper {
                 int id = rs.getInt("id");    
                 int parent_id = rs.getInt("parent_id");
                 String grade = rs.getString("grade");
-                int subject = rs.getInt("subject");
+                String subject = rs.getString("subject");
                 String teachCounty = rs.getString("teachCounty");
                 String teachRegion = rs.getString("teachRegion");
                 int wage = rs.getInt("wage");
                 String teachTime = rs.getString("teachTime");
-                int teachExperience = rs.getInt("teachExperience");
+                String teachExperience = rs.getString("teachExperience");
                 int state = rs.getInt("state");
                 Timestamp modified = rs.getTimestamp("modified");
                 Timestamp created = rs.getTimestamp("created");

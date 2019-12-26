@@ -4,7 +4,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>案件詳情</title>
 
-    <script src="statics/jquery-3.4.1.min.js" ></script>
+        <script src="statics/js/jquery-3.4.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="statics/css/design_case.css">
 
 </head>
@@ -19,19 +19,19 @@
 
 		<div id="content">
 
-			<h2>案件編號:NO.</h2>
+			<h2>案件編號:NO.<span id="id">{{id}}</span></h2>
 
 			<h3>上課內容</h3><hr>
 
-			<div>對象:</div>
-			<div>上課科目:</div>
-			<div>上課地點:</div>
-			<div>薪資待遇:</div>
-			<div>上課時間:</div>
+			<div>對象:<span id="grade">{{grade}}</span></div>
+			<div>上課科目:<span id="subject">{{subject}}</span></div>
+			<div>上課地點:<span id="location">{{location}}</span></div>
+			<div>薪資待遇:<span id="wage">{{wage}}</span></div>
+			<div>上課時間:<span id="teachtime">{{teachtime}}</span></div>
 
 			<h3>老師條件需求</h3><hr>
 
-			<div>教學經驗:</div>
+			<div>教學經驗:<span id="exper">{{exper}}</span></div>
 
 			<div id="secend_content"></div>
 					<div class="submit"><input type="button" value="我要應徵" id="submit"></div>
@@ -67,47 +67,16 @@
 	  getCaseData();
 	  
 	  function updateHTML(data) {
-		  $("#order_id").html(data['order_info']['id']);
-		  $("#create").html(data['order_info']['create']);
-		  $("#modify").html(data['order_info']['modify']);
-		  $("#email").html(data['order_info']['email']);
-		  $("#address").html(data['order_info']['address']);
-		  $("#phone").html(data['order_info']['phone']);
-		  $("#first_name").html(data['order_info']['first_name']);
-		  $("#last_name").html(data['order_info']['last_name']);
-		  $("#item").html(data.product_info.length);
-		  
-		  var total_price = Big(0.0);
-		  var quantity = 0;
-		  var inner_html = "";
-		  
-		  $.each(data.product_info, function (k, v) {
-			  quantity += v['quantity'];
-			  total_price = total_price.plus(v['subtotal']);
-			  inner_html += updateOrderProductTable(v);
-		  });
-		  
-		  $("#quantity").html(quantity);
-		  $("#total").html(total_price.toString());
-		  
-		  $("#table > tbody").empty();
-		  $("#panel").append(inner_html);
+		  $("#id").html(data['id']);
+		  $("#grade").html(data['grade']);
+		  $("#subject").html(data['subject']);
+		  $("#location").html(data['teach_county']+data['teach_region']);
+		  $("#wage").html(data['wage']);
+		  $("#teachtime").html(data['teachtime']);
+		  $("#exper").html(data['teach_experience']);
 	
 	  }
 	  
-	  function updateOrderProductTable(data) {
-		  var table_html = "";
-		  table_html += '<tr id="row_' + data.id + '">';
-	    table_html += '<td class="align-middle text-center">' + data.product.id + '</td>';
-	    table_html += '<td class="align-middle"><p class="text-break">' + data.product.name + '</p></td>';
-	    table_html += '<td class="align-middle text-center"><span id="price_' + data.id + '">' + data.price + '</td>';
-	    table_html += '<td class="align-middle text-center">' + data.quantity + '</td>';
-	    table_html += '<td class="align-middle text-center"><strong><span id="subtotal_' + data.id + '">' + data.subtotal + '<strong></td>';
-	    table_html += '</tr>';
-		  
-		  return table_html;
-		  
-	  }
 	  </script>
 </body>
 </html>
