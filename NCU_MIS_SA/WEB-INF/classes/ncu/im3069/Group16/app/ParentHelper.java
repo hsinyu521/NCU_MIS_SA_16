@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import ncu.im3069.demo.util.DBMgr;
+import ncu.im3069.Group16.util.DBMgr;
 
 public class ParentHelper {
 	/*
