@@ -251,14 +251,13 @@ public class TeacherController extends HttpServlet {
         	else if(password.equals(realPwd)) {	//密碼正確
         		System.out.printf("login success.\n");
         		/** 透過TeacherHelper物件的create()方法新建一個會員至資料庫 */
-                //JSONObject data = th.create(t);
-        		th.updateLogin(email, true);
+                JSONObject data = th.updateLogin(email, true);	//1227
         		
                 /** 新建一個JSONObject用於將回傳之資料進行封裝 */
                 JSONObject resp = new JSONObject();
                 resp.put("status", "200");
                 resp.put("message", "登入成功!");
-                //resp.put("response", data);
+                resp.put("response", data);	//1227
                 
                 /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
                 jsr.response(resp, response);

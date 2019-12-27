@@ -42,7 +42,7 @@
 						</div>
 
 						<div class="input tel required">
-							<label for="member_tel">手機</label>
+							<label for="member_tel">(格式範例:09xxxxxxxx)手機</label>
 							<input type="tel" name="tel" maxlength="10" id="member_tel" required="required">
 						</div>
 						
@@ -83,6 +83,7 @@
 
 				var email_rule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
                 var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+                var tel_rule=/^09[0-9]{8}$/;
               	
                 //先在前端確認資料皆填了(value長度皆不為0)再送去後端
                 if(name.length==0 || email.length==0 || password.length==0 || tel.length==0){
@@ -94,6 +95,9 @@
                 else if(!password_rule.test(password)) {
 					alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
              	}
+                else if (!tel_rule.test(tel)) {
+                    alert("手機號碼格式不符！");
+                }
                 else{
                 	var data_object = {
                     		"name":name,
