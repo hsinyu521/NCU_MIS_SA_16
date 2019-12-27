@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>老師面試管理</title>
+    
+    <link rel="stylesheet" type="text/css" href="statics/css/manage_teacher.css">
+    <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+</head>
+
+
+<body>
+
+    <div id="container">
+
+        <div id="header">
+            <a href="index.html"><img src="statics/img/Logo.png" alt="Logo"></a>
+           	<h1> 老師面試管理</h1>
+           	<label id="teacher_name"></label>
+        </div>
+
+        <div id="content">
+<!--            <div id="next_content"></div> -->
+                <div id=Inquire class="btn-group-vertical">
+                        <input class="btn btn-default" type="button" value="修改老師會員資訊" onclick="location.href='要前往的網頁連結'" style="width:150px;height:50px;">
+                        <input class="btn btn-default" type="button" value="面試管理" onclick="location.href='要前往的網頁連結'" style="width:150px;height:50px;">
+                        <input class="btn btn-default" type="button" value="成交紀錄" onclick="location.href='要前往的網頁連結'" style="width:150px;height:50px;">
+                </div>
+
+
+            <section id="case" >
+                <table id="table" border="1" solid #888888>
+                <thead>
+                         <tr>
+                            <td>案件編號</td>
+                            <td>家長會員手機</td>
+                            <td>上課科目</td>
+                            <td>上課地點</td>
+                            <td>管理狀態</td>
+                        </tr>
+                 </thead>
+                 <tbody>
+                </tbody>
+                </table>
+            </section>
+        </div>
+    </div>
+    <script type="text/javascript">
+	    $(document).ready(function() {
+	        //看登入
+	        checkTLogIn();
+	    });
+        function getAllCase() {
+            /*$.ajax({
+                type: "GET",
+                url: "api/product.do",
+                crossDomain: true,
+                cache: false,
+                dataType: 'json',
+                timeout: 5000,
+                success: function (response) {
+                    if (response.status == 200) {
+                	var product_panel = '';
+
+                	$.each(response.response.data, function (){
+                		//product_panel += addProduct(this);
+                	})
+
+                	$("#product_panel").append(product_panel);
+                	setButtonFunction();
+                	checkIfExistInCart();
+                    }
+                },
+                error: function () {
+                    alert("無法連線到伺服器！");
+                }
+            });
+        */}
+
+        getAllCase();
+        
+        //預設都是0，如果有人登入會去改，若其他部分又去取東西再用這個
+        var loginTID=0;
+        var loginEmail;
+        
+    	//看有沒有老師會員登入
+    	function checkTLogIn(){
+    		// 將資料組成JSON格式
+    		var data_object = {
+    			'option':"login"
+    		};
+    		// 將JSON格式轉換成字串
+    		var data_string = JSON.stringify(data_object);
+              
+    		$.ajax({
+    			type: "GET",
+    			url: "api/teacher.do",
+    			crossDomain: true,
+    			data: "option=login",
+    			cache: false,
+    			dataType: 'json',
+    			timeout: 5000,
+    			success: function (response) {
+    				if(response.status == 200){
+    					updateLogIn(response);
+    					loginTID = response['response']['data'][0]['id'];
+    					loginEmail = response['response']['data'][0]['email'];
+    				}
+    				else{	//沒有就顯示平常的樣子
+    					loginTID=0;
+    					showInit();
+    				}
+    				console.log(response);
+    			},
+    			error: function () {
+    				alert("無法連線到伺服器！");
+    			}
+    		});
+    	}
+    	
+    	//沒會員登入的長相
+    	function showInit(){
+    		//上面20幾行的loginOrNot不要直接打東西上去，打在這，不然有登入的人還是會先閃過那個
+    		$("#teacher_name").empty();
+    		var label_html = '<label>訪客您好</label>';
+    		$("#teacher_name").append(label_html);
+    	}
+    	
+    	
+    	//更新顯示登入會員的地方
+    	function updateLogIn(response){
+    		$("#teacher_name").empty();
+          	var label_html = "";
+          	var name = response['response']['data'][0]['name'];
+          	label_html += '<label> '+ name + '老師，您好 </label>';
+          	label_html += '<button id="logoutBtn">登出</button>';
+          	$("#teacher_name").append(label_html);
+          	var $form = $('#logoutBtn');
+    		$form.click(function(){
+    			logout();
+    		});
+        }
+    	
+    	//登出
+    	function logout(){
+    		var urlstr = "api/teacher.do";
+    		//alert("loginPID="+loginPID+" loginTID="+loginTID);
+    		// 將資料組成JSON格式
+    		var data_object = {
+    			'email': loginEmail,
+    			'option':"logout"
+    		};
+    		// 將JSON格式轉換成字串
+    		var data_string = JSON.stringify(data_object);
+    		alert("urlstr: "+urlstr);
+    		
+    		$.ajax({
+    			type: "PUT",
+    			url: urlstr,
+    			data: data_string,
+    			cache: false,
+    			dataType: 'json',
+    			timeout: 5000,
+    			success: function (response) {
+    				//如果你們前端登入成功要新跳視窗出來就打在這
+    				if (response.status == 200) {
+    					alert(response.message);
+    					loginTID=0;
+    					//showInit();
+    					window.location.reload();	//刷新頁面
+    				}
+    			},
+    			error: function () {
+    				alert("無法連線到伺服器！");
+    			}
+    		});
+    	}
+    </script>
+
+
+</body>
+</html>

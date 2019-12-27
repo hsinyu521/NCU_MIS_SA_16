@@ -18,7 +18,7 @@
         <img src="statics/img/Logo.png" alt="Italian Trulli" width="200" height="100">
     </div>
     
-    <div id="loginOrNot" align="right">
+    <div id="member_name" align="right">
     	<label></label>
     </div>
 
@@ -257,20 +257,20 @@
 	//沒會員登入的長相
 	function showInit(){
 		//上面20幾行的loginOrNot不要直接打東西上去，打在這，不然有登入的人還是會先閃過那個
-		$("#loginOrNot").empty();
-		var label_html = '<label> No login member </label>';
-		$("#loginOrNot").append(label_html);
+		$("#member_name").empty();
+		var label_html = '<label>訪客您好</label>';
+		$("#member_name").append(label_html);
 	}
 	
 	
 	//更新顯示登入會員的地方
 	function updateLogIn(response, str){
-		$("#loginOrNot").empty();
+		$("#member_name").empty();
       	var label_html = "";
       	var name = response['response']['data'][0]['name'];
       	label_html += '<label> Hi, '+ name + ' ' + str +' </label>';
       	label_html += '<button id="logoutBtn">登出</button>';
-      	$("#loginOrNot").append(label_html);
+      	$("#member_name").append(label_html);
       	var $form = $('#logoutBtn');
 		$form.click(function(){
 			logout();
