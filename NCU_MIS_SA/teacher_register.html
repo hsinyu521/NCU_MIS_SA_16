@@ -71,80 +71,105 @@
 		</div>
 	
 
-		<script type="text/javascript">
-			$(document).ready(function(){
-				
-				var $form = $('#submit');
-				$form.click(function(){
-					submit();
-				});
-
-				 var $login = $('#log_in');
-				 $login.click(function(){
-				 	 href="log_in.html";
-				 });
-
-				function submit(){
-					var name = $('#member_name').val();
-					var email = $('#member_email').val();
-					var password = $('#member_password').val();
-					var tel = $('#member_tel').val();
-					var e = document.getElementById("select_gender");
-					var gender = e.options[e.selectedIndex].value;
-					
-					
-					var email_rule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
-                    var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-                    var tel_rule=/^09[0-9]{8}$/;
-					
-                    //先在前端確認資料皆填了(value長度皆不為0)再送去後端
-                    if(name.length==0 || email.length==0 || password.length==0 || tel.length==0){
-                    	alert("所有欄位皆必填!!!");
-                    }
-                    else if (!email_rule.test(email)) {
-						alert("Email格式不符！");
-                    }
-                    else if(!password_rule.test(password)) {
-						alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
-                    }
-                    else if (!tel_rule.test(tel)) {
-                        alert("手機號碼格式不符！");
-                    }
-                    else{
-                    	var data_object = {
-                    		"name":name,
-                    		"email":email,
-                    		"password":password,
-                    		"cellphone":tel,
-                    		"gender":gender
-                    	};
-
-                    	var data_string = JSON.stringify(data_object);
-
-                    	$.ajax({
-                                    type: "POST",
-                                    url: "api/teacher.do",
-                                    data: data_string,
-                                    crossDomain: true,
-                                    cache: false,
-                                    dataType: 'json',
-                                    timeout: 5000,
-                                    success: function (response) {
-                                    	//顯示錯誤訊息，法二
-                                        $('#flashMessage').html(response.message);
-                                        $('#flashMessage').show();
-                                    },
-                                    error: function () {
-                                        alert("無法連線到伺服器！");
-                                    }
-                            });
-                    }
-
-
-                 }
-
-				});
+	<script type="text/javascript">
+		$(document).ready(function(){
+			var $form = $('#submit');
+			$form.click(function(){
+				submit();
+			});
+			var $login = $('#log_in');
+			$login.click(function(){
+				href="log_in.html";
+			});
+		});
 			
+		function submit(){
+			var name = $('#member_name').val();
+			var email = $('#member_email').val();
+			var password = $('#member_password').val();
+			var tel = $('#member_tel').val();
+			var e = document.getElementById("select_gender");
+			var gender = e.options[e.selectedIndex].value;
+			var email_rule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+			var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+			var tel_rule=/^09[0-9]{8}$/;
+			//先在前端確認資料皆填了(value長度皆不為0)再送去後端
+			if(name.length==0 || email.length==0 || password.length==0 || tel.length==0){
+				alert("所有欄位皆必填!!!");
+			}
+			else if (!email_rule.test(email)) {
+				alert("Email格式不符！");
+			}
+			else if(!password_rule.test(password)) {
+				alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
+			}
+			else if (!tel_rule.test(tel)) {
+				alert("手機號碼格式不符！");
+			}
+			else{
+				var data_object = {
+					"name":name,
+                   	"email":email,
+                   	"password":password,
+                   	"cellphone":tel,
+                   	"gender":gender
+                    };
+				var data_string = JSON.stringify(data_object);
+					
+				$.ajax({
+					type: "POST",
+					url: "api/teacher.do",
+					data: data_string,
+					crossDomain: true,
+					cache: false,
+					dataType: 'json',
+					timeout: 5000,
+					success: function (response) {
+						alert(response.message);
+						if(response.status == 200){	//若註冊成功，將自動登入，並轉往首頁
+							directLogin(email, password);
+						}
+					},
+					error: function () {
+						alert("無法連線到伺服器！");
+					}
+				});
+			}
+		}
+		
+		//直接登入，跳至首頁
+		function directLogin(email, password){
+			// 將資料組成JSON格式
+            var data_object = {
+            	"memberType":"teacher",
+                "email":email,
+                "password":password
+            };
+            // 將JSON格式轉換成字串
+            var data_string = JSON.stringify(data_object);
+            
+            // 發出POST的AJAX請求
+           	$.ajax({
+                type: "POST",
+                url: "api/login.do",
+                data: data_string,
+                crossDomain: true,
+                cache: false,
+                dataType: 'json',
+                timeout: 5000,
+                success: function (response) {
+                    if(response.status == 200){
+                    	//重導至首頁
+                    	alert("直接登入，將跳轉至首頁!");
+                    	window.location.assign("http://localhost:8090/NCU_MIS_SA_Group16/");
+                    }
+                },
+                error: function () {
+                    alert("無法連線到伺服器！");
+                }
+            
+            });
+		}
 		</script>
 
 	</div>

@@ -118,9 +118,10 @@
                         dataType: 'json',
                         timeout: 5000,
                         success: function (response) {
-                        	//顯示錯誤訊息，法一
-                        	var errormsg = response.message;
-                        	alert(errormsg);
+    						alert(response.message);	//顯示訊息
+    						if(response.status == 200){	//若註冊成功，將自動登入，並轉往首頁
+    							directLogin(email, password);
+    						}
                         },
                         error: function () {
                         	alert("無法連線到伺服器！");
@@ -128,7 +129,40 @@
                     });
                 }//else end
 			}//submit end
-
+			
+			//直接登入，跳至首頁
+			function directLogin(email, password){
+				// 將資料組成JSON格式
+	            var data_object = {
+	            	"memberType":"parent",
+	                "email":email,
+	                "password":password
+	            };
+	            // 將JSON格式轉換成字串
+	            var data_string = JSON.stringify(data_object);
+	            
+	            // 發出POST的AJAX請求
+	           	$.ajax({
+	                type: "POST",
+	                url: "api/login.do",
+	                data: data_string,
+	                crossDomain: true,
+	                cache: false,
+	                dataType: 'json',
+	                timeout: 5000,
+	                success: function (response) {
+	                    if(response.status == 200){
+	                    	//重導至首頁
+	                    	alert("直接登入，將跳轉至首頁!");
+	                    	window.location.assign("http://localhost:8090/NCU_MIS_SA_Group16/");
+	                    }
+	                },
+	                error: function () {
+	                    alert("無法連線到伺服器！");
+	                }
+	            
+	            });
+			}
 		</script>
 
 		</div>

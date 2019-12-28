@@ -22,7 +22,7 @@ public class TeacherHelper {
   }
   
   /** 靜態變數，儲存ParentHelper物件 */
-	private static TeacherHelper th;
+  private static TeacherHelper th;
 	
 	/** 儲存JDBC資料庫連線 */
   private Connection conn = null;

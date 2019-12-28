@@ -38,7 +38,7 @@ public class LoginController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("in LC, doGet\n");
+		//System.out.println("in LC, doGet\n");
         /** 透過JsonReader類別將Request之JSON格式資料解析並取回 */
         JsonReader jsr = new JsonReader(request);
 		
