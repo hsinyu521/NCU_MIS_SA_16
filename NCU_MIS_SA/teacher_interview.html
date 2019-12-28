@@ -94,14 +94,14 @@
     			success: function (response) {
     				if(response.status == 200){
     					if(response['response']['memberType']!="teacher"){
-    						showInit();
+    						noTLogin();
     					}
     					else{
     						updateLogIn(response);
     					}
     				}
-    				else{	//沒有就顯示平常的樣子
-    					showInit();
+    				else{	//沒有登入
+    					noTLogin();
     				}
     				console.log(response);
     			},
@@ -142,12 +142,10 @@
     			success: function (response) {
     				//如果你們前端登入成功要新跳視窗出來就打在這
     				if (response.status == 200) {
-    					alert(response.message);
-    					showInit();
     					loginPID=0;
     					loginTID=0;
-    					//alert("pid: "+loginPID +" tid: "+ loginTID);
-    					//window.location.reload();	//刷新頁面
+    					alert(response.message);
+    					noTLogin();
     				}
     			},
     			error: function () {
@@ -157,11 +155,9 @@
     	}
     	
     	//沒會員登入的長相
-    	function showInit(){
-    		//上面20幾行的loginOrNot不要直接打東西上去，打在這，不然有登入的人還是會先閃過那個
-    		$("#teacher_name").empty();
-    		var label_html = '<label>訪客您好</label>';
-    		$("#teacher_name").append(label_html);
+    	function noTLogin(){
+    		alert("未登入老師會員，將跳轉至首頁!");
+    		window.location.assign("http://localhost:8090/NCU_MIS_SA_Group16/");
     	}
         
     </script>

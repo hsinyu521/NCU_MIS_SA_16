@@ -53,7 +53,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 	    getAllMember();
-	    checkPLogIn();
+	    getLogin();
 	});
 	
     // 全域變數紀錄SQL指令下的次數
@@ -115,66 +115,51 @@
         $("#sql_summary").html("(default) " + data.row + " queries took " + time + " ms");
     }
     
-    
-	//預設都是0，如果有人登入會去改，若其他部分又去取東西再用這個
+   
+    //如果有人登入會去改，若其他部分又去取東西再用這個
     var loginPID=0;
-    var loginEmail;
-    
-	//看有沒有家長會員登入
-	function checkPLogIn(){
-		// 將資料組成JSON格式
-		var data_object = {
-			'option':"login"
-		};
-		// 將JSON格式轉換成字串
-		var data_string = JSON.stringify(data_object);
-          
+	
+    function getLogin(){
 		$.ajax({
 			type: "GET",
-			url: "api/parent.do",
+			url: "api/login.do",
 			crossDomain: true,
-			data: "option=login",
 			cache: false,
 			dataType: 'json',
 			timeout: 5000,
 			success: function (response) {
 				if(response.status == 200){
-					updateLogIn(response, "家長");
-					loginPID = response['response']['data'][0]['id'];
-					loginEmail = response['response']['data'][0]['email'];
-					//alert("loginPID: "+loginPID);
-					//alert("loginEmail: "+loginEmail);
-					updateLogIn(response);
+					if(response['response']['memberType']!="parent"){
+						noPLogin();
+					}
+					else{
+						updateLogIn(response);
+					}
 				}
-				else{	//沒登入
-					//可能跳出這個頁面
-					alert("you has not logged in!");
+				else{	//沒有登入
+					noPLogin();
 				}
 				console.log(response);
 			},
 			error: function () {
-				alert("in checkPLogin");
 				alert("無法連線到伺服器！");
 			}
 		});
 	}
 	
-	//沒會員登入的長相
-	function showInit(){
-		//上面20幾行的parent_name不要直接打東西上去，打在這，不然有登入的人還是會先閃過那個
-		$("#parent_name").empty();
-		var label_html = '<label> No login member </label>';
-		$("#parent_name").append(label_html);
-	}
-	
-	
 	//更新顯示登入會員的地方
 	function updateLogIn(response){
 		$("#parent_name").empty();
       	var label_html = "";
-      	var name = response['response']['data'][0]['name'];
-      	label_html += '<label> '+ name + '家長，您好 </label>';
-      	label_html += '<button id="logoutBtn">登出 </button>';
+      	var name = response['response']['name'];
+      	var typeStr = "家長";
+      	//alert(type);
+      	
+      	loginPID = response['response']['id'];
+      	//alert("loginPID: "+loginPID);
+      	
+      	label_html += '<label> '+ name + typeStr +'，您好</label>';
+      	label_html += '<button id="logoutBtn">登出</button>';
       	$("#parent_name").append(label_html);
       	var $form = $('#logoutBtn');
 		$form.click(function(){
@@ -184,37 +169,30 @@
 	
 	//登出
 	function logout(){
-		var urlstr = "api/parent.do";
-		
-		// 將資料組成JSON格式
-		var data_object = {
-			'email': loginEmail,
-			'option':"logout"
-		};
-		// 將JSON格式轉換成字串
-		var data_string = JSON.stringify(data_object);
-		//alert("urlstr: "+urlstr);
-		
 		$.ajax({
-			type: "PUT",
-			url: urlstr,
-			data: data_string,
+			type: "DELETE",
+			url: "api/login.do",
 			cache: false,
 			dataType: 'json',
 			timeout: 5000,
 			success: function (response) {
 				//如果你們前端登入成功要新跳視窗出來就打在這
 				if (response.status == 200) {
-					alert(response.message);
 					loginPID=0;
-					//showInit();
-					window.location.reload();	//刷新頁面
+					alert(response.message);
+					noPLogin();
 				}
 			},
 			error: function () {
 				alert("無法連線到伺服器！");
 			}
 		});
+	}
+	
+	//沒會員登入的長相
+	function noPLogin(){
+		alert("未登入家長會員，將跳轉至首頁!");
+		window.location.assign("http://localhost:8090/NCU_MIS_SA_Group16/");
 	}
 </script>
 

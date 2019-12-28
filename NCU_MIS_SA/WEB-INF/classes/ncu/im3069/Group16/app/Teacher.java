@@ -80,18 +80,6 @@ public class Teacher {
 		this.cellphone = cellphone;
 	}
 	
-	/** constructor_4 建構子4 (doPost()家長登入會用到)
-     * 實例化（Instantiates）一個新的（new）Teacher物件
-     * 採用多載（overload）方法進行，此建構子用於老師會員"登入"時，產生一名老師會員
-     * 
-     * @param email 老師會員電子信箱
-     * @param password 老師會員密碼
-     */
-	public Teacher(String email, String password) {
-		this.email = email;
-		this.password = password;
-	}
-	
 	/**
      * 取得老師會員之編號
      *
