@@ -200,6 +200,9 @@ public class TeacherController extends HttpServlet {
      */
     public void doPut(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {	//1223 8pm by min
+    	//1228
+    	HttpSession session = request.getSession();
+    	
         /** 透過JsonReader類別將Request之JSON格式資料解析並取回 */
         JsonReader jsr = new JsonReader(request);
         JSONObject jso = jsr.getObject();
@@ -228,12 +231,28 @@ public class TeacherController extends HttpServlet {
         	/** 透過JsonReader物件回傳到前端（以JSONObject方式） */
         	jsr.response(resp, response);
         }
- 
+
+        else if(option.equals("new_login")) {
+        	System.out.printf("----------new teacher登入---------\n");
+        	String email = jso.getString("email");
+        	String password = jso.getString("password");
+        	
+        	if(th.checkLogin(email, password)) {	//if true，代表登入成功
+        		
+        	}
+        }
+        
+        
         //若為登入
         else if(option.equals("login")) {	
         	System.out.printf("----------teacher登入---------\n");
         	String email = jso.getString("email");
         	String password = jso.getString("password");
+        	
+        	///////1228
+        	int id = th.getIDByEmail(email);
+        	
+        	//////
         	//建一個新的老師會員物件 (建構子4)
         	//Teacher t = new Teacher(email, password);
         	String realPwd = th.getPwdByEmail(email);
@@ -241,6 +260,7 @@ public class TeacherController extends HttpServlet {
         	
         	//要先確認email存在、找密碼
         	if(realPwd.isEmpty()) {	//此email不存在，故realPwd為空
+        	//if(id==0){ //1228
         		System.out.printf("email not exist\n");
         		
         		/** 以字串組出JSON格式之資料 */
@@ -251,13 +271,17 @@ public class TeacherController extends HttpServlet {
         	else if(password.equals(realPwd)) {	//密碼正確
         		System.out.printf("login success.\n");
         		/** 透過TeacherHelper物件的create()方法新建一個會員至資料庫 */
-                JSONObject data = th.updateLogin(email, true);	//1227
+                th.updateLogin(email, true);	//1227
         		
+                //1228
+                session.setAttribute("member","teacher");                
+                session.setAttribute("id",id);
+                
                 /** 新建一個JSONObject用於將回傳之資料進行封裝 */
                 JSONObject resp = new JSONObject();
                 resp.put("status", "200");
                 resp.put("message", "登入成功!");
-                resp.put("response", data);	//1227
+                //resp.put("response", data);	//1227
                 
                 /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
                 jsr.response(resp, response);
@@ -276,8 +300,13 @@ public class TeacherController extends HttpServlet {
         	System.out.printf("----------teacher登出---------\n");
         	String email = jso.getString("email");
         	
-        	th.updateLogin(email, false);
+        	//sol 1
+        	//th.updateLogin(email, false);
     		
+        	//sol 2
+        	session.removeAttribute("id");
+        	session.removeAttribute("member");
+        	
             /** 新建一個JSONObject用於將回傳之資料進行封裝 */
             JSONObject resp = new JSONObject();
             resp.put("status", "200");

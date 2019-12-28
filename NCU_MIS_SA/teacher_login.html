@@ -66,9 +66,9 @@
                 	
                     // 將資料組成JSON格式
                     var data_object = {
+                    	"memberType":"teacher",
                         "email":email,
-                        "password":password,
-                        "option":"login"
+                        "password":password
                     };
                     // 將JSON格式轉換成字串
                     var data_string = JSON.stringify(data_object);
@@ -80,8 +80,8 @@
 				  
                     // 發出PUT的AJAX請求
                    	$.ajax({
-                        type: "PUT",
-                        url: "api/teacher.do",
+                        type: "POST",
+                        url: "api/login.do",
                         data: data_string,
                         crossDomain: true,
                         cache: false,

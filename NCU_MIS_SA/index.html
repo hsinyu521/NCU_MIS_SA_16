@@ -136,7 +136,7 @@
 
 
 	$(document).ready(function(){
-		checkPLogIn();
+		//checkPLogIn();
 	});
 	
 	function getAllCaseData() {
@@ -318,6 +318,44 @@
 			}
 		});
 	}
+	
+	//
+	function getLogin(){
+		// 將資料組成JSON格式
+		var data_object = {
+			'id':session.getAttribute("id")
+		};
+		// 將JSON格式轉換成字串
+		var data_string = JSON.stringify(data_object);
+          
+		$.ajax({
+			type: "PUT",
+			url: "api/login.do",
+			crossDomain: true,
+			data: "option=login",
+			cache: false,
+			dataType: 'json',
+			timeout: 5000,
+			success: function (response) {
+				if(response.status == 200){
+					updateLogIn(response, "老師");
+					loginTID = response['response']['data'][0]['id'];
+					loginPID=0;
+					loginEmail = response['response']['data'][0]['email'];
+				}
+				else{	//沒有就顯示平常的樣子
+					loginTID=0;
+					loginPID=0;
+					showInit();
+				}
+				console.log(response);
+			},
+			error: function () {
+				alert("無法連線到伺服器！");
+			}
+		});
+	}
+	
 </script>
 
 
