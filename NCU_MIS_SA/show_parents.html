@@ -13,7 +13,7 @@
   <div id="Header">
       <div class="imgHolder"><a href="home.html"><img  src="statics/img/Logo.png" alt="Logo"></a></div>
       <h1>管理者中心</h1>
-      <label id="manager_name">XXX管理者，您好</label>
+      <label id="manager_name"></label>
   </div>
 
     <div id="content">
@@ -49,7 +49,90 @@
   <div id="Footer">®安心168家教網 created by 2019</div>
 
 </div>
-
+	<script type="text/javascript">
+	$(document).ready(function() {
+		getLogin();	//看登入
+	});
+	
+	//如果有人登入會去改，若其他部分又去取東西再用這個
+    var loginMID=0;
+	
+    function getLogin(){
+		$.ajax({
+			type: "GET",
+			url: "api/login.do",
+			crossDomain: true,
+			cache: false,
+			dataType: 'json',
+			timeout: 5000,
+			success: function (response) {
+				if(response.status == 200){
+					if(response['response']['memberType']!="manager"){
+						noPLogin();
+					}
+					else{
+						updateLogIn(response);
+					}
+				}
+				else{	//沒有登入
+					noPLogin();
+				}
+				console.log(response);
+			},
+			error: function () {
+				alert("無法連線到伺服器！");
+			}
+		});
+	}
+	
+	//更新顯示登入會員的地方
+	function updateLogIn(response){
+		$("#manager_name").empty();
+      	var label_html = "";
+      	var name = response['response']['name'];
+      	var typeStr = "管理者";
+      	//alert(type);
+      	
+      	loginMID = response['response']['id'];
+      	//alert("loginPID: "+loginPID);
+      	
+      	label_html += '<label> '+ name + typeStr +'，您好</label>';
+      	label_html += '<button id="logoutBtn">登出</button>';
+      	$("#manager_name").append(label_html);
+      	var $form = $('#logoutBtn');
+		$form.click(function(){
+			logout();
+		});
+    }
+	
+	//登出
+	function logout(){
+		$.ajax({
+			type: "DELETE",
+			url: "api/login.do",
+			cache: false,
+			dataType: 'json',
+			timeout: 5000,
+			success: function (response) {
+				//如果你們前端登入成功要新跳視窗出來就打在這
+				if (response.status == 200) {
+					loginMID=0;
+					alert(response.message);
+					noPLogin();
+				}
+			},
+			error: function () {
+				alert("無法連線到伺服器！");
+			}
+		});
+	}
+	
+	//沒會員登入的長相
+	function noPLogin(){
+		alert("未登入管理者會員，將跳轉至首頁!");
+		window.location.assign("http://localhost:8090/NCU_MIS_SA_Group16/");
+	}
+	</script>
 </body>
 
 </html>

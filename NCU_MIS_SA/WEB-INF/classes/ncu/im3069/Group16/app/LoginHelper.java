@@ -62,8 +62,11 @@ public class LoginHelper {
 	          if(type.equals("teacher")) {
 	        	  sql = "SELECT `id` FROM `sa16`.`teachers` WHERE `email` = ? AND `password` = ?";
 	          }
-	          else {
+	          else if(type.equals("parent")) {
 	        	  sql = "SELECT `id` FROM `sa16`.`parents` WHERE `email` = ? AND `password` = ?";
+	          }
+	          else {
+	        	  sql = "SELECT `id` FROM `sa16`.`managers` WHERE `email` = ? AND `password` = ?";
 	          }
 	        
 	          /** 取得所需之參數 */
@@ -119,8 +122,11 @@ public class LoginHelper {
 			if(login.getMemberType().equals("teacher")) {
 				sql = "SELECT `name` FROM `sa16`.`teachers` WHERE `id` = ? LIMIT 1";
 			}
-			else {
+			else if(login.getMemberType().equals("parent")){
 				sql = "SELECT `name` FROM `sa16`.`parents` WHERE `id` = ? LIMIT 1";
+			}
+			else {
+				sql = "SELECT `name` FROM `sa16`.`managers` WHERE `id` = ? LIMIT 1";
 			}
 			
 			/** 將參數回填至SQL指令當中 */

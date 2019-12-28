@@ -100,6 +100,7 @@ public class LoginController extends HttpServlet {
         String memberType = jso.getString("memberType");
         String email = jso.getString("email");
         String password = jso.getString("password");
+        System.out.printf("in LC, type: %s\n", memberType);
         
         Login login = new Login(memberType, email, password);
         
@@ -146,6 +147,7 @@ public class LoginController extends HttpServlet {
 		
 		session.removeAttribute("memberType");
 		session.removeAttribute("id");
+		session.invalidate();
 		
 		/** 新建一個JSONObject用於將回傳之資料進行封裝 */
         JSONObject resp = new JSONObject();

@@ -50,6 +50,85 @@
 
 </div>
 
+<script type="text/javascript">
+	$(document).ready(function() {
+	    getAllMember();
+	    checkLogIn();
+	});
+	
+	//取得所有老師會員列表
+	function getAllMember() {
+    	$.ajax({
+            type: "GET",
+            url: "api/teacher.do",
+            crossDomain: true,
+            cache: false,
+            dataType: 'json',
+            timeout: 5000,
+            success: function (response) {
+                if(response.status == 200){
+                    updateTable(response.response.data);
+                }
+                console.log(response);
+            },
+            error: function () {
+                alert("無法連線到伺服器！");
+            }
+    	});
+	}
+	
+	// 更新會員列表表格
+    function updateTable(data) {	//做出html要的表單形式
+        $("#table > tbody").empty();
+        var table_html = '';
+        $.each(data, function(index, value) {	//data為陣列
+        	table_html += '<tr><td scope="row">' + value['id'] + '</td>';
+            table_html += '<td>' + value['name'] + '</td>';
+            table_html += '<td>' + value['email'] + '</td>';
+            table_html += '<td>' + value['cellphone'] + '</td>';
+            table_html += '<td>' + value['gender'] + '</td>';
+            table_html += '<td>' + '<a href="edit.html?id=' + value['id'] + '">編輯</a> | ';
+            table_html += '<a href="javascript: deleteMember(' + value['id'] + ');">刪除</a></td></tr>';
+        })
+
+        $("#table > tbody").append(table_html);
+    }
+	
+	//刪除會員
+    function deleteMember(id) {
+        var check = window.confirm("確認刪除該老師會員？");
+        if (check == true) {
+            console.log("You pressed OK!");
+            var request = {'id': id};
+            var data_string = JSON.stringify(request);
+            $.ajax({
+                type: "DELETE",
+                url: "api/parent.do",
+                crossDomain: true,
+                data: data_string,
+                cache: false,
+                dataType: 'json',
+                timeout: 5000,
+                success: function (response) {
+                    if(response.status == 200){
+                        alert("成功!已成功刪除");
+                    	//$("#flashMessage").html("成功!已成功刪除");
+                        //$("#flashMessage").show();
+                        getAllMember();
+                    }
+                    console.log(response);
+                },
+                error: function () {
+                    alert("無法連線到伺服器！");
+                }
+            });
+        }
+        else {
+            console.log("You pressed Cancel!");
+        }
+    }
+</script>
+
 </body>
 
 </html>

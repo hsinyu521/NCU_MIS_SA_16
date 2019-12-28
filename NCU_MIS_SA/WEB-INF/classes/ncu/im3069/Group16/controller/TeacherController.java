@@ -66,7 +66,7 @@ public class TeacherController extends HttpServlet {
         	resp.put("status", "200");
         	resp.put("message", "成功! 註冊老師會員資料");
         	resp.put("response", data);
-                
+        	
         	/** 透過JsonReader物件回傳到前端（以JSONObject方式） */
         	jsr.response(resp, response);
         }

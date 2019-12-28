@@ -389,8 +389,8 @@ public class TeacherHelper {
           /** 取得資料庫之連線 */
           conn = DBMgr.getConnection();
           /** SQL指令 */
-          String sql = "INSERT INTO `sa16`.`teachers`(`name`,`email`,`password`,`cellphone`,`gender`,`modified`, `created`,`login`)"
-                  + " VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+          String sql = "INSERT INTO `sa16`.`teachers`(`name`,`email`,`password`,`cellphone`,`gender`,`modified`, `created`)"
+                  + " VALUES(?, ?, ?, ?, ?, ?, ?)";
           
           /** 取得所需之參數 */
           String name = t.getName();
@@ -408,7 +408,6 @@ public class TeacherHelper {
           pres.setInt(5, gender);
           pres.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
           pres.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
-          pres.setInt(8, 1);
           
           /** 執行新增之SQL指令並記錄影響之行數 */
           row = pres.executeUpdate();

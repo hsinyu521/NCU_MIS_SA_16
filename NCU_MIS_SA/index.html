@@ -180,6 +180,7 @@
     //看有沒有人登入
 	var loginPID = 0;
 	var loginTID = 0;
+	var loginMID = 0;
 	
 	function getLogin(){
 		$.ajax({
@@ -218,10 +219,14 @@
       		loginTID = response['response']['id'];
       		//alert("loginTID: "+loginTID);
       	}
-      	else{
+      	else if (type=="parent"){
       		typeStr = "家長";
       		loginPID = response['response']['id'];
       		//alert("loginPID: "+ loginPID);
+      	}
+      	else{
+      		typeStr = "管理者";
+      		loginMID = response['response']['id'];
       	}
       	
       	label_html += '<label> '+ name + typeStr +'，您好</label>';
@@ -248,6 +253,7 @@
 					showInit();
 					loginPID=0;
 					loginTID=0;
+					loginMID=0;
 					//alert("pid: "+loginPID +" tid: "+ loginTID);
 					//window.location.reload();	//刷新頁面
 				}

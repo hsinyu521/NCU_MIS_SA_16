@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="UTF-8">
   <title>管理者登入</title>
   <link rel="stylesheet" type="text/css" href="statics/css/manager_login.css">
   <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
@@ -38,74 +38,66 @@
 
   </div>
  <script type="text/javascript">
-    $(document).ready(function(){
-
-      var $form = $('#submit');
-      $form.click(function(){
-        submit();
-      });
-
-      function submit(){
-        var email = $('#member_email').val();
-        var password = $('#member_password').val();
-
-        var email_rule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+ 	$(document).ready(function(){
+ 		var $form = $('#submit');
+ 		$form.click(function(){
+ 			submit();
+ 		});
+ 		
+ 	function submit(){
+ 		var email = $('#member_email').val();
+ 		var password = $('#member_password').val();
+ 		
+ 		var email_rule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
         var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-
         //在前端就先確認欄位都填了
         if(email.length==0 || password.length==0){
-          alert("所有欄位皆必填!!!");
+        	alert("所有欄位皆必填!!!");
         }
         else if (!email_rule.test(email)) {
-          alert("email格式不符！");
-        }
-        else if(!password_rule.test(password)) {
-          alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
+        	alert("email格式不符！");
         }
         else{
-
-          // 將資料組成JSON格式
-          var data_object = {
-            "email":email,
-            "password":password,
-            "option":"login"
-          };
-          // 將JSON格式轉換成字串
-          var data_string = JSON.stringify(data_object);
-
-          //alert(email);
-          //alert(password);
-          //alert("good!要比對資料");
-
-
-          // 發出PUT的AJAX請求
-          $.ajax({
-            type: "PUT",
-            url: "api/teacher.do",
-            data: data_string,
-            crossDomain: true,
-            cache: false,
-            dataType: 'json',
-            timeout: 5000,
-            success: function (response) {
-              //alert("get respose");
-              $('#flashMessage').html(response.message);
-              $('#flashMessage').show();
-              if(response.status == 200){
-                //updateSQLTable(response.response);
-              }
-            },
-            error: function () {
-              alert("無法連線到伺服器！");
-            }
-
-          });
+        	// 將資料組成JSON格式
+        	var data_object = {
+        		"memberType":"manager",
+        		"email":email,
+        		"password":password
+        	};
+        	// 將JSON格式轉換成字串
+        	var data_string = JSON.stringify(data_object);
+        	
+        	//alert(email);
+        	//alert(password);
+        	//alert("good!要比對資料");
+        	
+        	// 發出PUT的AJAX請求
+           	$.ajax({
+                type: "POST",
+                url: "api/login.do",
+                data: data_string,
+                crossDomain: true,
+                cache: false,
+                dataType: 'json',
+                timeout: 5000,
+                success: function (response) {
+                    alert(response.message);
+                    //$('#flashMessage').html(response.message);
+                    //$('#flashMessage').show();           
+                    if(response.status == 200){
+                    	//重導至首頁
+                    	window.location.assign("http://localhost:8090/NCU_MIS_SA_Group16/");
+                    }
+                },
+                error: function () {
+                    alert("無法連線到伺服器！");
+                }
+            
+            });
         }
-
-
-      }
-
-    });
+    }
+ 	
+ });
 
   </script>
 
