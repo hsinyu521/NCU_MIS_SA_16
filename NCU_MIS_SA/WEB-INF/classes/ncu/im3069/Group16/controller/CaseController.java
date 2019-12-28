@@ -44,6 +44,8 @@ public class CaseController extends HttpServlet {
 
         /** 取出經解析到 JsonReader 之 Request 參數 */
         String id = jsr.getParameter("id");
+        String subject = jsr.getParameter("subject");
+        String teachExperience = jsr.getParameter("teachExperience");
 
         /** 新建一個 JSONObject 用於將回傳之資料進行封裝 */
         JSONObject resp = new JSONObject();
@@ -55,6 +57,20 @@ public class CaseController extends HttpServlet {
           resp.put("status", "200");
           resp.put("message", "單筆案件資料取得成功");
           resp.put("response", query);
+        }
+        else if(!subject.isEmpty()) {
+            /** 透過 orderHelper 物件之 getAll() 方法取回所有訂單之資料，回傳之資料為 JSONObject 物件 */
+            JSONObject query = ch.getBySubject(subject);
+            resp.put("status", "200");
+            resp.put("message", "所有案件資料取得成功");
+            resp.put("response", query);
+        }
+        else if(!teachExperience.isEmpty()) {
+            /** 透過 orderHelper 物件之 getAll() 方法取回所有訂單之資料，回傳之資料為 JSONObject 物件 */
+            JSONObject query = ch.getByExperience(teachExperience);
+            resp.put("status", "200");
+            resp.put("message", "所有案件資料取得成功");
+            resp.put("response", query);
         }
         else {
           /** 透過 orderHelper 物件之 getAll() 方法取回所有訂單之資料，回傳之資料為 JSONObject 物件 */
@@ -116,14 +132,59 @@ public class CaseController extends HttpServlet {
 	 * @see HttpServlet#doPut(HttpServletRequest, HttpServletResponse)
 	 */
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+        /** 透過JsonReader類別將Request之JSON格式資料解析並取回 */
+        JsonReader jsr = new JsonReader(request);
+        JSONObject jso = jsr.getObject();
+        
+        /** 取出經解析到JSONObject之Request參數 */
+        int parent_id = jso.getInt("parent_id");
+        String grade = jso.getString("grade");
+        String subject = jso.getString("subject");
+        String teach_county = jso.getString("teachCounty");
+        String teach_region = jso.getString("teachRegion");
+        int wage  = jso.getInt("wage");
+        String teachtime = jso.getString("teachTime");
+        String teachExperience = jso.getString("teachExperience");
+
+        /** 透過傳入之參數，新建一個以這些參數之會員Member物件 */
+        Case c =new Case(parent_id,grade,subject,teach_county,teach_region
+        		,wage,teachtime,teachExperience);
+        
+        /** 透過Member物件的update()方法至資料庫更新該名會員資料，回傳之資料為JSONObject物件 */
+        JSONObject data = c.update();
+        
+        /** 新建一個JSONObject用於將回傳之資料進行封裝 */
+        JSONObject resp = new JSONObject();
+        resp.put("status", "200");
+        resp.put("message", "成功! 更新會員資料...");
+        resp.put("response", data);
+        
+        /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
+        jsr.response(resp, response);
 	}
 
 	/**
 	 * @see HttpServlet#doDelete(HttpServletRequest, HttpServletResponse)
 	 */
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+        /** 透過JsonReader類別將Request之JSON格式資料解析並取回 */
+        JsonReader jsr = new JsonReader(request);
+        JSONObject jso = jsr.getObject();
+        
+        /** 取出經解析到JSONObject之Request參數 */
+        int id = jso.getInt("id");
+        
+        /** 透過MemberHelper物件的deleteByID()方法至資料庫刪除該名會員，回傳之資料為JSONObject物件 */
+        JSONObject query = ch.deleteByID(id);
+        
+        /** 新建一個JSONObject用於將回傳之資料進行封裝 */
+        JSONObject resp = new JSONObject();
+        resp.put("status", "200");
+        resp.put("message", "會員移除成功！");
+        resp.put("response", query);
+
+        /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
+        jsr.response(resp, response);
 	}
 
 }
