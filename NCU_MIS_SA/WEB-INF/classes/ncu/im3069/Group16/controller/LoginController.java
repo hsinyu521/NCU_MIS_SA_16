@@ -38,7 +38,46 @@ public class LoginController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		System.out.println("in LC, doGet\n");
+        /** 透過JsonReader類別將Request之JSON格式資料解析並取回 */
+        JsonReader jsr = new JsonReader(request);
+		
+		HttpSession session = request.getSession();	//登入用
+		
+		String type = (String)session.getAttribute("memberType");
+		
+		//System.out.printf("in LC, type:%s , id: %d\n", type, id);
+		
+		if(type==null) {	//沒人登入
+			/** 新建一個JSONObject用於將回傳之資料進行封裝 */
+            JSONObject resp = new JSONObject();
+    		//回傳訊息告訴前端正常顯示
+    		resp.put("status", "400");
+            resp.put("message", "沒人登入哦");
+            
+            /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
+            jsr.response(resp, response);
+		}
+		else {	//有人登入
+			int id = (int)session.getAttribute("id");
+			Login login =  new Login(type, id);
+			String name = lh.getNameByLogin(login);
+			
+			JSONObject data = new JSONObject();
+			data.put("memberType", type);
+			data.put("id", id);
+			data.put("name", name);
+			
+			/** 新建一個JSONObject用於將回傳之資料進行封裝 */
+            JSONObject resp = new JSONObject();
+            resp.put("status", "200");
+            resp.put("message", "有人登入");
+            resp.put("response", data);
+    
+            /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
+            jsr.response(resp, response);
+		}
+		
 	}
 
 	/**
@@ -50,6 +89,8 @@ public class LoginController extends HttpServlet {
 		System.out.printf("in LoginController, doPost\n");
 		
 		HttpSession session = request.getSession();	//登入用
+		session.removeAttribute("memberType");
+		session.removeAttribute("id");
 		
 		/** 透過JsonReader類別將Request之JSON格式資料解析並取回 */
         JsonReader jsr = new JsonReader(request);
@@ -100,6 +141,19 @@ public class LoginController extends HttpServlet {
 	 */
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		JsonReader jsr = new JsonReader(request);
+		HttpSession session = request.getSession();	//登入用
+		
+		session.removeAttribute("memberType");
+		session.removeAttribute("id");
+		
+		/** 新建一個JSONObject用於將回傳之資料進行封裝 */
+        JSONObject resp = new JSONObject();
+        resp.put("status", "200");
+        resp.put("message", "登出成功！");
+
+        /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
+        jsr.response(resp, response);
 	}
 
 }

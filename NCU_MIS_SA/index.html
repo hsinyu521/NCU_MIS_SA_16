@@ -94,6 +94,10 @@
     </div>
 </div>
 <script type="text/javascript">
+	$(document).ready(function(){
+		getLogin();
+	});
+
 	var colleges=['台北市','新北市','桃園市','新竹','苗栗縣','台中市','彰化縣','雲林縣','嘉義','台南市','高雄市','屏東縣','基隆市','宜蘭縣','花蓮縣','台東縣','南投縣','澎湖縣','金門縣','連江縣'];
 	var collegeSelect=document.getElementById("county-list");
 	var inner="";
@@ -135,10 +139,6 @@
 	changeCollege(document.getElementById("county-list").selectedIndex);
 
 
-	$(document).ready(function(){
-		//checkPLogIn();
-	});
-	
 	function getAllCaseData() {
     	$.ajax({
               type: "GET",
@@ -175,39 +175,26 @@
               
           })
           $("#case_list > tbody").append(table_html);
-      }
-    
-    //預設都是0，如果有人登入會去改，若其他部分又去取東西再用這個
-    var loginPID=0;
-    var loginTID=0;
-    var loginEmail;
-    
-	//看有沒有家長會員登入
-	function checkPLogIn(){
-		// 將資料組成JSON格式
-		var data_object = {
-			'option':"login"
-		};
-		// 將JSON格式轉換成字串
-		var data_string = JSON.stringify(data_object);
-          
+      }	
+	
+    //看有沒有人登入
+	var loginPID = 0;
+	var loginTID = 0;
+	
+	function getLogin(){
 		$.ajax({
 			type: "GET",
-			url: "api/parent.do",
+			url: "api/login.do",
 			crossDomain: true,
-			data: "option=login",
 			cache: false,
 			dataType: 'json',
 			timeout: 5000,
 			success: function (response) {
 				if(response.status == 200){
-					updateLogIn(response, "家長");
-					loginPID = response['response']['data'][0]['id'];
-					loginTID=0;
-					loginEmail = response['response']['data'][0]['email'];
+					updateLogIn(response);
 				}
-				else{	//沒家長會員登入再去看有沒有老師會員登入
-					checkTLogIn();
+				else{	//沒有就顯示平常的樣子
+					showInit();
 				}
 				console.log(response);
 			},
@@ -217,36 +204,53 @@
 		});
 	}
 	
-	//看有沒有老師會員登入
-	function checkTLogIn(){
-		// 將資料組成JSON格式
-		var data_object = {
-			'option':"login"
-		};
-		// 將JSON格式轉換成字串
-		var data_string = JSON.stringify(data_object);
-          
+	//更新顯示登入會員的地方
+	function updateLogIn(response){
+		$("#member_name").empty();
+      	var label_html = "";
+      	var name = response['response']['name'];
+      	var type = response['response']['memberType'];
+      	var typeStr;
+      	//alert(type);
+      	
+      	if(type=="teacher"){
+      		typeStr = "老師";
+      		loginTID = response['response']['id'];
+      		//alert("loginTID: "+loginTID);
+      	}
+      	else{
+      		typeStr = "家長";
+      		loginPID = response['response']['id'];
+      		//alert("loginPID: "+ loginPID);
+      	}
+      	
+      	label_html += '<label> '+ name + typeStr +'，您好</label>';
+      	label_html += '<button id="logoutBtn">登出</button>';
+      	$("#member_name").append(label_html);
+      	var $form = $('#logoutBtn');
+		$form.click(function(){
+			logout();
+		});
+    }
+	
+	//登出
+	function logout(){
 		$.ajax({
-			type: "GET",
-			url: "api/teacher.do",
-			crossDomain: true,
-			data: "option=login",
+			type: "DELETE",
+			url: "api/login.do",
 			cache: false,
 			dataType: 'json',
 			timeout: 5000,
 			success: function (response) {
-				if(response.status == 200){
-					updateLogIn(response, "老師");
-					loginTID = response['response']['data'][0]['id'];
-					loginPID=0;
-					loginEmail = response['response']['data'][0]['email'];
-				}
-				else{	//沒有就顯示平常的樣子
-					loginTID=0;
-					loginPID=0;
+				//如果你們前端登入成功要新跳視窗出來就打在這
+				if (response.status == 200) {
+					alert(response.message);
 					showInit();
+					loginPID=0;
+					loginTID=0;
+					//alert("pid: "+loginPID +" tid: "+ loginTID);
+					//window.location.reload();	//刷新頁面
 				}
-				console.log(response);
 			},
 			error: function () {
 				alert("無法連線到伺服器！");
@@ -260,100 +264,6 @@
 		$("#member_name").empty();
 		var label_html = '<label>訪客您好</label>';
 		$("#member_name").append(label_html);
-	}
-	
-	
-	//更新顯示登入會員的地方
-	function updateLogIn(response, str){
-		$("#member_name").empty();
-      	var label_html = "";
-      	var name = response['response']['data'][0]['name'];
-      	label_html += '<label> Hi, '+ name + ' ' + str +' </label>';
-      	label_html += '<button id="logoutBtn">登出</button>';
-      	$("#member_name").append(label_html);
-      	var $form = $('#logoutBtn');
-		$form.click(function(){
-			logout();
-		});
-    }
-	
-	//登出
-	function logout(){
-		var urlstr = "";
-		if(loginPID!=0){
-			urlstr = "api/parent.do";
-		}
-		else if(loginTID!=0){
-			urlstr = "api/teacher.do";
-		}
-		//alert("loginPID="+loginPID+" loginTID="+loginTID);
-		// 將資料組成JSON格式
-		var data_object = {
-			'email': loginEmail,
-			'option':"logout"
-		};
-		// 將JSON格式轉換成字串
-			var data_string = JSON.stringify(data_object);
-		//alert("urlstr: "+urlstr);
-		
-		$.ajax({
-			type: "PUT",
-			url: urlstr,
-			data: data_string,
-			cache: false,
-			dataType: 'json',
-			timeout: 5000,
-			success: function (response) {
-				//如果你們前端登入成功要新跳視窗出來就打在這
-				if (response.status == 200) {
-					alert(response.message);
-					loginPID=0;
-					loginTID=0;
-					//showInit();
-					window.location.reload();	//刷新頁面
-				}
-			},
-			error: function () {
-				alert("無法連線到伺服器！");
-			}
-		});
-	}
-	
-	//
-	function getLogin(){
-		// 將資料組成JSON格式
-		var data_object = {
-			'id':session.getAttribute("id")
-		};
-		// 將JSON格式轉換成字串
-		var data_string = JSON.stringify(data_object);
-          
-		$.ajax({
-			type: "PUT",
-			url: "api/login.do",
-			crossDomain: true,
-			data: "option=login",
-			cache: false,
-			dataType: 'json',
-			timeout: 5000,
-			success: function (response) {
-				if(response.status == 200){
-					updateLogIn(response, "老師");
-					loginTID = response['response']['data'][0]['id'];
-					loginPID=0;
-					loginEmail = response['response']['data'][0]['email'];
-				}
-				else{	//沒有就顯示平常的樣子
-					loginTID=0;
-					loginPID=0;
-					showInit();
-				}
-				console.log(response);
-			},
-			error: function () {
-				alert("無法連線到伺服器！");
-			}
-		});
 	}
 	
 </script>

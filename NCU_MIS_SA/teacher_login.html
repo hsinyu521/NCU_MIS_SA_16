@@ -77,7 +77,6 @@
                     //alert(password);
                     //alert("good!要比對資料");
 				  
-				  
                     // 發出PUT的AJAX請求
                    	$.ajax({
                         type: "POST",
@@ -88,11 +87,12 @@
                         dataType: 'json',
                         timeout: 5000,
                         success: function (response) {
-                            //alert("get respose");
-                            $('#flashMessage').html(response.message);
-                            $('#flashMessage').show();           
+                            alert(response.message);
+                            //$('#flashMessage').html(response.message);
+                            //$('#flashMessage').show();           
                             if(response.status == 200){
-                            	//updateSQLTable(response.response);
+                            	//重導至首頁
+                            	window.location.assign("http://localhost:8090/NCU_MIS_SA_Group16/");
                             }
                         },
                         error: function () {

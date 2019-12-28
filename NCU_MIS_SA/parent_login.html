@@ -73,34 +73,37 @@
 					}*/
 	                else {
 	                	// 將資料組成JSON格式
-						var data_object = {
-							"email": email,
-							"password": password,
-							"option":"login"
-						};
-						// 將JSON格式轉換成字串
-						var data_string = JSON.stringify(data_object);
-
-						$.ajax({
-							type: "PUT",
-							url: "api/parent.do",
-							data: data_string,
-							cache: false,
-							dataType: 'json',
-							timeout: 5000,
-							success: function (response) {
-								//如果你們前端登入成功要新跳視窗出來就打在這
-								alert(response.message);
-								if (response.status == 200) {
-									
-								}
-								//要連接到哪個畫面
-								//回傳蛇哦
-							},
-							error: function () {
-								alert("無法連線到伺服器！");
-							}
-						});
+	                    var data_object = {
+	                    	"memberType":"parent",
+	                        "email":email,
+	                        "password":password
+	                    };
+	                    // 將JSON格式轉換成字串
+	                    var data_string = JSON.stringify(data_object);
+					  
+	                    // 發出PUT的AJAX請求
+	                   	$.ajax({
+	                        type: "POST",
+	                        url: "api/login.do",
+	                        data: data_string,
+	                        crossDomain: true,
+	                        cache: false,
+	                        dataType: 'json',
+	                        timeout: 5000,
+	                        success: function (response) {
+	                            alert(response.message);
+	                            //$('#flashMessage').html(response.message);
+	                            //$('#flashMessage').show();           
+	                            if(response.status == 200){
+	                            	//重導至首頁
+	                            	window.location.assign("http://localhost:8090/NCU_MIS_SA_Group16/");
+	                            }
+	                        },
+	                        error: function () {
+	                            alert("無法連線到伺服器！");
+	                        }
+	                    
+	                    });
 					}
 				}
 			})

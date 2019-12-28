@@ -48,7 +48,7 @@
     <script type="text/javascript">
 	    $(document).ready(function() {
 	        //看登入
-	        checkTLogIn();
+	        getLogin();
 	    });
         function getAllCase() {
             /*$.ajax({
@@ -82,35 +82,73 @@
         //預設都是0，如果有人登入會去改，若其他部分又去取東西再用這個
         var loginTID=0;
         var loginEmail;
-        
-    	//看有沒有老師會員登入
-    	function checkTLogIn(){
-    		// 將資料組成JSON格式
-    		var data_object = {
-    			'option':"login"
-    		};
-    		// 將JSON格式轉換成字串
-    		var data_string = JSON.stringify(data_object);
-              
+    	
+        function getLogin(){
     		$.ajax({
     			type: "GET",
-    			url: "api/teacher.do",
+    			url: "api/login.do",
     			crossDomain: true,
-    			data: "option=login",
     			cache: false,
     			dataType: 'json',
     			timeout: 5000,
     			success: function (response) {
     				if(response.status == 200){
-    					updateLogIn(response);
-    					loginTID = response['response']['data'][0]['id'];
-    					loginEmail = response['response']['data'][0]['email'];
+    					if(response['response']['memberType']!="teacher"){
+    						showInit();
+    					}
+    					else{
+    						updateLogIn(response);
+    					}
     				}
     				else{	//沒有就顯示平常的樣子
-    					loginTID=0;
     					showInit();
     				}
     				console.log(response);
+    			},
+    			error: function () {
+    				alert("無法連線到伺服器！");
+    			}
+    		});
+    	}
+    	
+    	//更新顯示登入會員的地方
+    	function updateLogIn(response){
+    		$("#teacher_name").empty();
+          	var label_html = "";
+          	var name = response['response']['name'];
+          	var typeStr = "老師";
+          	//alert(type);
+          	
+          	loginTID = response['response']['id'];
+          	//alert("loginTID: "+loginTID);
+          	
+          	label_html += '<label> '+ name + typeStr +'，您好</label>';
+          	label_html += '<button id="logoutBtn">登出</button>';
+          	$("#teacher_name").append(label_html);
+          	var $form = $('#logoutBtn');
+    		$form.click(function(){
+    			logout();
+    		});
+        }
+    	
+    	//登出
+    	function logout(){
+    		$.ajax({
+    			type: "DELETE",
+    			url: "api/login.do",
+    			cache: false,
+    			dataType: 'json',
+    			timeout: 5000,
+    			success: function (response) {
+    				//如果你們前端登入成功要新跳視窗出來就打在這
+    				if (response.status == 200) {
+    					alert(response.message);
+    					showInit();
+    					loginPID=0;
+    					loginTID=0;
+    					//alert("pid: "+loginPID +" tid: "+ loginTID);
+    					//window.location.reload();	//刷新頁面
+    				}
     			},
     			error: function () {
     				alert("無法連線到伺服器！");
@@ -125,56 +163,7 @@
     		var label_html = '<label>訪客您好</label>';
     		$("#teacher_name").append(label_html);
     	}
-    	
-    	
-    	//更新顯示登入會員的地方
-    	function updateLogIn(response){
-    		$("#teacher_name").empty();
-          	var label_html = "";
-          	var name = response['response']['data'][0]['name'];
-          	label_html += '<label> '+ name + '老師，您好 </label>';
-          	label_html += '<button id="logoutBtn">登出</button>';
-          	$("#teacher_name").append(label_html);
-          	var $form = $('#logoutBtn');
-    		$form.click(function(){
-    			logout();
-    		});
-        }
-    	
-    	//登出
-    	function logout(){
-    		var urlstr = "api/teacher.do";
-    		//alert("loginPID="+loginPID+" loginTID="+loginTID);
-    		// 將資料組成JSON格式
-    		var data_object = {
-    			'email': loginEmail,
-    			'option':"logout"
-    		};
-    		// 將JSON格式轉換成字串
-    		var data_string = JSON.stringify(data_object);
-    		alert("urlstr: "+urlstr);
-    		
-    		$.ajax({
-    			type: "PUT",
-    			url: urlstr,
-    			data: data_string,
-    			cache: false,
-    			dataType: 'json',
-    			timeout: 5000,
-    			success: function (response) {
-    				//如果你們前端登入成功要新跳視窗出來就打在這
-    				if (response.status == 200) {
-    					alert(response.message);
-    					loginTID=0;
-    					//showInit();
-    					window.location.reload();	//刷新頁面
-    				}
-    			},
-    			error: function () {
-    				alert("無法連線到伺服器！");
-    			}
-    		});
-    	}
+        
     </script>
 
 

@@ -57,13 +57,13 @@ public class LoginHelper {
 	          conn = DBMgr.getConnection();
 	          String sql;
 	          String type = login.getMemberType();
-	          System.out.printf("in LH, type: %s", type);
+	          System.out.printf("in LH, type: %s\n", type);
 	          
 	          if(type.equals("teacher")) {
-	        	  sql = "SELECT `id` FROM `sa16`.`teachers` WHERE `email` = ? AND `email` = ?";
+	        	  sql = "SELECT `id` FROM `sa16`.`teachers` WHERE `email` = ? AND `password` = ?";
 	          }
 	          else {
-	        	  sql = "SELECT `id` FROM `sa16`.`parents` WHERE `email` = ? AND `email` = ?";
+	        	  sql = "SELECT `id` FROM `sa16`.`parents` WHERE `email` = ? AND `password` = ?";
 	          }
 	        
 	          /** 取得所需之參數 */
@@ -98,4 +98,66 @@ public class LoginHelper {
 	       */
 	      return loginID;
 	  }
+	
+	public String getNameByLogin(Login login) {
+		//回傳找到的id
+		String name="";
+		/** 記錄實際執行之SQL指令 */
+		String exexcute_sql = "";
+		/** 紀錄程式開始執行時間 */
+		long start_time = System.nanoTime();
+		/** 儲存JDBC檢索資料庫後回傳之結果，以 pointer 方式移動到下一筆資料 */
+		ResultSet rs = null;
+		
+		/** SQL指令 */
+		String sql; 
+		
+		try {
+			/** 取得資料庫之連線 */
+			conn = DBMgr.getConnection();
+			
+			if(login.getMemberType().equals("teacher")) {
+				sql = "SELECT `name` FROM `sa16`.`teachers` WHERE `id` = ? LIMIT 1";
+			}
+			else {
+				sql = "SELECT `name` FROM `sa16`.`parents` WHERE `id` = ? LIMIT 1";
+			}
+			
+			/** 將參數回填至SQL指令當中 */
+			pres = conn.prepareStatement(sql);
+			pres.setInt(1, login.getId());
+			/** 執行查詢之SQL指令並記錄其回傳之資料 */
+			rs = pres.executeQuery();
+			
+			//要有rs.next()在getString()才會成功!!!!!!
+			rs.next();
+			name = rs.getString("name");
+			
+			/** 紀錄真實執行的SQL指令，並印出 **/
+			exexcute_sql = pres.toString();
+			System.out.println(exexcute_sql);
+			
+		} catch (SQLException e) {
+			/** 印出JDBC SQL指令錯誤 **/
+			System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
+		} catch (Exception e) {
+			/** 若錯誤則印出錯誤訊息 */
+			e.printStackTrace();
+		} finally {
+			/** 關閉連線並釋放所有資料庫相關之資源 **/
+			DBMgr.close(rs, pres, conn);
+		}
+		
+		/** 紀錄程式結束執行時間 */
+		long end_time = System.nanoTime();
+		/** 紀錄程式執行時間 */
+		long duration = (end_time - start_time);
+		
+		/** 將SQL指令、花費時間、影響行數與所有會員資料之JSONArray，封裝成JSONObject回傳 */
+		JSONObject response = new JSONObject();
+		response.put("sql", exexcute_sql);
+		response.put("time", duration);
+		
+		return name;
+	}
 }
