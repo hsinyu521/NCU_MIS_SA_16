@@ -89,7 +89,7 @@ public class CaseHelper {
      * @param c 一名會員之Case物件
      * @return the JSONObject 回傳SQL指令執行結果與執行之資料
      */
-    public JSONObject update(Case c) {
+    public JSONObject update(Case ca) {
         /** 紀錄回傳之資料 */
         JSONArray jsa = new JSONArray();
         /** 記錄實際執行之SQL指令 */
@@ -99,16 +99,16 @@ public class CaseHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "Update `sa16`.`members` SET `grade` = ? ,`subject` = ? , `teachCounty` = ? , `teachRegion` = ?,`wage` = ? ,`teachTime` = ? ,`teachExperience` = ?,`modified` = ? WHERE `id` = ?";
+            String sql = "Update `sa16`.`cases` SET `grade` = ? ,`subject` = ? , `teachCounty` = ? , `teachRegion` = ?,`wage` = ? ,`teachTime` = ? ,`teachExperience` = ?,`modified` = ? WHERE `id` = ?";
             /** 取得所需之參數 */
-            int id = c.getId();            		
-            String grade = c.getGrade();
-            String subject = c.getSubject();
-            String teachCounty = c.getCounty();
-            String teachRegion = c.getRegion();
-            int wage = c.getWage();
-            String teachTime = c.getTeachTime();
-            String teachExperience = c.getTeachExperience();
+            int id = ca.getId();            		
+            String grade = ca.getGrade();
+            String subject = ca.getSubject();
+            String teachCounty = ca.getCounty();
+            String teachRegion = ca.getRegion();
+            int wage = ca.getWage();
+            String teachTime = ca.getTeachTime();
+            String teachExperience = ca.getTeachExperience();
             
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
@@ -480,7 +480,7 @@ public class CaseHelper {
         return response;
     }
     
-    public JSONObject deleteByID(int id) {
+    public JSONObject deleteById(int id) {
         /** 記錄實際執行之SQL指令 */
         String exexcute_sql = "";
 

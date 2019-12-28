@@ -175,7 +175,7 @@ public class CaseController extends HttpServlet {
         int id = jso.getInt("id");
         
         /** 透過MemberHelper物件的deleteByID()方法至資料庫刪除該名會員，回傳之資料為JSONObject物件 */
-        JSONObject query = ch.deleteByID(id);
+        JSONObject query = ch.deleteById(id);
         
         /** 新建一個JSONObject用於將回傳之資料進行封裝 */
         JSONObject resp = new JSONObject();
