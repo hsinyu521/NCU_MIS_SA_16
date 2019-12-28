@@ -20,7 +20,7 @@
 
     <div id="Sidebar">
         <p></p>
-        <div clase="list"> 家長會員中心</div>
+        <div class="list"> 家長會員中心</div>
         <div class="list">
             <ul>  <!--修改名稱與連結 Chu 12/25 8:27pm-->
             	<li><a href="parent_change_information.html">修改家長會員資料</a></li>
@@ -34,8 +34,9 @@
 
     <div id="Body">
 		<form id="caseID">
-        	<select>
-            	<option>請選擇案件編號</option>
+        	<select id="case_id_list">
+            	<option value="num">請選擇案件編號</option>
+            	
         	</select>
     	</form>
         <div id="flashMessage" class="message" style="display: none;"></div>
@@ -115,13 +116,11 @@
     </div>
 </div>
 
-<script>
+<script type="text/javascript">
     $('#submit').click(function() {
         alert('你點了更新按鈕');
     });
-</script>
 
-<script type="text/javascript">
 	$(document).ready(function() {
 		getLogin();
 	});
@@ -244,6 +243,75 @@
 		alert("未登入家長會員，將跳轉至首頁!");
 		window.location.assign("http://localhost:8090/NCU_MIS_SA_Group16/");
 	}
+	//抓取案件編號
+	function addOption(list,data){
+		var l = document.getElementById(list);
+		$.each(data, function(index, value) {
+		var i = document.getElementById(list).length;
+		//alert("i:"+i);
+		//alert("value"+value['id']);
+		l.options[i]=new Option(String(value['id']),String(value['id']));
+		});
+	}
+	
+    function getCaseIdList(){
+		$.ajax({
+			type: "GET",
+            url: "api/case.do",
+            data: "parent_id=" + loginPID,
+            crossDomain: true,
+            cache: false,
+            dataType: 'json',
+            timeout: 5000,
+            success: function (response) {
+                if(response.status == 200){
+                	addOption("case_id_list",response.response.data);
+                }
+                console.log(response);
+            },
+            error: function () {
+                alert("無法連線到伺服器！");
+            }
+		});
+	}
+    getCaseIdList();
+    //////////////////////////////////////////////////////////////
+	  var url_string = window.location.href;
+	  var url = new URL(url_string);
+	  var id = url.searchParams.get("id");
+	  
+	  function getCaseData() {
+		  $.ajax({
+	          type: "GET",
+	          url: "api/case.do",
+	          data: "id=" + id,
+	          crossDomain: true,
+	          cache: false,
+	          dataType: 'json',
+	          timeout: 5000,
+	          success: function (response) {
+	              if(response.status == 200){
+	            	  updateHTML(response.response.data);
+	              }
+	          },
+	          error: function () {
+	              alert("無法連線到伺服器！");
+	          }
+	    });
+	  }
+	  
+	  getCaseData();
+	  
+	  function updateHTML(data) {
+		  $("#id").html(data['id']);
+		  $("#grade").html(data['grade']);
+		  $("#subject").html(data['subject']);
+		  $("#location").html(data['teach_county']+data['teach_region']);
+		  $("#wage").html(data['wage']);
+		  $("#teachtime").html(data['teachtime']);
+		  $("#exper").html(data['teach_experience']);
+	
+	  }
 </script>
 
 </body>
