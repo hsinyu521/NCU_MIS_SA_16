@@ -13,12 +13,9 @@
 <body>	
 	<div id="container">
 		<div id="header">
-        	<a href="test.html"><img src="statics/img/Logo.png" alt="Logo" width="200" height="100"></a>
+        	<a href="index.html"><img src="statics/img/Logo.png" alt="Logo" width="200" height="100"></a>
+        	<label id="teacher_name"></label>
     	</div>
-    	
-    	<div id="loginOrNot">
-			<label></label>
-        </div>
 			
 		<div id="content">
 
@@ -29,13 +26,13 @@
 						<div id="input" style="border: none">
 
 							<div class="input oldpwd required">
-								<label for="member_oldpwd">輸入新密碼</label>
-								<input type="password" name="member_oldpwd" maxlength="50" id="member_oldpwd" required="required">
+								<label for="newPwd">輸入新密碼</label>
+								<input type="password" name="newPwd" maxlength="50" id="newPwd" required="required">
 							</div>
 
 							<div class="input newpwd required">
-								<label for="member_newpwd">確認新密碼</label>
-								<input type="password" name="member_newpwd" maxlength="30" id="member_newpwd" required="required">
+								<label for="newPwd2">確認新密碼</label>
+								<input type="password" name="newPwd2" maxlength="30" id="newPwd2" required="required">
 							</div>
 
 							<div class="input tel required">
@@ -53,17 +50,16 @@
 		</div>
 
 		<div id="table2">
-			<a href="teacher_change_information.html" class="button"><input type="button" value="修改老師會員資訊"  id="teacher_information"></a><br>
-			<a href="manage_teacher.html" class="button"><input type="button" value="面試管理"  id="interview"></a><br>
-			<a href="log_in.html" class="button"><input type="button" value="成交紀錄"  id="closing"></a>
+			<a href="teacher_edit.html" class="button"><input type="button" value="修改老師會員資訊"  id="teacher_information"></a><br>
+			<a href="teacher_interview.html" class="button"><input type="button" value="面試管理"  id="interview"></a><br>
+			<a href="teacher_match.html" class="button"><input type="button" value="成交紀錄"  id="closing"></a>
 		</div>
 	</div>
 </body>
 
 		<script type="text/javascript">
 			$(document).ready(function(){
-				var id;
-				checkLogIn();
+				getLogin();
 				var $form = $('#submit');
 				$form.click(function(){
 					submit();
@@ -71,27 +67,30 @@
 			});
 			
 			function submit(){
-				var member_oldpwd = $('#member_oldpwd').val();
-				var member_newpwd = $('#member_newpwd').val();
+				var member_oldpwd = $('#newPwd').val();
+				var member_newpwd = $('#newPwd2').val();
 				var cellphone = $('#member_tel').val();
 				var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+				var tel_rule=/^09[0-9]{8}$/;
 				
-				if(member_oldpwd.length==0 || member_newpwd.length==0 || cellphone.length==0){
+				if(newPwd.length==0 || newPwd2.length==0 || cellphone.length==0){
 					alert("所有欄位皆為必填");
 				}
-				else if (member_oldpwd!=member_newpwd){
+				else if (newPwd!=newPwd2){
 					alert("密碼不相同，請重新輸入！");
 				}
-				else if(!password_rule.test(member_newpwd)) {
+				else if(!password_rule.test(newPwd)) {
 					alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
+				}
+				else if(!tel_rule.test(cellphone)){
+					alert("手機號碼格式不符！");
 				}
 				else{
 					// 將資料組成JSON格式
                     var data_object = {
-                        "id": id,
-                        "password": member_newpwd,
-                        "cellphone": cellphone,
-                        "option":"update"
+                        "id": loginTID,
+                        "password": newPwd,
+                        "cellphone": cellphone
                     };
 
                     // 將JSON格式轉換成字串
@@ -109,8 +108,8 @@
 							//$('#flashMessage').html(response.message);
 							//$('#flashMessage').show();
 							if(response.status == 200){
-								document.getElementById("member_oldpwd").value="";
-								document.getElementById("member_newpwd").value="";
+								document.getElementById("newPwd").value="";
+								document.getElementById("newPwd2").value="";
 								document.getElementById("member_tel").value="";
 							}
 						},
@@ -121,51 +120,86 @@
 				}//else end
 			}//submit end
 			
-			//看有沒有人登入
-            function checkLogIn(){
-            	// 將資料組成JSON格式
-                var data_object = {
-                	'option':"login"
-                };
-                // 將JSON格式轉換成字串
-                var data_string = JSON.stringify(data_object);
-                
-            	$.ajax({
-                    type: "GET",
-                    url: "api/teacher.do",
-                    crossDomain: true,
-                    data: "option=login",
-                    cache: false,
-                    dataType: 'json',
-                    timeout: 5000,
-                    success: function (response) {
-                        if(response.status == 200){
-                        	updateLogIn(response);
-                        	
-                        }
-                        else{
-                        	$("#loginOrNot").empty();
-                        	//這裡要再改
-                         	var label_html = '<label> No login member </label>';
-                         	$("#loginOrNot").append(label_html);
-                        }
-                        console.log(response);
-                    },
-                    error: function () {
-                        alert("無法連線到伺服器！");
-                    }
-            	});
-            }
-			
-			//更新顯示登入會員的地方
-			function updateLogIn(response){
-            	$("#loginOrNot").empty();
-            	var label_html = "";
-            	var name = response['response']['data'][0]['name'];
-            	id = response['response']['data'][0]['id'];
-            	label_html += '<label> 編號: '+ id + ', ' + name +' 老師會員，您好</label>';
-            	$("#loginOrNot").append(label_html);
-            }
+			//預設都是0，如果有人登入會去改，若其他部分又去取東西再用這個
+	        var loginTID=0;
+	        var loginEmail;
+	    	
+	        function getLogin(){
+	    		$.ajax({
+	    			type: "GET",
+	    			url: "api/login.do",
+	    			crossDomain: true,
+	    			cache: false,
+	    			dataType: 'json',
+	    			timeout: 5000,
+	    			success: function (response) {
+	    				if(response.status == 200){
+	    					if(response['response']['memberType']!="teacher"){
+	    						noTLogin();
+	    					}
+	    					else{
+	    						updateLogIn(response);
+	    					}
+	    				}
+	    				else{	//沒有登入
+	    					noTLogin();
+	    				}
+	    				console.log(response);
+	    			},
+	    			error: function () {
+	    				alert("無法連線到伺服器！");
+	    			}
+	    		});
+	    	}
+	    	
+	    	//更新顯示登入會員的地方
+	    	function updateLogIn(response){
+	    		$("#teacher_name").empty();
+	          	var label_html = "";
+	          	var name = response['response']['name'];
+	          	var typeStr = "老師";
+	          	//alert(type);
+	          	
+	          	loginTID = response['response']['id'];
+	          	//alert("loginTID: "+loginTID);
+	          	
+	          	label_html += '<label> '+ name + typeStr +'，您好</label>';
+	          	label_html += '<button id="logoutBtn">登出</button>';
+	          	$("#teacher_name").append(label_html);
+	          	var $form = $('#logoutBtn');
+	    		$form.click(function(){
+	    			logout();
+	    		});
+	        }
+	    	
+	    	//登出
+	    	function logout(){
+	    		$.ajax({
+	    			type: "DELETE",
+	    			url: "api/login.do",
+	    			cache: false,
+	    			dataType: 'json',
+	    			timeout: 5000,
+	    			success: function (response) {
+	    				//如果你們前端登入成功要新跳視窗出來就打在這
+	    				if (response.status == 200) {
+	    					loginPID=0;
+	    					loginTID=0;
+	    					alert(response.message);
+	    					noTLogin();
+	    				}
+	    			},
+	    			error: function () {
+	    				alert("無法連線到伺服器！");
+	    			}
+	    		});
+	    	}
+	    	
+	    	//沒會員登入的長相
+	    	function noTLogin(){
+	    		alert("未登入老師會員，將跳轉至首頁!");
+	    		window.location.assign("http://localhost:8090/NCU_MIS_SA_Group16/");
+	    	}
 
 		</script>
 

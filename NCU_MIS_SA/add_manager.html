@@ -61,6 +61,7 @@
 
 	<script type="text/javascript">
 		$(document).ready(function(){
+			getLogin();
 			var $form = $('#submit');
 			$form.click(function(){
 				submit();
@@ -111,6 +112,85 @@
 					}
 				});
 			}
+		}
+		
+		//如果有人登入會去改，若其他部分又去取東西再用這個
+	    var loginMID=0;
+		
+	    function getLogin(){
+			$.ajax({
+				type: "GET",
+				url: "api/login.do",
+				crossDomain: true,
+				cache: false,
+				dataType: 'json',
+				timeout: 5000,
+				success: function (response) {
+					if(response.status == 200){
+						if(response['response']['memberType']!="manager"){
+							noMLogin();
+						}
+						else{
+							updateLogIn(response);
+						}
+					}
+					else{	//沒有登入
+						noMLogin();
+					}
+					console.log(response);
+				},
+				error: function () {
+					alert("無法連線到伺服器！");
+				}
+			});
+		}
+		
+		//更新顯示登入會員的地方
+		function updateLogIn(response){
+			$("#manager_name").empty();
+	      	var label_html = "";
+	      	var name = response['response']['name'];
+	      	var typeStr = "管理者";
+	      	//alert(type);
+	      	
+	      	loginPID = response['response']['id'];
+	      	//alert("loginMID: "+loginMID);
+	      	
+	      	label_html += '<label> '+ name + typeStr +'，您好</label>';
+	      	label_html += '<button id="logoutBtn">登出</button>';
+	      	$("#manager_name").append(label_html);
+	      	var $form = $('#logoutBtn');
+			$form.click(function(){
+				logout();
+			});
+	    }
+		
+		//登出
+		function logout(){
+			$.ajax({
+				type: "DELETE",
+				url: "api/login.do",
+				cache: false,
+				dataType: 'json',
+				timeout: 5000,
+				success: function (response) {
+					//如果你們前端登入成功要新跳視窗出來就打在這
+					if (response.status == 200) {
+						loginMID=0;
+						alert(response.message);
+						noMLogin();
+					}
+				},
+				error: function () {
+					alert("無法連線到伺服器！");
+				}
+			});
+		}
+		
+		//沒會員登入的長相
+		function noMLogin(){
+			alert("未登入管理者會員，將跳轉至首頁!");
+			window.location.assign("http://localhost:8090/NCU_MIS_SA_Group16/");
 		}
 		
 		//直接登入，跳至首頁
