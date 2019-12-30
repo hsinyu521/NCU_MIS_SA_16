@@ -15,7 +15,11 @@
 <div id="container">
 
     <div id="header">
-        <img src="statics/img/Logo.png" alt="Italian Trulli" width="200" height="100">
+        <a href="index.html"><img src="statics/img/Logo.png" alt="Italian Trulli" width="200" height="100"></a>
+		<a href="manager_login.html">管理者登入</a>
+		<a href="teacher_login.html">老師會員登入</a>
+		<a href="parent_login.html">家長會員登入</a>
+        
     </div>
     
     <div id="member_name" align="right">
@@ -212,24 +216,29 @@
       	var name = response['response']['name'];
       	var type = response['response']['memberType'];
       	var typeStr;
+      	var memberCenterHref;
       	//alert(type);
       	
       	if(type=="teacher"){
+      		memberCenterHref="teacher_interview.html";
       		typeStr = "老師";
       		loginTID = response['response']['id'];
       		//alert("loginTID: "+loginTID);
       	}
       	else if (type=="parent"){
+      		memberCenterHref="parent_interview.html";
       		typeStr = "家長";
       		loginPID = response['response']['id'];
       		//alert("loginPID: "+ loginPID);
       	}
       	else{
+      		memberCenterHref="show_managers.html";
       		typeStr = "管理者";
       		loginMID = response['response']['id'];
       	}
       	
-      	label_html += '<label> '+ name + typeStr +'，您好</label>';
+      	label_html += '<a href='+ memberCenterHref;
+      	label_html += ' <label> '+ name + typeStr +'</label></a>，您好';
       	label_html += '<button id="logoutBtn">登出</button>';
       	$("#member_name").append(label_html);
       	var $form = $('#logoutBtn');

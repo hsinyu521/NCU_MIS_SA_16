@@ -3,7 +3,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>家長會員清單</title>
+  <title>會員清單</title>
   <link rel="stylesheet" type="text/css" href="statics/css/show.css">
   <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
 </head>
@@ -11,20 +11,18 @@
 <body>
 <div id="container">
   <div id="Header">
-      <div class="imgHolder"><a href="home.html"><img  src="statics/img/Logo.png" alt="Logo"></a></div>
+      <div class="imgHolder"><a href="index.html"><img  src="statics/img/Logo.png" alt="Logo"></a></div>
       <h1>管理者中心</h1>
       <label id="manager_name"></label>
   </div>
 
     <div id="content">
-      <h2>會員清單</h2>
-      <a href="">檢視所有管理者</a>
-      <a href=""></a>
-      <a href="show_teachers.html">檢視所有老師會員</a>
-      <button id="changeMember">檢視另一個</button>
-      <div id="loginOrNot">
-        <label></label>
-      </div>
+		<h2 id="list_name">家長會員清單</h2>
+		<a href="show_managers.html">檢視所有管理者</a>
+		<a href="teacher_register.html">新增老師會員</a>
+		<a href="parent_register.html">新增家長會員</a>
+		<a id="changeMember">檢視家長會員</a>
+		<div id="loginOrNot"><label></label></div>
 
 
       <div id="flashMessage" class="message" style="display: none;"></div>
@@ -38,6 +36,7 @@
           <th>手機</th>
           <th>性別</th>
           <th>功能</th>
+          <th></th>
         </tr>
         </thead>
         <tbody>
@@ -78,6 +77,8 @@
             timeout: 5000,
             success: function (response) {
                 if(response.status == 200){
+                	$('#list_name').text("家長會員清單");
+                    $('#changeMember').text("檢視老師會員清單");
                     updateTable(response.response.data);
                 }
                 console.log(response);
@@ -99,6 +100,8 @@
             timeout: 5000,
             success: function (response) {
                 if(response.status == 200){
+                	$('#list_name').text("老師會員清單");
+                    $('#changeMember').text("檢視家長會員清單");
                     updateTable(response.response.data);
                 }
                 console.log(response);
@@ -119,6 +122,12 @@
             table_html += '<td>' + value['email'] + '</td>';
             table_html += '<td>' + value['cellphone'] + '</td>';
             table_html += '<td>' + value['gender'] + '</td>';
+            if (nowShow==0){
+                table_html += '<td>' + '<a href="parent_edit.html?id=' + value['id'] + '">編輯</a>';
+              }
+              else{
+                table_html += '<td>' + '<a href="teacher_edit.html?id=' + value['id'] + '">編輯</a>';
+              }
             table_html += '<td>' + '<a href="javascript: deleteMember(' + value['id'] + ');">刪除</a></td></tr>';
         })
 
