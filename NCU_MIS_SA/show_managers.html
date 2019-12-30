@@ -49,7 +49,6 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-	    getAllMember();
 	    getLogin();
 	});
 	
@@ -84,7 +83,7 @@
             table_html += '<td>' + value['email'] + '</td>';
             table_html += '<td>' + value['password'] + '</td>';
             table_html += '<td>' + '<a href="edit_manager.html?id=' + value['id'] + '">編輯</a> | ';
-            table_html += '<td>' + '<a href="javascript: deleteMember(' + value['id'] + ');">刪除</a></td></tr>';
+            table_html += '<a href="javascript: deleteMember(' + value['id'] + ');">刪除</a></td></tr>';
         })
 
         $("#table > tbody").append(table_html);
@@ -92,7 +91,7 @@
 	
 	//刪除會員
     function deleteMember(id) {
-        var check = window.confirm("確認刪除該老師會員？");
+        var check = window.confirm("確認刪除該管理者？");
         if (check == true) {
             console.log("You pressed OK!");
             var request = {'id': id};
@@ -108,8 +107,6 @@
                 success: function (response) {
                     if(response.status == 200){
                         alert("成功!已成功刪除");
-                    	//$("#flashMessage").html("成功!已成功刪除");
-                        //$("#flashMessage").show();
                         getAllMember();
                     }
                     console.log(response);
@@ -142,6 +139,7 @@
 					}
 					else{
 						updateLogIn(response);
+						getAllMember();	//登入成功才會顯示
 					}
 				}
 				else{	//沒有登入

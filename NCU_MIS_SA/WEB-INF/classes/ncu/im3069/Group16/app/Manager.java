@@ -57,8 +57,9 @@ public class Manager {
      * @param id 管理者編號
      * @param password 管理者密碼
      */
-    public Manager(int id, String password) {
+    public Manager(int id, String name, String password) {
     	this.id = id;
+    	this.name = name;
     	this.password = password;
     }
     

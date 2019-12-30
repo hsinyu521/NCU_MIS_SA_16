@@ -447,17 +447,19 @@ public class ManagerHelper {
           /** 取得資料庫之連線 */
           conn = DBMgr.getConnection();
           /** SQL指令 */
-          String sql = "Update `sa16`.`managers` SET `password` = ? , `modified` = ? WHERE `id` = ?";
+          String sql = "Update `sa16`.`managers` SET `name` = ? ,`password` = ? , `modified` = ? WHERE `id` = ?";
           /** 取得所需之參數 */
           //String email = t.getEmail();
           int id = m.getID();
+          String name = m.getName();
           String password = m.getPassword();
           
           /** 將參數回填至SQL指令當中 */
           pres = conn.prepareStatement(sql);
-          pres.setString(1, password);
-          pres.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
-          pres.setInt(3, id);
+          pres.setString(1, name);
+          pres.setString(2, password);
+          pres.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+          pres.setInt(4, id);
           /** 執行更新之SQL指令並記錄影響之行數 */ //這行應該也不用 by min
           row = pres.executeUpdate();
           

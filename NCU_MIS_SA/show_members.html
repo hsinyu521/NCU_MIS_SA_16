@@ -50,7 +50,6 @@
 </div>
 	<script type="text/javascript">
 	$(document).ready(function() {
-		getAllPMember();
 	    getLogin();
 	});
 	
@@ -192,6 +191,7 @@
 					}
 					else{
 						updateLogIn(response);
+						getAllPMember();	//登入成功才能顯示
 					}
 				}
 				else{	//沒有登入
