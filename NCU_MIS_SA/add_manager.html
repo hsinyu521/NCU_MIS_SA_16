@@ -16,6 +16,7 @@
 	<div id="container">
 		<div id="header">
 			<a href="index.html"><img src="statics/img/Logo.png" alt="Italian Trulli" width="200" height="100"></a>
+			<label id="manager_name"></label>
 		</div>
 
 		<div id="content">
@@ -86,11 +87,12 @@
 			}
 			
 			else{
+				
 				var data_object = {
 					"name":name,
                    	"email":email,
-                   	"password":password,
-                    };
+                   	"password":password
+                };
 				var data_string = JSON.stringify(data_object);
 					
 				$.ajax({

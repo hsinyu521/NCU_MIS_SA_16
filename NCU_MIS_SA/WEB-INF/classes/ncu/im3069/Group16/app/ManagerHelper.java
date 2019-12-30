@@ -380,7 +380,7 @@ public class ManagerHelper {
           conn = DBMgr.getConnection();
           /** SQL指令 */
           String sql = "INSERT INTO `sa16`.`managers`(`name`,`email`,`password`,`modified`, `created`)"
-                  + " VALUES(?, ?, ?, ?, ?, ?, ?)";
+                  + " VALUES(?, ?, ?, ?, ?)";
           
           /** 取得所需之參數 */
           String name = m.getName();
