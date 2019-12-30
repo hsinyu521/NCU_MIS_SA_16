@@ -1,10 +1,153 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="BIG5">
-<title>Insert title here</title>
-</head>
-<body>
 
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>新增管理者</title>
+	
+	<link rel="stylesheet" type="text/css" href="statics/css/design_register.css">
+    
+    <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+
+</head>
+
+
+<body>	
+	<div id="container">
+		<div id="header">
+			<a href="index.html"><img src="statics/img/Logo.png" alt="Italian Trulli" width="200" height="100"></a>
+		</div>
+
+		<div id="content">
+			<h1>新增管理者</h1>
+			<div id="flashMessage" class="message" style="display: none;"></div>
+			
+			<div id="next_content">
+				<h3>請輸入新增的管理者資料</h3>
+				
+				<form id="form" accept-charset="UTF-8" >
+
+					<div style="display:none;"><input type="hidden" name="_method" value="POST"></div>
+
+					<div id="input" style="border: none">
+						<div class="input text required">
+							<label for="member_name">姓名</label>
+							<input type="text" name="name" maxlength="30" id="member_name" required="required">				
+						</div>
+
+						<div class="input email required">
+							<label for="member_email">email</label>
+							<input type="email" name="email" maxlength="50" id="member_email" required="required">
+						</div>
+
+						<div class="input password required">
+							<label for="member_password">密碼</label>
+							<input type="password" name="password" maxlength="30" id="member_password" required="required">
+						</div>
+
+					</div>
+
+					<div class="submit"><input type="button" value="新增" id="submit"></div>
+
+					<h5>不想新增嗎？ <!-- <input type="button" value="登入"  id="log_in"> -->
+					<a href=show_managers.html class="button"><input type="button" value="回到管理者清單"  id="log_in"></a>
+					</h5>
+			
+
+				</form>
+			</div>
+		</div>
+	
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+			var $form = $('#submit');
+			$form.click(function(){
+				submit();
+			});
+		});
+			
+		function submit(){
+			var name = $('#member_name').val();
+			var email = $('#member_email').val();
+			var password = $('#member_password').val();
+			var email_rule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+			var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+			//先在前端確認資料皆填了(value長度皆不為0)再送去後端
+			if(name.length==0 || email.length==0 || password.length==0 ){
+				alert("所有欄位皆必填!!!");
+			}
+			else if (!email_rule.test(email)) {
+				alert("Email格式不符！");
+			}
+			else if(!password_rule.test(password)) {
+				alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
+			}
+			
+			else{
+				var data_object = {
+					"name":name,
+                   	"email":email,
+                   	"password":password,
+                    };
+				var data_string = JSON.stringify(data_object);
+					
+				$.ajax({
+					type: "POST",
+					url: "api/manager.do",
+					data: data_string,
+					crossDomain: true,
+					cache: false,
+					dataType: 'json',
+					timeout: 5000,
+					success: function (response) {
+						alert(response.message);
+						if(response.status == 200){	//若註冊成功，將自動登入，並轉往首頁
+							directLogin(email, password);
+						}
+					},
+					error: function () {
+						alert("無法連線到伺服器！");
+					}
+				});
+			}
+		}
+		
+		//直接登入，跳至首頁
+		function directLogin(email, password){
+			// 將資料組成JSON格式
+            var data_object = {
+            	"memberType":"manager",
+                "email":email,
+                "password":password
+            };
+            // 將JSON格式轉換成字串
+            var data_string = JSON.stringify(data_object);
+            
+            // 發出POST的AJAX請求
+           	$.ajax({
+                type: "POST",
+                url: "api/login.do",
+                data: data_string,
+                crossDomain: true,
+                cache: false,
+                dataType: 'json',
+                timeout: 5000,
+                success: function (response) {
+                    if(response.status == 200){
+                    	//重導至首頁
+                    	alert("直接登入，將跳轉至首頁!");
+                    	window.location.assign("http://localhost:8080/NCU_MIS_SA_Group16/");
+                    }
+                },
+                error: function () {
+                    alert("無法連線到伺服器！");
+                }
+            
+            });
+		}
+		</script>
+
+	</div>
 </body>
 </html>
