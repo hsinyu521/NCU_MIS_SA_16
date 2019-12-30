@@ -52,22 +52,9 @@
 
         <form id="content" accept-charset="utf-8">
             <div style="display:none;"><input type="hidden" name="_method" value="POST"></div>
-            <div class="input text required">
-                <label for="student_grade">對象</label>
-                <select name="school" id="student_schoool">
-                    <option value="primary">國小</option>
-                    <option value="junior">國中</option>
-                    <option value="senior">高中</option>
-                    <option value="university">大學</option>
-                </select>
-                <select name="grade" id="student_grade">
-                    <option value="0">一年級</option>
-                    <option value="2">二年級</option>
-                    <option value="3">三年級</option>
-                    <option value="4">四年級</option>
-                    <option value="5">五年級</option>
-                    <option value="6">六年級</option>
-                </select>
+            <div class="input text">
+                <label for="grade">對象</label>
+                <input name="teachTime" type="text" id="grade" >
             </div>
             <div class="input text required">
                 <label for="student_subject">上課科目</label>
@@ -205,7 +192,7 @@
       	//alert(type);
       	
       	loginPID = response['response']['id'];
-      	//alert("loginPID: "+loginPID);
+      	alert("loginPID: "+loginPID);
       	
       	label_html += '<label> '+ name + typeStr +'，您好</label>';
       	label_html += '<button id="logoutBtn">登出</button>';
@@ -265,6 +252,7 @@
             timeout: 5000,
             success: function (response) {
                 if(response.status == 200){
+                	alert(loginPID);
                 	addOption("case_id_list",response.response.data);
                 }
                 console.log(response);
@@ -276,42 +264,78 @@
 	}
     getCaseIdList();
     //////////////////////////////////////////////////////////////
-	  var url_string = window.location.href;
-	  var url = new URL(url_string);
-	  var id = url.searchParams.get("id");
+	  var cid = document.getElementById("case_id_list").value;
 	  
-	  function getCaseData() {
-		  $.ajax({
-	          type: "GET",
-	          url: "api/case.do",
-	          data: "id=" + id,
-	          crossDomain: true,
-	          cache: false,
-	          dataType: 'json',
-	          timeout: 5000,
-	          success: function (response) {
-	              if(response.status == 200){
-	            	  updateHTML(response.response.data);
-	              }
-	          },
-	          error: function () {
-	              alert("無法連線到伺服器！");
-	          }
+	    $('#case_id_list').change(function() {
+	    	var cid = document.getElementById("case_id_list").value;
+	    	if(cid == "num"){
+	    		alert("請重新選擇案件編號");
+	    	}
+	    	else{
+	    		alert(cid);
+		    	getCaseData();
+	    	}
 	    });
-	  }
-	  
-	  getCaseData();
-	  
-	  function updateHTML(data) {
-		  $("#id").html(data['id']);
-		  $("#grade").html(data['grade']);
-		  $("#subject").html(data['subject']);
-		  $("#location").html(data['teach_county']+data['teach_region']);
-		  $("#wage").html(data['wage']);
-		  $("#teachtime").html(data['teachtime']);
-		  $("#exper").html(data['teach_experience']);
-	
-	  }
+		
+	    function getCaseData() {
+			  $.ajax({
+		          type: "GET",
+		          url: "api/case.do",
+		          data: "id=" + cid,
+		          crossDomain: true,
+		          cache: false,
+		          dataType: 'json',
+		          timeout: 5000,
+		          success: function (response) {
+		              if(response.status == 200){
+		            	  updateHTML(response.response.data);
+		            	  alert("更新表單");
+		              }
+		          },
+		          error: function () {
+		              alert("無法連線到伺服器！");
+		          }
+		    });
+		  }
+		  
+		  function updateHTML(data) {
+				//document.getElementById('state').value = data['state'];
+	          	document.getElementById('wage').value = data['wage'];
+	          	
+<!--
+			  alert(data['teach_county']);
+			  var radioValue = data['state'];
+			  if(radioValue == 0){
+			  	$("input[name='state'][value='開放']").attr("checked",true);
+			  } else if(radioValue == 1){
+			  	$("input[name='state'][value='關閉']").attr("checked",true);
+			  }
+			  			  
+			  ////$("#id").selectedIndex=index;
+			  var radioValue2 = data['subject'];
+			  if(radioValue2 == "國"){
+			  	$("input[name='subject'][value='國']").attr("checked",true);
+			  } else if(radioValue2 == "英"){
+			  	$("input[name='subject'][value='英']").attr("checked",true);
+			  } else if(radioValue2 == "數"){
+			  	$("input[name='subject'][value='數']").attr("checked",true);
+			  } else if(radioValue2 == "物"){
+			  	$("input[name='subject'][value='物']").attr("checked",true);
+			  } else if(radioValue2 == "化"){
+			  	$("input[name='subject'][value='化']").attr("checked",true);
+			  } else if(radioValue2 == "生"){
+			  	$("input[name='subject'][value='生']").attr("checked",true);
+			  }
+			  
+			  $("#county-list").selectedIndex=data['teach_county'];
+			  $("#area-list").selectedIndex=data['teach_county'];
+			  
+			  $("input[name='case_wage']").val(data['wage']);
+			  $("input[name='case_time']").val(data['teach_region']);
+			  $("#teacher_exp").selectedIndex=data['teach_experience'];
+-->
+		  }
+
 </script>
 
 </body>

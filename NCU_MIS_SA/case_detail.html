@@ -42,9 +42,6 @@
 		</div>
 	</div>
 	<script>
-	  $(document).ready(function(){
-		  getLogin();
-	  });
 	  //取得網址參數
 	  var url_string = window.location.href;
 	  var url = new URL(url_string);
@@ -80,8 +77,11 @@
 		  $("#wage").html(data['wage']);
 		  $("#teachtime").html(data['teachtime']);
 		  $("#exper").html(data['teach_experience']);
-	
 	  }
+	  $(document).ready(function(){
+		  getLogin();
+	  });
+
 	  
 	//看有沒有人登入
 	var loginPID = 0;

@@ -479,49 +479,5 @@ public class CaseHelper {
 
         return response;
     }
-    
-    public JSONObject deleteById(int id) {
-        /** 記錄實際執行之SQL指令 */
-        String exexcute_sql = "";
-
-        /** 儲存JDBC檢索資料庫後回傳之結果，以 pointer 方式移動到下一筆資料 */
-        ResultSet rs = null;
-        
-        try {
-            /** 取得資料庫之連線 */
-            conn = DBMgr.getConnection();
-            
-            /** SQL指令 */
-            String sql = "DELETE FROM `sa16`.`cases` WHERE `id` = ? LIMIT 1";
-            
-            /** 將參數回填至SQL指令當中 */
-            pres = conn.prepareStatement(sql);
-            pres.setInt(1, id);
-
-            /** 紀錄真實執行的SQL指令，並印出 **/
-            exexcute_sql = pres.toString();
-            System.out.println(exexcute_sql);
-            
-        } catch (SQLException e) {
-            /** 印出JDBC SQL指令錯誤 **/
-            System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
-        } catch (Exception e) {
-            /** 若錯誤則印出錯誤訊息 */
-            e.printStackTrace();
-        } finally {
-            /** 關閉連線並釋放所有資料庫相關之資源 **/
-            DBMgr.close(rs, pres, conn);
-        }
-
-        
-        /** 將SQL指令、花費時間與影響行數，封裝成JSONObject回傳 */
-        JSONObject response = new JSONObject();
-        response.put("sql", exexcute_sql);
-
-        return response;
-    }
-    
- 
-
-    
+      
 }

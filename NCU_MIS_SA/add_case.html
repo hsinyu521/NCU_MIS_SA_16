@@ -31,22 +31,8 @@
 		  </tr>
 		  
 		  <tr>
-		    <td>對象:
-		    	<select id="school">
-		  			<option value="國小">國小</option>
-		  			<option value="國中">國中</option>
-		  			<option value="高中">高中</option>
-		  			<option value="大學">大學</option>
-				</select>
-		        <select id="years">
-		  			<option value="一年級">一年級</option>
-		  			<option value="二年級">二年級</option>
-		  			<option value="三年級">三年級</option>
-		  			<option value="四年級">四年級</option>
-		            <option value="五年級">五年級</option>
-		  			<option value="六年級">六年級</option>
-				</select>
-		    </td>
+		    <td>對象: <input type="text" id="grade" name="wage" style="width:70px"> </td>
+
 		    <td>教學經歷:
 		    	<select id="express" name="express">
 		  			<option value="無經驗">無經驗</option>
@@ -153,9 +139,7 @@
 		
 		function submit(){
 			var parent_id = loginPID;	//抓登入id
-			var g1 = document.getElementById("school");
-			var g2 = document.getElementById("years");
-			var grade = g1.value + g2.value;
+			var grade = $('#grade').val();
 			
 			var subject = $('input[name=subject]:checked').val();
 			
@@ -206,9 +190,6 @@
                             	alert("get respose");
                                 $('#flashMessage').html(response.message);
                                 $('#flashMessage').show();
-                                /*if(response.status == 200){
-                                    updateSQLTable(response.response);
-                                }*/
                             },
                             error: function () {
                                 alert("無法連線到伺服器！");
