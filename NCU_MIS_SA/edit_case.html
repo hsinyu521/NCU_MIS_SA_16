@@ -110,7 +110,7 @@
 
 	$(document).ready(function() {
 		getLogin();
-		getCaseIdList();
+		
 	});
 	
     var colleges=['台北市','新北市','桃園市','新竹','苗栗縣','台中市','彰化縣','雲林縣','嘉義','台南市','高雄市','屏東縣','基隆市','宜蘭縣','花蓮縣','台東縣','南投縣','澎湖縣','金門縣','連江縣'];
@@ -171,6 +171,7 @@
 					}
 					else{
 						updateLogIn(response);
+						getCaseIdList();
 					}
 				}
 				else{	//沒有登入
@@ -193,7 +194,7 @@
       	//alert(type);
       	
       	loginPID = response['response']['id'];
-      	alert("loginPID: "+loginPID);
+      	//alert("loginPID: "+loginPID);
       	
       	label_html += '<label> '+ name + typeStr +'，您好</label>';
       	label_html += '<button id="logoutBtn">登出</button>';
@@ -229,8 +230,9 @@
 	//沒會員登入的長相
 	function noPLogin(){
 		alert("未登入家長會員，將跳轉至首頁!");
-		window.location.assign("http://localhost:8090/NCU_MIS_SA_Group16/");
+		window.location.assign("/NCU_MIS_SA_Group16");
 	}
+	var i;
 	//抓取案件編號
 	function addOption(list,data){
 		var l = document.getElementById(list);
@@ -253,7 +255,6 @@
             timeout: 5000,
             success: function (response) {
                 if(response.status == 200){
-                	alert("in getCaseId: "+loginPID);
                 	addOption("case_id_list",response.response.data);
                 }
                 console.log(response);
@@ -263,18 +264,17 @@
             }
 		});
 	}
-    //getCaseIdList();
+    
     //////////////////////////////////////////////////////////////
-	  var cid = document.getElementById("case_id_list").value;
-	  
-	    $('#case_id_list').change(function() {
-	    	var cid = document.getElementById("case_id_list").value;
-	    	if(cid == "num"){
-	    		alert("請重新選擇案件編號");
-	    	}
-	    	else{
+	 var cid;
+	  $('#case_id_list').change(function() {
+	    	cid = document.getElementById("case_id_list").value;
+	    	if(cid != "num"){
 	    		alert(cid);
 		    	getCaseData();
+	    	}
+	    	else{
+	    		alert("請重新選擇案件編號");
 	    	}
 	    });
 		
@@ -289,7 +289,8 @@
 		          timeout: 5000,
 		          success: function (response) {
 		              if(response.status == 200){
-		            	  updateHTML(response.response.data);
+		            	  //updateHTML(response.response.data);
+		            	  document.getElementById('wage').value = response['response']['data']['wage'][0];
 		            	  alert("更新表單");
 		              }
 		          },
@@ -301,7 +302,7 @@
 		  
 		  function updateHTML(data) {
 				//document.getElementById('state').value = data['state'];
-	          	document.getElementById('wage').value = data['wage'];
+	          	//document.getElementById('wage').value = data['wage'];
 	          	
 <!--
 			  alert(data['teach_county']);
@@ -336,6 +337,9 @@
 			  $("#teacher_exp").selectedIndex=data['teach_experience'];
 -->
 		  }
+
+
+
 
 </script>
 

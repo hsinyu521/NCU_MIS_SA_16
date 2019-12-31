@@ -282,10 +282,12 @@ public class CaseHelper {
     public JSONObject getByParentId(String p_id) {
         JSONObject data = new JSONObject();
         Case c = null;
+        JSONArray jsa = new JSONArray();
         /** 記錄實際執行之SQL指令 */
         String exexcute_sql = "";;
         /** 儲存JDBC檢索資料庫後回傳之結果，以 pointer 方式移動到下一筆資料 */
         ResultSet rs = null;
+        int row = 0;
         
         try {
             /** 取得資料庫之連線 */
@@ -305,7 +307,7 @@ public class CaseHelper {
             
             /** 透過 while 迴圈移動pointer，取得每一筆回傳資料 */
             while(rs.next()) {
-                
+            	 row += 1;
                 /** 將 ResultSet 之資料取出 */ 
             	int id = rs.getInt("id"); 
                 int parent_id = rs.getInt("parent_id");
@@ -323,7 +325,7 @@ public class CaseHelper {
                 /** 將每一筆商品資料產生一名新Product物件 */
                 c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state, modified, created);
                 /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
-                data = c.getCaseData();
+                jsa.put(c.getCaseData());
             }
 
         } catch (SQLException e) {
@@ -341,7 +343,8 @@ public class CaseHelper {
         
         JSONObject response = new JSONObject();
         response.put("sql", exexcute_sql);
-        response.put("data", data);
+        response.put("row", row);
+        response.put("data", jsa);
 
         return response;
     }
@@ -349,6 +352,7 @@ public class CaseHelper {
     public JSONObject getBySubject(String sub) {
         JSONObject data = new JSONObject();
         Case c = null;
+        JSONArray jsa = new JSONArray();
         /** 記錄實際執行之SQL指令 */
         String exexcute_sql = "";;
         /** 儲存JDBC檢索資料庫後回傳之結果，以 pointer 方式移動到下一筆資料 */
@@ -390,7 +394,7 @@ public class CaseHelper {
                 /** 將每一筆商品資料產生一名新Product物件 */
                 c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state, modified, created);
                 /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
-                data = c.getCaseData();
+                jsa.put(c.getCaseData());
             }
 
         } catch (SQLException e) {
@@ -408,7 +412,7 @@ public class CaseHelper {
         
         JSONObject response = new JSONObject();
         response.put("sql", exexcute_sql);
-        response.put("data", data);
+        response.put("data", jsa);
 
         return response;
     }
@@ -416,6 +420,7 @@ public class CaseHelper {
     public JSONObject getByExperience(String exp) {
         JSONObject data = new JSONObject();
         Case c = null;
+        JSONArray jsa = new JSONArray();
         /** 記錄實際執行之SQL指令 */
         String exexcute_sql = "";;
         /** 儲存JDBC檢索資料庫後回傳之結果，以 pointer 方式移動到下一筆資料 */
@@ -457,7 +462,7 @@ public class CaseHelper {
                 /** 將每一筆商品資料產生一名新Product物件 */
                 c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state, modified, created);
                 /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
-                data = c.getCaseData();
+                jsa.put( c.getCaseData());
             }
 
         } catch (SQLException e) {
@@ -475,7 +480,7 @@ public class CaseHelper {
         
         JSONObject response = new JSONObject();
         response.put("sql", exexcute_sql);
-        response.put("data", data);
+        response.put("data", jsa);
 
         return response;
     }
