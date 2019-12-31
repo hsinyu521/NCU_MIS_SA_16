@@ -24,22 +24,33 @@
 						<div style="display:none;"><input type="hidden" name="_method" value="POST"></div>
 
 						<div id="input" style="border: none">
-
-							<div class="input oldpwd required">
-								<label for="newPwd">輸入新密碼</label>
-								<input type="password" name="newPwd" maxlength="50" id="newPwd" required="required">
+							<div class="input text required">
+								<label for="member_name">姓名</label>
+								<input type="text" name="name" maxlength="30" id="member_name" required="required" disabled>				
+							</div>
+							
+							<div class="input email required">
+								<label for="member_email">email</label>
+								<input type="email" name="email" maxlength="50" id="member_email" required="required" disabled>
 							</div>
 
-							<div class="input newpwd required">
-								<label for="newPwd2">確認新密碼</label>
-								<input type="password" name="newPwd2" maxlength="30" id="newPwd2" required="required">
+							<div class="input password required">
+								<label for="member_password">密碼</label>
+								<input type="password" name="password" maxlength="30" id="member_password" required="required">
 							</div>
-
+	
 							<div class="input tel required">
-								<label for="member_tel">輸入手機</label>
-								<input type="text" name="tel" maxlength="10" id="member_tel" required="required">
+								<label for="member_tel">手機</label>
+								<input type="tel" name="tel" maxlength="10" id="member_tel" required="required" >
 							</div>
-
+	
+							<div class="input gender">
+							<label for="member_gender">性別</label>
+								<select id="select_gender" disabled>
+	  								<option value="1" selected="selected">男</option>
+	  								<option value="2">女</option>
+								</select>
+							</div>
 						</div>
 
 						<div class="submit"><input type="button" value="修改" id="submit"></div>
@@ -67,30 +78,26 @@
 			});
 			
 			function submit(){
-				var newPwd = $('#newPwd').val();
-				var newPwd2 = $('#newPwd2').val();
-				var cellphone = $('#member_tel').val();
+				var new_password = $('#member_password').val();
+				var new_tel = $('#member_tel').val();
 				var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 				var tel_rule=/^09[0-9]{8}$/;
 				
-				if(newPwd.length==0 || newPwd2.length==0 || cellphone.length==0){
+				if(new_password.length==0 || new_tel.length==0){
 					alert("所有欄位皆為必填");
 				}
-				else if (newPwd!=newPwd2){
-					alert("密碼不相同，請重新輸入！");
-				}
-				else if(!password_rule.test(newPwd)) {
+				else if(!password_rule.test(new_password)) {
 					alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
 				}
-				else if(!tel_rule.test(cellphone)){
+				else if(!tel_rule.test(new_tel)){
 					alert("手機號碼格式不符！");
 				}
 				else{
 					// 將資料組成JSON格式
                     var data_object = {
                         "id": loginTID,
-                        "password": newPwd,
-                        "cellphone": cellphone
+                        "password": new_password,
+                        "cellphone": new_tel
                     };
 
                     // 將JSON格式轉換成字串
@@ -108,9 +115,7 @@
 							//$('#flashMessage').html(response.message);
 							//$('#flashMessage').show();
 							if(response.status == 200){
-								document.getElementById("newPwd").value="";
-								document.getElementById("newPwd2").value="";
-								document.getElementById("member_tel").value="";
+								
 							}
 						},
 						error: function () {
@@ -119,6 +124,32 @@
 					});//ajax end
 				}//else end
 			}//submit end
+			
+			function getMember() {	//取得家長原資料
+                alert("in edit.html getMember(), id= "+loginTID);
+                $.ajax({
+                    type: "GET",
+                    url: "api/teacher.do",
+                    crossDomain: true,
+                    data: "id="+loginTID,
+                    cache: false,
+                    dataType: 'json',
+                    timeout: 5000,
+                    success: function (response) {
+                        if(response.status == 200){
+                        	document.getElementById('member_name').value = response['response']['data'][0]['name'];
+                        	document.getElementById('member_email').value = response['response']['data'][0]['email'];
+                        	document.getElementById('member_password').value = response['response']['data'][0]['password'];
+                        	document.getElementById('member_tel').value = response['response']['data'][0]['cellphone'];
+                        	$('#select_gender')[0].selectedIndex = response['response']['data'][0]['gender']-1;
+                        }
+                        console.log(response);
+                    },
+                    error: function () {
+                        alert("無法連線到伺服器！");
+                    }
+                });
+            }
 			
 			//預設都是0，如果有人登入會去改，若其他部分又去取東西再用這個
 	        var loginTID=0;
@@ -139,6 +170,7 @@
 	    					}
 	    					else{
 	    						updateLogIn(response);
+	    						getMember();
 	    					}
 	    				}
 	    				else{	//沒有登入
