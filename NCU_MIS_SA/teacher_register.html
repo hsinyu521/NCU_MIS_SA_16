@@ -124,6 +124,7 @@
 						alert(response.message);
 						if(response.status == 200){	//若註冊成功，將自動登入，並轉往首頁
 							directLogin(email, password);
+							alert("你的姓名是 " + name + "\n電子郵件是 " + email + "\n密碼是" + password + "\n手機號碼是" + tel );
 						}
 					},
 					error: function () {
