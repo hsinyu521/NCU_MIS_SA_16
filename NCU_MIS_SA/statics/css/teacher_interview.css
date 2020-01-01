@@ -4,8 +4,8 @@
 }
 /** General Style Info **/
 
-html,body {
-	/*font-family:'lucida grande',verdana,helvetica,arial,sans-serif;*/
+html,Body {
+  font-family:'lucida grande',verdana,helvetica,arial,sans-serif;
   height: 100%;  /* 設定body高度為100% 拉到視窗可視的大小 */
   margin: 0;
 }

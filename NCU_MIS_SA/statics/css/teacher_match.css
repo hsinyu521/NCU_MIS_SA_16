@@ -1,0 +1,183 @@
+* {
+  margin:0;
+  padding:0;
+}
+/** General Style Info **/
+
+html,Body {
+  font-family:'lucida grande',verdana,helvetica,arial,sans-serif;
+  height: 100%;  /* 設定body高度為100% 拉到視窗可視的大小 */
+  margin: 0;
+}
+img{
+  float:left;
+  width:243.4px;
+  height:100px;
+  vertical-align:middle;
+  border-right:5px;
+}
+.imgHolder{
+	float:left;
+	margin:5px 20px 0  0;  /*上右下左*/
+}
+#teacher_name{
+  float:right;
+}
+/** Layout **/
+#container {
+  text-align: left;
+  min-height: 100%; /* 設定高度最小為100%, 如果內容區塊很多, 可以長大 */
+  position: relative; /* 位置設為relative, 作為footer區塊位置的參考 */
+}
+#Header{
+  height: 120px;
+  font-size: 100%;
+  font-weight: bold;
+  font-family: 'lucida grande', verdana, helvetica, arial, sans-serif;
+  color: #fffaf3;
+  background-color: #ff8000;
+  margin: 0; /*上右下左*/
+  padding: 10px 20px 0px 20px; /*上右下左*/
+}
+#content{
+  background: #fff;
+  clear: both;
+  color: #333;
+  padding: 0px 0px 0px 0px; /*上右下左*/
+  overflow: auto;
+}
+#Sidebar{
+    width:250px;
+    height:400px;
+    float:left;
+    text-align:left;
+    vertical-align:middle;
+    font-size:15px;
+    color:#ffffff;
+    font-weight:bold;
+    background-color:#cecece;
+    padding: 20px 0px 0px 20px; /*上右下左*/
+}
+ul, li {
+	font-size: 105%;
+	margin:20px 0px 0px 20px;
+}
+a {
+  color: #003d4c;
+  text-decoration: underline;
+  font-weight: bold;
+}
+a:hover {
+  color: #367889;
+  text-decoration:none;
+}
+#Body{
+    height:400px;
+    font-size:15px;
+    color:#f9c81e;
+    font-weight:bold;
+    float:left;
+    padding: 0px 10px 0px 10px;
+    padding: 20px 0px 0px 20px; /*上右下左*/
+}
+#Footer{
+  text-align:center;
+  line-height:60px;
+  font-size:15px;
+  color:#fffaf3;
+  font-weight:bold;
+  background-color:#ff8000;
+  height: 60px;
+  box-sizing: border-box;
+  position: absolute; /* 設定footer絕對位置在底部 */
+  bottom: 0;
+  width: 100%; /* 展開footer寬度 */
+}
+
+
+#h2{
+	display : inline;
+}
+table{
+	font-size:120%;
+    padding: 0px 0px 0px 150px; //上右下左
+	color:black;
+    width: 150%;
+}
+th {
+    height: 50px;
+    color:black;
+    font-size:120%;
+
+}
+th, td {
+    padding: 5px;
+    text-align: center;
+}
+
+tr:hover {background-color: #f5f5f5;}
+
+/** Tables 
+table {
+  border-right:0;
+  clear: both;
+  color: #333;
+  margin-bottom: 10px;
+  width: 200%;
+}
+th {
+  font-size:20px;
+  border:0;
+  border-bottom:2px solid #555;
+  text-align: left;
+  padding:4px;
+}
+th a {
+  display: block;
+  padding: 2px 4px;
+  text-decoration: none;
+}
+th a.asc:after {
+  content: ' ⇣';
+}
+th a.desc:after {
+  content: ' ⇡';
+}
+table tr td {
+  padding: 6px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom:1px solid #ddd;
+}
+table tr:nth-child(even) {
+  background: #f9f9f9;
+}
+td.actions {
+  text-align: center;
+  white-space: nowrap;
+}
+table td.actions a {
+  margin: 0px 6px;
+  padding:2px 5px;
+}
+**/
+
+/* 
+table{
+	font-size:30px;
+	width:100%;
+	padding: 100px;
+	border-collapse:collapse;
+
+}
+
+
+#case{
+ 	margin: 20px;
+	text-align: left;
+	font-weight: bold;
+	display:inline-block;
+	vertical-align:top;
+}
+*/
+
