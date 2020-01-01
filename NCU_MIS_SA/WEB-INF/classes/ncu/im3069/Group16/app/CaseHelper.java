@@ -161,11 +161,12 @@ public class CaseHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT * FROM `sa16`.`cases`";
+            String sql = "SELECT * FROM `sa16`.`cases` WHERE `state`= ?";
             
             /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
             pres = conn.prepareStatement(sql);
             /** 執行查詢之SQL指令並記錄其回傳之資料 */
+            pres.setInt(1, 0);
             rs = pres.executeQuery();
 
             /** 紀錄真實執行的SQL指令，並印出 **/
@@ -365,11 +366,13 @@ public class CaseHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT * FROM `sa16`.`cases` WHERE `cases`.`subject` = ?";
+            //String sql = "SELECT * FROM `sa16`.`cases` WHERE `cases`.`subject` = ?";
+            String sql = "SELECT * FROM `sa16`.`cases` WHERE `subject` = ? AND `state`= ?";
             
             /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
             pres = conn.prepareStatement(sql);
             pres.setString(1, sub);
+            pres.setInt(2, 0);
             /** 執行查詢之SQL指令並記錄其回傳之資料 */
             rs = pres.executeQuery();
 
@@ -433,11 +436,12 @@ public class CaseHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT * FROM `sa16`.`cases` WHERE `cases`.`teachExperience` = ?";
+            String sql = "SELECT * FROM `sa16`.`cases` WHERE `teachExperience` = ? AND `state`= ?";
             
             /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
             pres = conn.prepareStatement(sql);
             pres.setString(1, exp);
+            pres.setInt(2, 0);
             /** 執行查詢之SQL指令並記錄其回傳之資料 */
             rs = pres.executeQuery();
 

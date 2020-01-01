@@ -64,11 +64,11 @@
 		  </tr>
 		  
 		  <tr>
-		    <td>薪資待遇: <input type="text" id="wage" name="wage" style="width:70px"> 元/hr</td>
+		    <td>薪資待遇: <input type="number" id="wage" name="wage" style="width:100px" min="0" placeholder="請輸入正整數"> 元/hr</td>
 		  </tr>
 		  
 		  <tr>
-		   <td>上課時間: <input type="datetime" id="teachtime" name="teachtime" style="width:160px">(hh:mm)</td>
+		   <td>上課時間: <input type="datetime" id="teachtime" name="teachtime" style="width:160px" placeholder="請輸入 hh:mm的格式"></td>
 		  </tr>
 		  
 		   <tr>
@@ -140,33 +140,30 @@
 		function submit(){
 			var parent_id = loginPID;	//抓登入id
 			var grade = $('#grade').val();
-			
 			var subject = $('input[name=subject]:checked').val();
-			
 			var county = document.getElementById("county-list");
 			var teachCounty = county.value;
-			
 			var region = document.getElementById("area-list");
 			var teachRegion = region.value;
-			
 			var wage = $('#wage').val();
 			var teachTime = $('#teachtime').val();
 			var e = document.getElementById("express");
 			var teachExperience = e.value;
 			
-			//alert(grade);
-			//alert(subject);
-			//alert(teachCounty);
-			//alert(teachRegion);
-			//alert(wage);
-			//alert(teachTime);
-			//alert(teachExperience);
+			var timeRule = /([0-9]+):([0-5][0-9]|6[0])/;
+			
             //先在前端確認資料皆填了(value長度皆不為0)再送去後端
-            //grade.length==0 || subject.length==0 || teachCounty.length==0 || teachRegion.length==0 || wage.length==0 || teachTime.length==0 || teachExperience.length==0
-            if(2>3){
-            	alert("所有欄位皆必填!!!");
-            }
-            else{
+            if(grade.length==0 || wage.length==0 || teachTime.length==0 || subject==null) {
+			  //檢驗空白
+			  alert("所有欄位皆為必填");
+		  	}
+		  	else if(wage<=0) {
+		  		alert("請輸入合理的薪資待遇！");
+		  	}
+		 	else if(!timeRule.test(teachTime)){
+			  alert("上課時間格式不符！");
+		 	}
+		 	else{
             	var data_object = {
             		"parent_id": parent_id,
             		"grade": grade,
@@ -238,7 +235,7 @@
           	//alert(type);
           	
           	loginPID = response['response']['id'];
-          	alert("loginPID: "+loginPID);
+          	//alert("loginPID: "+loginPID);
           	
           	label_html += '<label> '+ name + typeStr +'，您好</label>';
           	label_html += '<button id="logoutBtn">登出</button>';

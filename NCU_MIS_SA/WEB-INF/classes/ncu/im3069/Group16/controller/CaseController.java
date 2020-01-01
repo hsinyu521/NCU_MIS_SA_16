@@ -81,7 +81,7 @@ public class CaseController extends HttpServlet {
             resp.put("response", query);
         }
         else {
-            /** 透過 orderHelper 物件之 getAll() 方法取回所有訂單之資料，回傳之資料為 JSONObject 物件 */
+            /** 透過 orderHelper 物件之 getAll() 方法取回所有案件之資料，回傳之資料為 JSONObject 物件 */
             JSONObject query = ch.getAll();
             resp.put("status", "200");
             resp.put("message", "所有案件資料取得成功");

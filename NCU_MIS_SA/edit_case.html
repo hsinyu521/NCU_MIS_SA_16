@@ -13,7 +13,7 @@
 <div id="container">
 
     <div id="Header">
-        <a href="home.html"><img src="statics/img/Logo.png" alt="Italian Trulli" width="200" height="100"></a>
+        <a href="index.html"><img src="statics/img/Logo.png" alt="Italian Trulli" width="200" height="100"></a>
         <h1>修改案件</h1>
         <label id="parent_name"></label>
     </div>
@@ -71,11 +71,11 @@
             </div>
             <div class="input text">
                 <label for="case_wage">薪資待遇</label>
-                <input name="wage" type="text" id="case_wage">元/hr
+                <input name="wage" type="number" id="case_wage" min="0" placeholder="請輸入正整數">元/hr
             </div>
             <div class="input text">
                 <label for="case_time">上課時間</label>
-                <input name="teachTime" type="text" id="case_time" >
+                <input name="teachTime" type="text" id="case_time" placeholder="請輸入 hh:mm的格式">
             </div>
             <div class="input text">
                 <label for="teacher_exp">教學經驗</label>
@@ -268,11 +268,11 @@
 	  $('#case_id_list').change(function() {
 	    	cid = document.getElementById("case_id_list").value;
 	    	if(cid != "num"){
-	    		alert(cid);
+	    		//alert(cid);
 		    	getCaseData(cid);
 			    $('#submit').click(function() {
-			        alert('你點了更新按鈕');
-			        alert("cid:"+cid);
+			        //alert('你點了更新按鈕');
+			        //alert("cid:"+cid);
 			        updateCase(cid);
 			    });
 	    	}
@@ -303,7 +303,7 @@
                   	$('input[name=subject]')[selectedSbj].checked = true;
                  	//案件狀態(radio button；DB存int，不用項科目一樣需要轉換)
                    	var selectedState = response['response']['data']['state'];
-                   	alert("selectedState"+selectedState);
+                   	//alert("selectedState"+selectedState);
                  	$('input[name=state]')[selectedState].checked = true;
                   	//縣市(下拉式)
                   	var selectedCountry = colleges.indexOf(response['response']['data']['teach_county']);
@@ -323,15 +323,14 @@
               }
           });
 	  }
+	  
 	  //更新案件資料
 	  function updateCase(cid) {
 		  var state = $('input[name=state]:checked').val();
 		  var grade = $('#grade').val();
-		  var subject = $('input[name=subject]:checked').val();  
-		  
+		  var subject = $('input[name=subject]:checked').val();
 		  var county = document.getElementById("county-list");
-		  var teachCounty = county.value;	
-		  
+		  var teachCounty = county.value;
 		  var region = document.getElementById("area-list");
 		  var teachRegion = region.value;
 		  var wage = $('#case_wage').val();
@@ -339,17 +338,16 @@
 		  var e = document.getElementById("teacher_exp");
 		  var teachExperience = e.value;
 		  
-		  alert(state);
-		  alert(grade);
-		  alert(subject);
-		  alert(teachCounty);
-		  alert(teachRegion);
-		  alert(wage);
-		  alert(teachTime);
-		  alert(teachExperience);
+		  var timeRule = /([0-9]+):([0-5][0-9]|6[0])/;
 		  
-		  if(2>3) {
-			  //檢驗空白
+		  if(grade.length==0 || wage.length==0 || teachTime.length==0) {
+			  alert("所有欄位皆為必填");
+		  }
+		  else if(wage<=0) {
+			  alert("請輸入合理的薪資待遇！");
+		  }
+		  else if(!timeRule.test(teachTime)){
+			  alert("上課時間格式不符！");
 		  }
 		  else {
 			  // 將資料組成JSON格式
