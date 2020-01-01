@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>老師面試管理</title>
     
-    <link rel="stylesheet" type="text/css" href="statics/css/manage_teacher.css">
+    <link rel="stylesheet" type="text/css" href="statics/css/teacher_interview.css">
     <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
 </head>
 
@@ -14,37 +14,53 @@
     <div id="container">
 
         <div id="header">
-            <a href="index.html"><img src="statics/img/Logo.png" alt="Logo"></a>
+            <div class="imgHolder"><a href="index.html"><img src="statics/img/Logo.png" alt="Logo"></a></div>
            	<h1> 老師面試管理</h1>
            	<label id="teacher_name"></label>
         </div>
 
-        <div id="content">
-<!--            <div id="next_content"></div> -->
+        <div id="content">	
+        
+			<div id="Sidebar">
+    			<p></p>
+    			<div clase="list"> 老師會員中心</div>
+   					<div class="list">
+        					<ul> <!--修改名稱與連結 Chu 12/25 8:27pm-->
+            					<li><a href="teacher_edit.html">修改家長會員資料</a></li>
+            					<li><a href="teacher_interview.html">面試管理</a></li>
+            					<li><a href="teacher_match.html">成交紀錄</a></li>
+        					</ul>
+    				</div>
+			</div>        			
+
+<!--         
                 <div id=Inquire class="btn-group-vertical">
-                        <input class="btn btn-default" type="button" value="修改老師會員資訊" onclick="location.href='要前往的網頁連結'" style="width:150px;height:50px;">
-                        <input class="btn btn-default" type="button" value="面試管理" onclick="location.href='要前往的網頁連結'" style="width:150px;height:50px;">
-                        <input class="btn btn-default" type="button" value="成交紀錄" onclick="location.href='要前往的網頁連結'" style="width:150px;height:50px;">
+                        <input class="btn btn-default" type="button" value="修改老師會員資訊" onclick="location.href='teacher_edit.html'" style="width:150px;height:50px;">
+                        <input class="btn btn-default" type="button" value="面試管理" onclick="location.href='teacher_interview.html'" style="width:150px;height:50px;">
+                        <input class="btn btn-default" type="button" value="成交紀錄" onclick="location.href='teacher_match.html'" style="width:150px;height:50px;">
                 </div>
-
-
-            <section id="case" >
-                <table id="table" border="1" solid #888888>
-                <thead>
-                         <tr>
-                            <td>案件編號</td>
-                            <td>家長會員手機</td>
-                            <td>上課科目</td>
-                            <td>上課地點</td>
-                            <td>管理狀態</td>
-                        </tr>
-                 </thead>
-                 <tbody>
-                </tbody>
-                </table>
-            </section>
-        </div>
+ -->
+			<div id=Body>
+            	<section id="case" >
+                	<table id="table">
+                	<thead>
+                         	<tr>
+                           		<th>案件編號</th>
+                        	    <th>家長會員手機</th>
+                           	 	<th>上課科目</th>
+                            	<th>上課地點</th>
+                            	<th>管理狀態</th>
+                        	</tr>
+                 	</thead>
+                 	<tbody>
+                	</tbody>
+                	</table>
+            	</section>	
+         	</div>   
+        </div>        
     </div>
+    <div id="Footer">®安心168家教網 created by 2019</div>
+    
     <script type="text/javascript">
 	    $(document).ready(function() {
 	        //看登入
