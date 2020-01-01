@@ -38,7 +38,7 @@ public class CaseHelper {
             String subject = ca.getSubject();
             String teachCounty = ca.getCounty();
             String teachRegion = ca.getRegion();
-            int wage = ca.getWage();
+            String wage = ca.getWage();
             String teachTime = ca.getTeachTime();
             String teachExperience = ca.getTeachExperience();
             int state = ca.getState();
@@ -51,7 +51,7 @@ public class CaseHelper {
             pres.setString(3, subject);
             pres.setString(4, teachCounty);
             pres.setString(5, teachRegion);
-            pres.setInt(6, wage);
+            pres.setString(6, wage);
             pres.setString(7, teachTime);
             pres.setString(8, teachExperience);
             pres.setInt(9, state); 
@@ -99,16 +99,17 @@ public class CaseHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "Update `sa16`.`cases` SET `grade` = ? ,`subject` = ? , `teachCounty` = ? , `teachRegion` = ?,`wage` = ? ,`teachTime` = ? ,`teachExperience` = ?,`modified` = ? WHERE `id` = ?";
+            String sql = "Update `sa16`.`cases` SET `grade` = ? ,`subject` = ? , `teachCounty` = ? , `teachRegion` = ?,`wage` = ? ,`teachTime` = ? ,`teachExperience` = ?,`modified` = ?,`state` =? WHERE `id` = ?";
             /** 取得所需之參數 */
             int id = ca.getId();            		
             String grade = ca.getGrade();
             String subject = ca.getSubject();
             String teachCounty = ca.getCounty();
             String teachRegion = ca.getRegion();
-            int wage = ca.getWage();
+            String wage = ca.getWage();
             String teachTime = ca.getTeachTime();
             String teachExperience = ca.getTeachExperience();
+            int state = ca.getState();
             
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
@@ -116,11 +117,12 @@ public class CaseHelper {
             pres.setString(2, subject);
             pres.setString(3, teachCounty);
             pres.setString(4, teachRegion);
-            pres.setInt(5, wage);
+            pres.setString(5, wage);
             pres.setString(6, teachTime);
             pres.setString(7, teachExperience);
             pres.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
-            pres.setInt(9, id);
+            pres.setInt(9, state);
+            pres.setInt(10, id);
 
             /** 紀錄真實執行的SQL指令，並印出 **/
             exexcute_sql = pres.toString();
@@ -179,7 +181,7 @@ public class CaseHelper {
                 String subject = rs.getString("subject");
                 String teachCounty = rs.getString("teachCounty");
                 String teachRegion = rs.getString("teachRegion");
-                int wage = rs.getInt("wage");
+                String wage = rs.getString("wage");
                 String teachTime = rs.getString("teachTime");
                 String teachExperience = rs.getString("teachExperience");
                 int state = rs.getInt("state");
@@ -187,7 +189,7 @@ public class CaseHelper {
                 Timestamp created = rs.getTimestamp("created");
                 
                 /** 將每一筆商品資料產生一名新Product物件 */
-                c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state, modified, created);
+                c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state);
                 /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
                 jsa.put(c.getCaseData());
             }
@@ -246,7 +248,7 @@ public class CaseHelper {
                 String subject = rs.getString("subject");
                 String teachCounty = rs.getString("teachCounty");
                 String teachRegion = rs.getString("teachRegion");
-                int wage = rs.getInt("wage");
+                String wage = rs.getString("wage");
                 String teachTime = rs.getString("teachTime");
                 String teachExperience = rs.getString("teachExperience");
                 int state = rs.getInt("state");
@@ -254,7 +256,7 @@ public class CaseHelper {
                 Timestamp created = rs.getTimestamp("created");
                 
                 /** 將每一筆商品資料產生一名新Product物件 */
-                c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state, modified, created);
+                c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state);
                 /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
                 data = c.getCaseData();
             }
@@ -315,7 +317,7 @@ public class CaseHelper {
                 String subject = rs.getString("subject");
                 String teachCounty = rs.getString("teachCounty");
                 String teachRegion = rs.getString("teachRegion");
-                int wage = rs.getInt("wage");
+                String wage = rs.getString("wage");
                 String teachTime = rs.getString("teachTime");
                 String teachExperience = rs.getString("teachExperience");
                 int state = rs.getInt("state");
@@ -323,7 +325,7 @@ public class CaseHelper {
                 Timestamp created = rs.getTimestamp("created");
                 
                 /** 將每一筆商品資料產生一名新Product物件 */
-                c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state, modified, created);
+                c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state);
                 /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
                 jsa.put(c.getCaseData());
             }
@@ -384,7 +386,7 @@ public class CaseHelper {
                 String subject = rs.getString("subject");
                 String teachCounty = rs.getString("teachCounty");
                 String teachRegion = rs.getString("teachRegion");
-                int wage = rs.getInt("wage");
+                String wage = rs.getString("wage");
                 String teachTime = rs.getString("teachTime");
                 String teachExperience = rs.getString("teachExperience");
                 int state = rs.getInt("state");
@@ -392,7 +394,7 @@ public class CaseHelper {
                 Timestamp created = rs.getTimestamp("created");
                 
                 /** 將每一筆商品資料產生一名新Product物件 */
-                c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state, modified, created);
+                c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state);
                 /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
                 jsa.put(c.getCaseData());
             }
@@ -452,7 +454,7 @@ public class CaseHelper {
                 String subject = rs.getString("subject");
                 String teachCounty = rs.getString("teachCounty");
                 String teachRegion = rs.getString("teachRegion");
-                int wage = rs.getInt("wage");
+                String wage = rs.getString("wage");
                 String teachTime = rs.getString("teachTime");
                 String teachExperience = rs.getString("teachExperience");
                 int state = rs.getInt("state");
@@ -460,7 +462,7 @@ public class CaseHelper {
                 Timestamp created = rs.getTimestamp("created");
                 
                 /** 將每一筆商品資料產生一名新Product物件 */
-                c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state, modified, created);
+                c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state);
                 /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
                 jsa.put( c.getCaseData());
             }

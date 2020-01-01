@@ -44,11 +44,10 @@
             <div>
                 <label for="case_state">案件狀態</label>
                 <input name="state" maxlength="50" type="radio" value="0" required="required">開放
-                <input type="radio" value="1" name="state">關閉
+                <input name="state" type="radio" value="1" >關閉
             </div>
         </div>
 
-        <p></p>
 
         <form id="content" accept-charset="utf-8">
             <div style="display:none;"><input type="hidden" name="_method" value="POST"></div>
@@ -81,12 +80,12 @@
             <div class="input text">
                 <label for="teacher_exp">教學經驗</label>
                 <select name="teachExperience" id="teacher_exp">
-                    <option value="0">無經驗</option>
-                    <option value="1">一年以下</option>
-                    <option value="2">兩年以下</option>
-                    <option value="3">三年以下</option>
-                    <option value="4">四年以下</option>
-                    <option value="5">五年以上</option>
+                    <option value="無經驗">無經驗</option>
+                    <option value="一年以下">一年以下</option>
+                    <option value="兩年以下">兩年以下</option>
+                    <option value="三年以下">三年以下</option>
+                    <option value="四年以下">四年以下</option>
+                    <option value="五年以上">五年以上</option>
                 </select>
             </div>
 
@@ -104,14 +103,13 @@
 </div>
 
 <script type="text/javascript">
-    $('#submit').click(function() {
-        alert('你點了更新按鈕');
-    });
+
 
 	$(document).ready(function() {
 		getLogin();
-		
+
 	});
+
 	
     var colleges=['台北市','新北市','桃園市','新竹','苗栗縣','台中市','彰化縣','雲林縣','嘉義','台南市','高雄市','屏東縣','基隆市','宜蘭縣','花蓮縣','台東縣','南投縣','澎湖縣','金門縣','連江縣'];
     var collegeSelect=document.getElementById("county-list");
@@ -172,6 +170,7 @@
 					else{
 						updateLogIn(response);
 						getCaseIdList();
+
 					}
 				}
 				else{	//沒有登入
@@ -271,72 +270,78 @@
 	    	cid = document.getElementById("case_id_list").value;
 	    	if(cid != "num"){
 	    		alert(cid);
-		    	getCaseData();
+		    	//getCaseData();
+			    $('#submit').click(function() {
+			        alert('你點了更新按鈕');
+			        alert("cid:"+cid);
+			        updateCase(cid);
+			    });
 	    	}
 	    	else{
 	    		alert("請重新選擇案件編號");
 	    	}
 	    });
-		
-	    function getCaseData() {
-			  $.ajax({
-		          type: "GET",
-		          url: "api/case.do",
-		          data: "id=" + cid,
-		          crossDomain: true,
-		          cache: false,
-		          dataType: 'json',
-		          timeout: 5000,
-		          success: function (response) {
-		              if(response.status == 200){
-		            	  //updateHTML(response.response.data);
-		            	  document.getElementById('wage').value = response['response']['data']['wage'][0];
-		            	  alert("更新表單");
-		              }
-		          },
-		          error: function () {
-		              alert("無法連線到伺服器！");
-		          }
-		    });
-		  }
+
 		  
-		  function updateHTML(data) {
-				//document.getElementById('state').value = data['state'];
-	          	//document.getElementById('wage').value = data['wage'];
-	          	
-<!--
-			  alert(data['teach_county']);
-			  var radioValue = data['state'];
-			  if(radioValue == 0){
-			  	$("input[name='state'][value='開放']").attr("checked",true);
-			  } else if(radioValue == 1){
-			  	$("input[name='state'][value='關閉']").attr("checked",true);
-			  }
-			  			  
-			  ////$("#id").selectedIndex=index;
-			  var radioValue2 = data['subject'];
-			  if(radioValue2 == "國"){
-			  	$("input[name='subject'][value='國']").attr("checked",true);
-			  } else if(radioValue2 == "英"){
-			  	$("input[name='subject'][value='英']").attr("checked",true);
-			  } else if(radioValue2 == "數"){
-			  	$("input[name='subject'][value='數']").attr("checked",true);
-			  } else if(radioValue2 == "物"){
-			  	$("input[name='subject'][value='物']").attr("checked",true);
-			  } else if(radioValue2 == "化"){
-			  	$("input[name='subject'][value='化']").attr("checked",true);
-			  } else if(radioValue2 == "生"){
-			  	$("input[name='subject'][value='生']").attr("checked",true);
-			  }
+		  //更新案件資料
+		  function updateCase(cid) {
+			  	var state = $('input[name=state]:checked').val();
+			  	var grade = $('#grade').val();
+			  	var subject = $('input[name=subject]:checked').val();
 			  
-			  $("#county-list").selectedIndex=data['teach_county'];
-			  $("#area-list").selectedIndex=data['teach_county'];
-			  
-			  $("input[name='case_wage']").val(data['wage']);
-			  $("input[name='case_time']").val(data['teach_region']);
-			  $("#teacher_exp").selectedIndex=data['teach_experience'];
--->
-		  }
+				var county = document.getElementById("county-list");
+				var teachCounty = county.value;
+				
+				var region = document.getElementById("area-list");
+				var teachRegion = region.value;
+				
+				var wage = $('#case_wage').val();
+				var teachTime = $('#case_time').val();
+				var e = document.getElementById("teacher_exp");
+				var teachExperience = e.value;
+
+                    if(2>3) {
+                        //檢驗空白
+                    }
+                    else {
+                        // 將資料組成JSON格式
+                        var data_object = {
+                     			"id":cid,
+                        		"parent_id": loginPID,
+                        		"grade": grade,
+                        		"subject": subject,
+                        		"teachCounty": teachCounty,
+                        		"teachRegion": teachRegion,
+                        		"wage": wage,
+                        		"teachTime": teachTime,
+                        		"teachExperience": teachExperience,
+                        		"state":state
+                        };
+
+                        // 將JSON格式轉換成字串
+                        var data_string = JSON.stringify(data_object);
+
+                        // 發出POST的PUT請求
+                        $.ajax({
+                                type: "PUT",
+                                url: "api/case.do",
+                                data: data_string,
+                                crossDomain: true,
+                                cache: false,
+                                dataType: 'json',
+                                timeout: 5000,
+                                success: function (response) {
+                                    $('#flashMessage').html(response.message);
+                                    $('#flashMessage').show();
+                                    if(response.status == 200){
+                                    }
+                                },
+                                error: function () {
+                                    alert("無法連線到伺服器！");
+                                }
+                        });
+                    }
+                }
 
 
 
