@@ -103,14 +103,12 @@
 </div>
 
 <script type="text/javascript">
-
-
 	$(document).ready(function() {
 		getLogin();
-
 	});
-
 	
+	var subjects = ['國','英','數','物','化','生'];
+	var experiences = ['無經驗', '一年以下', '兩年以下', '三年以下', '四年以下', ''];
     var colleges=['台北市','新北市','桃園市','新竹','苗栗縣','台中市','彰化縣','雲林縣','嘉義','台南市','高雄市','屏東縣','基隆市','宜蘭縣','花蓮縣','台東縣','南投縣','澎湖縣','金門縣','連江縣'];
     var collegeSelect=document.getElementById("county-list");
     var inner="";
@@ -141,6 +139,7 @@
     sectors[17]=['馬公市','湖西鄉','白沙鄉','西嶼鄉','望安鄉','七美鄉']
     sectors[18]=['金城鎮','金湖鎮','金沙鎮','金寧鄉','烈嶼鄉','烏坵鄉']
     sectors[19]=['南竿鄉','北竿鄉','莒光鄉','東引鄉']
+    
     function changeCollege(index){
         var Sinner="";
         for(var i=0;i<sectors[index].length;i++){
@@ -170,7 +169,6 @@
 					else{
 						updateLogIn(response);
 						getCaseIdList();
-
 					}
 				}
 				else{	//沒有登入
@@ -231,6 +229,7 @@
 		alert("未登入家長會員，將跳轉至首頁!");
 		window.location.assign("/NCU_MIS_SA_Group16");
 	}
+	
 	var i;
 	//抓取案件編號
 	function addOption(list,data){
@@ -270,7 +269,7 @@
 	    	cid = document.getElementById("case_id_list").value;
 	    	if(cid != "num"){
 	    		alert(cid);
-		    	//getCaseData();
+		    	getCaseData(cid);
 			    $('#submit').click(function() {
 			        alert('你點了更新按鈕');
 			        alert("cid:"+cid);
@@ -281,69 +280,116 @@
 	    		alert("請重新選擇案件編號");
 	    	}
 	    });
-
+	  
+	  //抓取案件資料
+	  function getCaseData(cid){
+		  //alert("in getCaseData()");
+		  $.ajax({
+              type: "GET",
+              url: "api/case.do",
+              crossDomain: true,
+              data: "id="+cid,
+              cache: false,
+              dataType: 'json',
+              timeout: 5000,
+              success: function (response) {
+                  if(response.status == 200){
+                   	//文字框類
+                  	document.getElementById('grade').value = response['response']['data']['grade'];
+                  	document.getElementById('case_wage').value = response['response']['data']['wage'];
+                  	document.getElementById('case_time').value = response['response']['data']['teachtime'];
+                  	//科目(radio button；存在DB的是文字，要去array找他對應的index才能讓radio button設值)
+                  	var selectedSbj = subjects.indexOf(response['response']['data']['subject']);
+                  	$('input[name=subject]')[selectedSbj].checked = true;
+                 	//案件狀態(radio button；DB存int，不用項科目一樣需要轉換)
+                   	var selectedState = response['response']['data']['state'];
+                   	alert("selectedState"+selectedState);
+                 	$('input[name=state]')[selectedState].checked = true;
+                  	//縣市(下拉式)
+                  	var selectedCountry = colleges.indexOf(response['response']['data']['teach_county']);
+                  	$('#county-list')[0].selectedIndex = selectedCountry;
+                  	changeCollege(selectedCountry);	//要有這行才能動態變換region的下拉式選單
+                  	//區域(下拉式)
+                  	var selectedRegion = sectors[selectedCountry].indexOf(response['response']['data']['teach_region']);
+                  	$('#area-list')[0].selectedIndex = selectedRegion;
+                  	//教學經驗(下拉式)
+                  	var selectedExp = experiences.indexOf(response['response']['data']['teach_experience']);
+                  	$('#teacher_exp')[0].selectedIndex = selectedExp;
+                  }
+                  console.log(response);
+              },
+              error: function () {
+                  alert("無法連線到伺服器！");
+              }
+          });
+	  }
+	  //更新案件資料
+	  function updateCase(cid) {
+		  var state = $('input[name=state]:checked').val();
+		  var grade = $('#grade').val();
+		  var subject = $('input[name=subject]:checked').val();  
 		  
-		  //更新案件資料
-		  function updateCase(cid) {
-			  	var state = $('input[name=state]:checked').val();
-			  	var grade = $('#grade').val();
-			  	var subject = $('input[name=subject]:checked').val();
+		  var county = document.getElementById("county-list");
+		  var teachCounty = county.value;	
+		  
+		  var region = document.getElementById("area-list");
+		  var teachRegion = region.value;
+		  var wage = $('#case_wage').val();
+		  var teachTime = $('#case_time').val();
+		  var e = document.getElementById("teacher_exp");
+		  var teachExperience = e.value;
+		  
+		  alert(state);
+		  alert(grade);
+		  alert(subject);
+		  alert(teachCounty);
+		  alert(teachRegion);
+		  alert(wage);
+		  alert(teachTime);
+		  alert(teachExperience);
+		  
+		  if(2>3) {
+			  //檢驗空白
+		  }
+		  else {
+			  // 將資料組成JSON格式
+			  var data_object = {
+					  "id":cid,
+					  "parent_id": loginPID,
+					  "grade": grade,
+					  "subject": subject,
+					  "teachCounty": teachCounty,
+					  "teachRegion": teachRegion,
+					  "wage": wage,
+					  "teachTime": teachTime,
+					  "teachExperience": teachExperience,
+					  "state":state
+				};
+			  // 將JSON格式轉換成字串
+			  var data_string = JSON.stringify(data_object);
 			  
-				var county = document.getElementById("county-list");
-				var teachCounty = county.value;
-				
-				var region = document.getElementById("area-list");
-				var teachRegion = region.value;
-				
-				var wage = $('#case_wage').val();
-				var teachTime = $('#case_time').val();
-				var e = document.getElementById("teacher_exp");
-				var teachExperience = e.value;
-
-                    if(2>3) {
-                        //檢驗空白
-                    }
-                    else {
-                        // 將資料組成JSON格式
-                        var data_object = {
-                     			"id":cid,
-                        		"parent_id": loginPID,
-                        		"grade": grade,
-                        		"subject": subject,
-                        		"teachCounty": teachCounty,
-                        		"teachRegion": teachRegion,
-                        		"wage": wage,
-                        		"teachTime": teachTime,
-                        		"teachExperience": teachExperience,
-                        		"state":state
-                        };
-
-                        // 將JSON格式轉換成字串
-                        var data_string = JSON.stringify(data_object);
-
-                        // 發出POST的PUT請求
-                        $.ajax({
-                                type: "PUT",
-                                url: "api/case.do",
-                                data: data_string,
-                                crossDomain: true,
-                                cache: false,
-                                dataType: 'json',
-                                timeout: 5000,
-                                success: function (response) {
-                                    $('#flashMessage').html(response.message);
-                                    $('#flashMessage').show();
-                                    if(response.status == 200){
-                                    }
-                                },
-                                error: function () {
-                                    alert("無法連線到伺服器！");
-                                }
-                        });
-                    }
-                }
-
-
+			  // 發出POST的PUT請求
+			  $.ajax({
+				  type: "PUT",
+				  url: "api/case.do",
+				  data: data_string,
+				  crossDomain: true,
+				  cache: false,
+				  dataType: 'json',
+				  timeout: 5000,
+				  success: function (response) {
+					  //$('#flashMessage').html(response.message);
+					  //$('#flashMessage').show();
+					  if(response.status == 200){
+						  alert("更新成功");
+					  }
+				  },
+				  error: function () {
+					  alert("無法連線到伺服器！");
+				  }
+			  });
+		}
+	}
 
 
 </script>

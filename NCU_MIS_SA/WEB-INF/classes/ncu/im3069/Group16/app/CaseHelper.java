@@ -123,6 +123,7 @@ public class CaseHelper {
             pres.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
             pres.setInt(9, state);
             pres.setInt(10, id);
+            pres.executeUpdate();
 
             /** 紀錄真實執行的SQL指令，並印出 **/
             exexcute_sql = pres.toString();
@@ -224,8 +225,8 @@ public class CaseHelper {
         try {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
-            /** SQL指令 */
-            String sql = "SELECT * FROM `sa16`.`cases` WHERE `cases`.`id` = ?";
+            /** SQL指令 */	//改這
+            String sql = "SELECT * FROM `sa16`.`cases` WHERE `id` = ?";
             
             /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
             pres = conn.prepareStatement(sql);
