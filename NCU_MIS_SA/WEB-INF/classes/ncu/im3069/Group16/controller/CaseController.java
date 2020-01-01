@@ -106,7 +106,7 @@ public class CaseController extends HttpServlet {
         String subject = jso.getString("subject");
         String teach_county = jso.getString("teachCounty");
         String teach_region = jso.getString("teachRegion");
-        int wage  = jso.getInt("wage");
+        String wage  = jso.getString("wage");
         String teachtime = jso.getString("teachTime");
         String teachExperience = jso.getString("teachExperience");
         
@@ -145,18 +145,21 @@ public class CaseController extends HttpServlet {
         JSONObject jso = jsr.getObject();
         
         /** 取出經解析到JSONObject之Request參數 */
+        int id = jso.getInt("id");
         int parent_id = jso.getInt("parent_id");
         String grade = jso.getString("grade");
         String subject = jso.getString("subject");
         String teach_county = jso.getString("teachCounty");
         String teach_region = jso.getString("teachRegion");
-        int wage  = jso.getInt("wage");
+        String wage  = jso.getString("wage");
         String teachtime = jso.getString("teachTime");
         String teachExperience = jso.getString("teachExperience");
+        int state = jso.getInt("state");
+        
 
         /** 透過傳入之參數，新建一個以這些參數之會員Member物件 */
-        Case c =new Case(parent_id,grade,subject,teach_county,teach_region
-        		,wage,teachtime,teachExperience);
+        Case c =new Case(id,parent_id,grade,subject,teach_county,teach_region
+        		,wage,teachtime,teachExperience,state);
         
         /** 透過Member物件的update()方法至資料庫更新該名會員資料，回傳之資料為JSONObject物件 */
         JSONObject data = c.update();
