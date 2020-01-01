@@ -1,0 +1,185 @@
+* {
+  margin:0;
+  padding:0;
+}
+/** General Style Info **/
+
+html,body {
+	/*font-family:'lucida grande',verdana,helvetica,arial,sans-serif;*/
+  height: 100%;  /* 設定body高度為100% 拉到視窗可視的大小 */
+  margin: 0;
+}
+img{
+  float:left;
+  width:243.4px;
+  height:100px;
+  vertical-align:middle;
+  border-right:5px;
+}
+.imgHolder{
+	float:left;
+	margin:5px 20px 0  0;  /*上右下左*/
+}
+#teacher_name{
+  float:right;
+}
+#logoutBtn{
+	cleaar:both;
+	floar:right;
+}
+/** Layout **/
+#container {
+  text-align: left;
+  min-height: 100%; /* 設定高度最小為100%, 如果內容區塊很多, 可以長大 */
+  position: relative; /* 位置設為relative, 作為footer區塊位置的參考 */
+}
+#header{
+  height: 120px;
+  font-size: 100%;
+  font-weight: bold;
+  font-family: 'lucida grande', verdana, helvetica, arial, sans-serif;
+  color: #fffaf3;
+  background-color: #ff8000;
+  margin: 0; /*上右下左*/
+  padding: 10px 20px 0px 20px; /*上右下左*/
+}
+#content{
+  background: #fff;
+  clear: both;
+  color: #333;
+  padding: 0px 0px 0px 0px; /*上右下左*/
+  overflow: auto;
+}
+#Sidebar{
+    width:250px;
+    height:400px;
+    float:left;
+    text-align:left;
+    vertical-align:middle;
+    font-size:15px;
+    color:#ffffff;
+    font-weight:bold;
+    background-color:#cecece;
+    padding: 20px 0px 0px 20px; /*上右下左*/
+}
+#body{
+	vertical-align:middle;
+    height:400px;
+    font-size:15px;
+    color:#f9c81e;
+    font-weight:bold;
+    float:left;
+    padding: 0px 0px 0px 0px;  /*上右下左*/
+}
+#Footer{
+  text-align:center;
+  line-height:60px;
+  font-size:15px;
+  color:#fffaf3;
+  font-weight:bold;
+  background-color:#ff8000;
+  height: 60px;
+  box-sizing: border-box;
+  position: absolute; /* 設定footer絕對位置在底部 */
+  bottom: 0;
+  width: 100%; /* 展開footer寬度 */
+}
+
+ul, li {
+	font-size: 105%;
+	margin:20px 0px 0px 20px;
+}
+a {
+  color: #003d4c;
+  text-decoration: underline;
+  font-weight: bold;
+}
+a:hover {
+  color: #367889;
+  text-decoration:none;
+}
+
+
+#h2{
+	display : inline;
+}
+.flex{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:300%;
+  height:400px;
+}
+/** Forms **/
+form {
+	clear: both;
+	margin-right: 20px;
+	padding: 0;
+	width: 100%;
+}
+fieldset {
+	border: none;
+	margin-bottom: 0.5em;
+	padding: 0px 0px;
+}
+fieldset legend {
+	color: #e32;
+	font-size: 100%;
+	font-weight: bold;
+}
+fieldset fieldset {
+	margin-top: 0;
+	padding: 0px 0 0;
+}
+fieldset fieldset legend {
+	font-size: 100%;
+	font-weight: normal;
+}
+fieldset fieldset div {
+	clear: left;
+	margin: 0 0px;
+}
+form div {
+	clear: both;
+	margin-bottom: 0em;
+	padding: .5em;
+	vertical-align: text-top;
+}
+form .input {
+	color: #444;
+}
+form .required {
+	font-weight: bold;
+}
+form .required label:after {
+	color: #e32;
+	content: '*';
+	display:inline;
+}
+
+input, textarea {
+	clear: both;
+	font-size: 100%;
+	font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;
+	padding: 0%;
+	width:100%;
+}
+select {
+	clear: both;
+	font-size: 100%;
+	vertical-align: text-bottom;
+}
+.submit [type=button] {
+	float:right;
+	width:100%;
+	background:#62af56;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#76BF6B), to(#3B8230));
+	background-image: -webkit-linear-gradient(top, #76BF6B, #3B8230);
+	background-image: -moz-linear-gradient(top, #76BF6B, #3B8230);
+	border-color: #2d6324;
+	color: #fff;
+	text-shadow: rgba(0, 0, 0, 0.5) 0px -1px 0px;
+}
+.submit [type=button]:hover {
+	background: #5BA150;
+}

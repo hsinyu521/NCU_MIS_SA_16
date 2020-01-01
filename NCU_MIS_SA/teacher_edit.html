@@ -4,7 +4,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>老師會員更改資訊</title>
 
-    <link rel="stylesheet" type="text/css" href="statics/css/teacher_change.css">
+    <link rel="stylesheet" type="text/css" href="statics/css/teacher_edit.css">
     <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
 
 </head>
@@ -13,13 +13,25 @@
 <body>	
 	<div id="container">
 		<div id="header">
-        	<a href="index.html"><img src="statics/img/Logo.png" alt="Logo" width="200" height="100"></a>
+        	<div class="imgHolder"><a href="index.html"><img src="statics/img/Logo.png" alt="Logo"></a></div>
+        	 <h1> 修改老師會員資料</h1>
         	<label id="teacher_name"></label>
     	</div>
 			
 		<div id="content">
-
-					<form id='form'>
+				<div id="Sidebar">
+    				<p></p>
+    				<div class="list"> 老師會員中心</div>
+   					<div class="list">
+        					<ul> 
+            					<li><a href="teacher_edit.html">修改老師會員資料</a></li>
+            					<li><a href="teacher_interview.html">面試管理</a></li>
+            					<li><a href="teacher_match.html">成交紀錄</a></li>
+        					</ul>
+    				</div>
+				</div>
+				<div id="body">
+					<form id='form' class="flex">
 						
 						<div style="display:none;"><input type="hidden" name="_method" value="POST"></div>
 
@@ -55,16 +67,11 @@
 
 						<div class="submit"><input type="button" value="修改" id="submit"></div>
 						
-				</form>
-
+					</form>
+				</div>
 			
 		</div>
-
-		<div id="table2">
-			<a href="teacher_edit.html" class="button"><input type="button" value="修改老師會員資訊"  id="teacher_information"></a><br>
-			<a href="teacher_interview.html" class="button"><input type="button" value="面試管理"  id="interview"></a><br>
-			<a href="teacher_match.html" class="button"><input type="button" value="成交紀錄"  id="closing"></a>
-		</div>
+    <div id="Footer">®安心168家教網 created by 2019</div>
 	</div>
 </body>
 
