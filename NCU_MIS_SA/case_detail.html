@@ -38,8 +38,7 @@
 
 			<div id="secend_content"></div>
 					<div class="submit"><input type="button" value="我要應徵" id="submit"></div>
-			
-		</div>
+			</div>
 	</div>
 	<script>
 	  //取得網址參數
@@ -69,6 +68,41 @@
 	  
 	  getCaseData();
 	  
+
+	  
+		function submit(){
+
+            //先在前端確認資料皆填了(value長度皆不為0)再送去後端
+            //grade.length==0 || subject.length==0 || teachCounty.length==0 || teachRegion.length==0 || wage.length==0 || teachTime.length==0 || teachExperience.length==0
+            if(2>3){
+            	alert("所有欄位皆必填!!!");
+            }
+            else{
+            	var data_object = {
+            		"case_id": id,
+            		"teacher_id": loginTID,
+            	};
+            	var data_string = JSON.stringify(data_object);
+            	$.ajax({
+                            type: "POST",
+                            url: "api/interview.do",
+                            data: data_string,
+                            crossDomain: true,
+                            cache: false,
+                            dataType: 'json',
+                            timeout: 5000,
+                            success: function (response) {
+                            	alert("get respose");
+                                $('#flashMessage').html(response.message);
+                                $('#flashMessage').show();
+                            },
+                            error: function () {
+                                alert("無法連線到伺服器！");
+                            }
+                    });
+            }
+         }
+	  
 	  function updateHTML(data) {
 		  $("#id").html(data['id']);
 		  $("#grade").html(data['grade']);
@@ -80,6 +114,9 @@
 	  }
 	  $(document).ready(function(){
 		  getLogin();
+		  $("#submit").click(function(){
+				submit();
+		  });
 	  });
 
 	  

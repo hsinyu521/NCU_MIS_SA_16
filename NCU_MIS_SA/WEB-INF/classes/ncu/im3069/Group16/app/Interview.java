@@ -17,6 +17,10 @@ public class Interview {
     	this.teacher_id = teacher_id;
     	this.state = state;
     }
+    public Interview(int case_id,int teacher_id) {
+    	this.case_id = case_id;
+    	this.teacher_id = teacher_id;
+    }
     public int getCaseId() {
     	return this.case_id;
     }

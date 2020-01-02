@@ -34,20 +34,20 @@ public class InterviewHelper {
 	            /** 取得資料庫之連線 */
 	            conn = DBMgr.getConnection();
 	            /** SQL指令 */
-	            String sql = "INSERT INTO `sa16`.`interview`(`cases_id`, `teachers_id`, `state`)"
-	                    + " VALUES(?, ?, ?)";
+	            String sql = "INSERT INTO `sa16`.`interview`(`cases_id`, `teachers_id`)"
+	                    + " VALUES(?, ?)";
 	            
 	            /** 取得所需之參數 */
 	            int case_id = in.getCaseId();
 	            int teacher_id = in.getTeacherId();
-	            int state = in.getState();
+	            //int state = in.getState();
 
 	            
 	            /** 將參數回填至SQL指令當中 */
 	            pres = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 	            pres.setInt(1, case_id);
 	            pres.setInt(2, teacher_id);
-	            pres.setInt(3, state);
+	           // pres.setInt(3, state);
 
 	            /** 執行新增之SQL指令並記錄影響之行數 */
 	            pres.executeUpdate();
@@ -118,6 +118,7 @@ public class InterviewHelper {
 	    }
 	    public JSONObject getByCaseId(String ca_id) {
 	        JSONObject data = new JSONObject();
+	        JSONArray jsa = new JSONArray();
 	        Interview i = null;
 	        /** 記錄實際執行之SQL指令 */
 	        String exexcute_sql = "";;
@@ -152,7 +153,7 @@ public class InterviewHelper {
 	                /** 將每一筆商品資料產生一名新Product物件 */
 	                i = new Interview(case_id, teacher_id, state);
 	                /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
-	                data = i.getInterviewData();
+	                jsa.put( i.getInterviewData());
 	            }
 
 	        } catch (SQLException e) {
@@ -170,12 +171,12 @@ public class InterviewHelper {
 	        
 	        JSONObject response = new JSONObject();
 	        response.put("sql", exexcute_sql);
-	        response.put("data", data);
-
+	        response.put("data", jsa);
 	        return response;
 	    }
 	    public JSONObject getByTeacherId(String t_id) {
 	        JSONObject data = new JSONObject();
+	        JSONArray jsa = new JSONArray();
 	        Interview i = null;
 	        /** 記錄實際執行之SQL指令 */
 	        String exexcute_sql = "";;
@@ -210,7 +211,7 @@ public class InterviewHelper {
 	                /** 將每一筆商品資料產生一名新Product物件 */
 	                i = new Interview(case_id, teacher_id, state);
 	                /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
-	                data = i.getInterviewData();
+	                jsa.put( i.getInterviewData());
 	            }
 
 	        } catch (SQLException e) {
@@ -228,8 +229,7 @@ public class InterviewHelper {
 	        
 	        JSONObject response = new JSONObject();
 	        response.put("sql", exexcute_sql);
-	        response.put("data", data);
-
+	        response.put("data", jsa);
 	        return response;
 	    }
 }
