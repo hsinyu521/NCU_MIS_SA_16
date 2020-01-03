@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -81,7 +83,7 @@ public class InterviewHelper {
 	            /** 取得資料庫之連線 */
 	            conn = DBMgr.getConnection();
 	            /** SQL指令 */
-	            String sql = "Update `sa16`.`interview` SET `state` = ? WHERE `cases_id` = ?";
+	            String sql = "Update `sa16`.`interviews` SET `state` = ? WHERE `case_id` = ?";
 	            /** 取得所需之參數 */
 	            int case_id = in.getCaseId();            		
 	            int state = in.getState();
@@ -115,6 +117,7 @@ public class InterviewHelper {
 	        return response;
 	    }
 	    public JSONObject getByCaseId(String ca_id) {
+	        JSONObject data = new JSONObject();
 	        JSONArray jsa = new JSONArray();
 	        Interview i = null;
 	        /** 記錄實際執行之SQL指令 */
@@ -126,7 +129,7 @@ public class InterviewHelper {
 	            /** 取得資料庫之連線 */
 	            conn = DBMgr.getConnection();
 	            /** SQL指令 */
-	            String sql = "SELECT * FROM `sa16`.`interview` WHERE `interview`.`cases_id` = ?";
+	            String sql = "SELECT * FROM `sa16`.`interviews` WHERE `interviews`.`case_id` = ?";
 	            
 	            /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
 	            pres = conn.prepareStatement(sql);
@@ -172,6 +175,7 @@ public class InterviewHelper {
 	        return response;
 	    }
 	    public JSONObject getByTeacherId(String t_id) {
+	        JSONObject data = new JSONObject();
 	        JSONArray jsa = new JSONArray();
 	        Interview i = null;
 	        /** 記錄實際執行之SQL指令 */
@@ -183,7 +187,11 @@ public class InterviewHelper {
 	            /** 取得資料庫之連線 */
 	            conn = DBMgr.getConnection();
 	            /** SQL指令 */
-	            String sql = "SELECT * FROM `sa16`.`interview` WHERE `interview`.`teachers_id` = ?";
+	            //String sql = "SELECT * FROM `sa16`.`interviews` WHERE `interviews`.`teacher_id` = ?";
+	            String sql = "SELECT cases.id, cases.parent_id, parents.cellphone, cases.subject, cases.teachCounty, cases.teachRegion, interview.state " + 
+	            		"FROM sa16.cases " + 
+	            		"INNER JOIN interview ON cases.id = interview.cases_id " + 
+	            		"INNER JOIN parents ON cases.parent_id = parents.id WHERE interview.teachers_id = ?;";
 	            
 	            /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
 	            pres = conn.prepareStatement(sql);
@@ -194,20 +202,23 @@ public class InterviewHelper {
 	            /** 紀錄真實執行的SQL指令，並印出 **/
 	            exexcute_sql = pres.toString();
 	            System.out.println(exexcute_sql);
-	            
+	            System.out.printf("in IH\n");
 	            /** 透過 while 迴圈移動pointer，取得每一筆回傳資料 */
 	            while(rs.next()) {
-	                
 	                /** 將 ResultSet 之資料取出 */ 
-	            	int case_id = rs.getInt("cases_id"); 
-	                int teacher_id = rs.getInt("teachers_id");	              
+	            	int caseID = rs.getInt("id"); 
+	                int parentID = rs.getInt("parent_id");	              
+	                String cellphone = rs.getString("cellphone");
+	                String subject = rs.getString("subject");
+	                String teachCounty = rs.getString("teachCounty");
+	                String teachRegion = rs.getString("teachRegion");
 	                int state = rs.getInt("state");
-
 	                
 	                /** 將每一筆商品資料產生一名新Product物件 */
-	                i = new Interview(case_id, teacher_id, state);
+	                //i = new Interview(case_id, teacher_id, state);
+	                i = new Interview(caseID, parentID, cellphone, subject, teachCounty, teachRegion, state);
 	                /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
-	                jsa.put( i.getInterviewData());
+	                jsa.put( i.getTInterviewData());
 	            }
 
 	        } catch (SQLException e) {

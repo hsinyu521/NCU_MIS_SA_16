@@ -42,11 +42,11 @@
  -->
 			<div id=Body>
             	<section id="case" >
-                	<table id="table">
+                	<table id="interview_list">
                 	<thead>
                          	<tr>
                            		<th>案件編號</th>
-                        	    <!-- <th>家長會員手機</th> -->
+                        	    <th>家長會員手機</th>
                            	 	<th>上課科目</th>
                             	<th>上課地點</th>
                             	<th>管理狀態</th>
@@ -65,49 +65,74 @@
 	    $(document).ready(function() {
 	        //看登入
 	        getLogin();
-	        
 	    });
-	    var c_id = new Array();
-	    var i = 0;
-	       function getCaseId() {
-	   		  $.ajax({
-	 	          type: "GET",
-	 	          url: "api/interview.do",
-	 	          data: "teacher_id=" + loginTID,
-	 	          crossDomain: true,
-	 	          cache: false,
-	 	          dataType: 'json',
-	 	          timeout: 5000,
-	 	          success: function (response) {
-	 	              if(response.status == 200){
-	 	            	  $.each(response.response.data, function(index, value) {
-								c_id[i] = String(value['case_id']);
-								alert("?"+c_id[i]);
-								i++;
-								
-	 	            	  });
-	 	              }
-	 	          },
-	 	          error: function () {
-	 	              alert("無法連線到伺服器！");
-	 	          }
-	 	         getCase();
-	 	    });
-	   		
+	    
+	    var states = ['面試','成功','失敗'];
+        function getAllCase() {
+            /*$.ajax({
+                type: "GET",
+                url: "api/product.do",
+                crossDomain: true,
+                cache: false,
+                dataType: 'json',
+                timeout: 5000,
+                success: function (response) {
+                    if (response.status == 200) {
+                	var product_panel = '';
 
-	      }
+                	$.each(response.response.data, function (){
+                		//product_panel += addProduct(this);
+                	})
 
-	         function updateTable(data) {
-	             $("#table > tbody").empty();
-	             var table_html = '';
-	             $.each(data, function(index, value) {
-	                 table_html += '<tr><td>'+ '<a href="case_detail.html?id=' + value['id'] + '">' + value['id'] + '</a></td>';
-	                 table_html += '<td>' + value['subject'] + '</td>';
-	                 table_html += '<td>' + ['teachCounty']+ value['teachRegion'] + '</td>';
-	                 table_html += '<td>' + ['state'] + '</td></tr>'; 
-	             })
-	             $("#table > tbody").append(table_html);
-	         }
+                	$("#product_panel").append(product_panel);
+                	setButtonFunction();
+                	checkIfExistInCart();
+                    }
+                },
+                error: function () {
+                    alert("無法連線到伺服器！");
+                }
+            });
+        */}
+
+        //getAllCase();
+        
+        function getInterview(){
+        	
+        	$.ajax({
+                type: "GET",
+                url: "api/interview.do",
+                data: "teacher_id="+loginTID,
+                crossDomain: true,
+                cache: false,
+                dataType: 'json',
+                timeout: 5000,
+                success: function (response) {
+                    if(response.status == 200){
+                  	  updateTable(response.response.data);
+                    }
+                    console.log(response);
+                },
+                error: function () {
+                    alert("無法連線到伺服器！");
+                }
+          });
+        }
+        
+     	//更新表格
+        function updateTable(data) {	//做出html要的表單形式
+            $("#interview_list > tbody").empty();
+            var table_html = '';
+            $.each(data, function(index, value) {	//data為陣列
+            	table_html += '<tr><td scope="row">' + value['case_id'] + '</td>';
+                table_html += '<td>' + value['Tphone'] + '</td>';
+                table_html += '<td>' + value['subject'] + '</td>';
+                table_html += '<td>' + value['teachCounty']+ value['teachRegion'] + '</td>';
+                table_html += '<td>' + states[value['state']] + '</td></tr>';
+            })
+
+            $("#interview_list > tbody").append(table_html);
+        }
         
         //預設都是0，如果有人登入會去改，若其他部分又去取東西再用這個
         var loginTID=0;
@@ -128,7 +153,7 @@
     					}
     					else{
     						updateLogIn(response);
-    						getCaseId();
+    						getInterview();
     					}
     				}
     				else{	//沒有登入
@@ -190,41 +215,6 @@
     		alert("未登入老師會員，將跳轉至首頁!");
     		window.location.assign("http://localhost:8090/NCU_MIS_SA_Group16/");
     	}
-    	
-	       
-	      function getCase(){
-	    	  alert("i"+i);
-		   		for(var j=0;j<i;j++)  {
-		   			alert("???"+c_id[j]);
-		   		 $.ajax({
-	    	          type: "GET",
-	    	          url: "api/case.do",
-	    	          data: "id=" + c_id[j],
-	    	          crossDomain: true,
-	    	          cache: false,
-	    	          dataType: 'json',
-	    	          timeout: 5000,
-	    	          success: function (response) {
-	    	        	  alert(2);
-	    	              if(response.status == 200){
-	    	            	 $("#table > tbody").empty();
-	    		             var table_html = '';
-	    		             $.each(response.response.data, function(index, value) {
-	    		                 table_html += '<tr><td>'+ '<a href="case_detail.html?id=' + value['id'] + '">' + value['id'] + '</a></td>';
-	    		                 table_html += '<td>' + value['subject'] + '</td>';
-	    		                 table_html += '<td>' + value['teachCounty']+ value['teachRegion'] + '</td>';
-	    		                 table_html += '<td>' + value['state'] + '</td></tr>'; 
-	    		             })
-	    		             $("#table > tbody").append(table_html);
-	    	            	  alert("????");
-	    	              }
-	    	          },
-	    	          error: function () {
-	    	              alert("無法連線到伺服器！");
-	    	          }
-	    	    });
-		   		}
-	       }
         
     </script>
 
