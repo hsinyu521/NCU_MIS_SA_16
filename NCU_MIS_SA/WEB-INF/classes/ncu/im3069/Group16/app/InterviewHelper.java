@@ -5,8 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -83,7 +81,7 @@ public class InterviewHelper {
 	            /** 取得資料庫之連線 */
 	            conn = DBMgr.getConnection();
 	            /** SQL指令 */
-	            String sql = "Update `sa16`.`interviews` SET `state` = ? WHERE `case_id` = ?";
+	            String sql = "Update `sa16`.`interview` SET `state` = ? WHERE `cases_id` = ?";
 	            /** 取得所需之參數 */
 	            int case_id = in.getCaseId();            		
 	            int state = in.getState();
@@ -117,7 +115,6 @@ public class InterviewHelper {
 	        return response;
 	    }
 	    public JSONObject getByCaseId(String ca_id) {
-	        JSONObject data = new JSONObject();
 	        JSONArray jsa = new JSONArray();
 	        Interview i = null;
 	        /** 記錄實際執行之SQL指令 */
@@ -129,7 +126,7 @@ public class InterviewHelper {
 	            /** 取得資料庫之連線 */
 	            conn = DBMgr.getConnection();
 	            /** SQL指令 */
-	            String sql = "SELECT * FROM `sa16`.`interviews` WHERE `interviews`.`case_id` = ?";
+	            String sql = "SELECT * FROM `sa16`.`interview` WHERE `interview`.`cases_id` = ?";
 	            
 	            /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
 	            pres = conn.prepareStatement(sql);
@@ -175,7 +172,6 @@ public class InterviewHelper {
 	        return response;
 	    }
 	    public JSONObject getByTeacherId(String t_id) {
-	        JSONObject data = new JSONObject();
 	        JSONArray jsa = new JSONArray();
 	        Interview i = null;
 	        /** 記錄實際執行之SQL指令 */
@@ -187,7 +183,7 @@ public class InterviewHelper {
 	            /** 取得資料庫之連線 */
 	            conn = DBMgr.getConnection();
 	            /** SQL指令 */
-	            String sql = "SELECT * FROM `sa16`.`interviews` WHERE `interviews`.`teacher_id` = ?";
+	            String sql = "SELECT * FROM `sa16`.`interview` WHERE `interview`.`teachers_id` = ?";
 	            
 	            /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
 	            pres = conn.prepareStatement(sql);
@@ -203,8 +199,8 @@ public class InterviewHelper {
 	            while(rs.next()) {
 	                
 	                /** 將 ResultSet 之資料取出 */ 
-	            	int case_id = rs.getInt("case_id"); 
-	                int teacher_id = rs.getInt("teacher_id");	              
+	            	int case_id = rs.getInt("cases_id"); 
+	                int teacher_id = rs.getInt("teachers_id");	              
 	                int state = rs.getInt("state");
 
 	                

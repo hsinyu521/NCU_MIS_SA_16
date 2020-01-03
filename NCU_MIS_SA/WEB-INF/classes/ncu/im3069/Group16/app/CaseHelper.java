@@ -2,7 +2,6 @@ package ncu.im3069.Group16.app;
 
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.*;
 import org.json.*;
 import ncu.im3069.Group16.util.DBMgr;
 
@@ -58,7 +57,7 @@ public class CaseHelper {
             pres.setTimestamp(10, Timestamp.valueOf(LocalDateTime.now()));
             pres.setTimestamp(11, Timestamp.valueOf(LocalDateTime.now()));
             
-            /** 執行新增之SQL指令並記錄影響之行數 */
+            /** 執行新增之SQL指令 */
             pres.executeUpdate();
             
             /** 紀錄真實執行的SQL指令，並印出 **/
@@ -75,7 +74,7 @@ public class CaseHelper {
             DBMgr.close(pres, conn);
         }
 
-        /** 將SQL指令、花費時間與影響行數，封裝成JSONObject回傳 */
+        /** 將SQL指令，封裝成JSONObject回傳 */
         JSONObject response = new JSONObject();
         response.put("sql", exexcute_sql);
 
@@ -141,7 +140,7 @@ public class CaseHelper {
         }
 
         
-        /** 將SQL指令、花費時間與影響行數，封裝成JSONObject回傳 */
+        /** 將SQL指令和資料，封裝成JSONObject回傳 */
         JSONObject response = new JSONObject();
         response.put("sql", exexcute_sql);
         response.put("data", jsa);
@@ -187,8 +186,8 @@ public class CaseHelper {
                 String teachTime = rs.getString("teachTime");
                 String teachExperience = rs.getString("teachExperience");
                 int state = rs.getInt("state");
-                Timestamp modified = rs.getTimestamp("modified");
-                Timestamp created = rs.getTimestamp("created");
+                //Timestamp modified = rs.getTimestamp("modified");
+                //Timestamp created = rs.getTimestamp("created");
                 
                 /** 將每一筆商品資料產生一名新Product物件 */
                 c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state);
@@ -207,8 +206,7 @@ public class CaseHelper {
             DBMgr.close(rs, pres, conn);
         }
         
-        
-        /** 將SQL指令、花費時間、影響行數與所有會員資料之JSONArray，封裝成JSONObject回傳 */
+        /** 將SQL指令與所有資料之JSONArray，封裝成JSONObject回傳 */
         JSONObject response = new JSONObject();
         response.put("sql", exexcute_sql);
         response.put("data", jsa);
@@ -219,7 +217,7 @@ public class CaseHelper {
         JSONObject data = new JSONObject();
         Case c = null;
         /** 記錄實際執行之SQL指令 */
-        String exexcute_sql = "";;
+        String exexcute_sql = "";
         /** 儲存JDBC檢索資料庫後回傳之結果，以 pointer 方式移動到下一筆資料 */
         ResultSet rs = null;
         
@@ -241,7 +239,6 @@ public class CaseHelper {
             
             /** 透過 while 迴圈移動pointer，取得每一筆回傳資料 */
             while(rs.next()) {
-                /** 每執行一次迴圈表示有一筆資料 */
                 
                 /** 將 ResultSet 之資料取出 */
                 int id = rs.getInt("id");    
@@ -254,8 +251,8 @@ public class CaseHelper {
                 String teachTime = rs.getString("teachTime");
                 String teachExperience = rs.getString("teachExperience");
                 int state = rs.getInt("state");
-                Timestamp modified = rs.getTimestamp("modified");
-                Timestamp created = rs.getTimestamp("created");
+                //Timestamp modified = rs.getTimestamp("modified");
+                //Timestamp created = rs.getTimestamp("created");
                 
                 /** 將每一筆商品資料產生一名新Product物件 */
                 c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state);
@@ -274,7 +271,7 @@ public class CaseHelper {
             DBMgr.close(rs, pres, conn);
         }
         
-        /** 將SQL指令、花費時間、影響行數與所有會員資料之JSONArray，封裝成JSONObject回傳 */
+        /** 將SQL指令與資料之JSONArray，封裝成JSONObject回傳 */
         
         JSONObject response = new JSONObject();
         response.put("sql", exexcute_sql);
@@ -284,14 +281,12 @@ public class CaseHelper {
     }
     
     public JSONObject getByParentId(String p_id) {
-        JSONObject data = new JSONObject();
         Case c = null;
         JSONArray jsa = new JSONArray();
         /** 記錄實際執行之SQL指令 */
-        String exexcute_sql = "";;
+        String exexcute_sql = "";
         /** 儲存JDBC檢索資料庫後回傳之結果，以 pointer 方式移動到下一筆資料 */
         ResultSet rs = null;
-        int row = 0;
         
         try {
             /** 取得資料庫之連線 */
@@ -311,7 +306,6 @@ public class CaseHelper {
             
             /** 透過 while 迴圈移動pointer，取得每一筆回傳資料 */
             while(rs.next()) {
-            	 row += 1;
                 /** 將 ResultSet 之資料取出 */ 
             	int id = rs.getInt("id"); 
                 int parent_id = rs.getInt("parent_id");
@@ -323,8 +317,8 @@ public class CaseHelper {
                 String teachTime = rs.getString("teachTime");
                 String teachExperience = rs.getString("teachExperience");
                 int state = rs.getInt("state");
-                Timestamp modified = rs.getTimestamp("modified");
-                Timestamp created = rs.getTimestamp("created");
+                //Timestamp modified = rs.getTimestamp("modified");
+                //Timestamp created = rs.getTimestamp("created");
                 
                 /** 將每一筆商品資料產生一名新Product物件 */
                 c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state);
@@ -343,18 +337,15 @@ public class CaseHelper {
             DBMgr.close(rs, pres, conn);
         }
         
-        /** 將SQL指令、花費時間、影響行數與所有會員資料之JSONArray，封裝成JSONObject回傳 */
-        
+        /** 將SQL指令與資料之JSONArray，封裝成JSONObject回傳 */
         JSONObject response = new JSONObject();
         response.put("sql", exexcute_sql);
-        response.put("row", row);
         response.put("data", jsa);
 
         return response;
     }
     
     public JSONObject getBySubject(String sub) {
-        JSONObject data = new JSONObject();
         Case c = null;
         JSONArray jsa = new JSONArray();
         /** 記錄實際執行之SQL指令 */
@@ -366,7 +357,6 @@ public class CaseHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            //String sql = "SELECT * FROM `sa16`.`cases` WHERE `cases`.`subject` = ?";
             String sql = "SELECT * FROM `sa16`.`cases` WHERE `subject` = ? AND `state`= ?";
             
             /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
@@ -394,8 +384,8 @@ public class CaseHelper {
                 String teachTime = rs.getString("teachTime");
                 String teachExperience = rs.getString("teachExperience");
                 int state = rs.getInt("state");
-                Timestamp modified = rs.getTimestamp("modified");
-                Timestamp created = rs.getTimestamp("created");
+                //Timestamp modified = rs.getTimestamp("modified");
+                //Timestamp created = rs.getTimestamp("created");
                 
                 /** 將每一筆商品資料產生一名新Product物件 */
                 c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state);
@@ -414,7 +404,7 @@ public class CaseHelper {
             DBMgr.close(rs, pres, conn);
         }
         
-        /** 將SQL指令、花費時間、影響行數與所有會員資料之JSONArray，封裝成JSONObject回傳 */
+        /** 將SQL指令與資料之JSONArray，封裝成JSONObject回傳 */
         
         JSONObject response = new JSONObject();
         response.put("sql", exexcute_sql);
@@ -424,7 +414,6 @@ public class CaseHelper {
     }
     
     public JSONObject getByExperience(String exp) {
-        JSONObject data = new JSONObject();
         Case c = null;
         JSONArray jsa = new JSONArray();
         /** 記錄實際執行之SQL指令 */
@@ -463,8 +452,8 @@ public class CaseHelper {
                 String teachTime = rs.getString("teachTime");
                 String teachExperience = rs.getString("teachExperience");
                 int state = rs.getInt("state");
-                Timestamp modified = rs.getTimestamp("modified");
-                Timestamp created = rs.getTimestamp("created");
+                //Timestamp modified = rs.getTimestamp("modified");
+                //Timestamp created = rs.getTimestamp("created");
                 
                 /** 將每一筆商品資料產生一名新Product物件 */
                 c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state);
@@ -483,7 +472,7 @@ public class CaseHelper {
             DBMgr.close(rs, pres, conn);
         }
         
-        /** 將SQL指令、花費時間、影響行數與所有會員資料之JSONArray，封裝成JSONObject回傳 */
+        /** 將SQL指令與資料之JSONArray，封裝成JSONObject回傳 */
         
         JSONObject response = new JSONObject();
         response.put("sql", exexcute_sql);

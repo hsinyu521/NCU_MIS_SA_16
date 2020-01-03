@@ -1,10 +1,6 @@
 package ncu.im3069.Group16.controller;
 
 import java.io.IOException;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,7 +20,7 @@ import ncu.im3069.tools.JsonReader;
 public class CaseController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /** ch，MemberHelper之物件與Member相關之資料庫方法（Sigleton） */
+    /** ch，CaseHelper之物件與Case相關之資料庫方法（Sigleton） */
     private CaseHelper ch =  CaseHelper.getHelper();
     /**
      * @see HttpServlet#HttpServlet()
@@ -39,7 +35,7 @@ public class CaseController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-	       /** 透過 JsonReader 類別將 Request 之 JSON 格式資料解析並取回 */
+	    /** 透過 JsonReader 類別將 Request 之 JSON 格式資料解析並取回 */
         JsonReader jsr = new JsonReader(request);
 
         /** 取出經解析到 JsonReader 之 Request 參數 */
@@ -53,35 +49,35 @@ public class CaseController extends HttpServlet {
 
         /** 判斷該字串是否存在，若存在代表要取回個別訂單之資料，否則代表要取回全部資料庫內訂單之資料 */
         if (!id.isEmpty()) {
-          /** 透過 orderHelper 物件的 getByID() 方法自資料庫取回該筆訂單之資料，回傳之資料為 JSONObject 物件 */
+          /** 透過 CaseHelper 物件的 getByID() 方法自資料庫取回該筆訂單之資料，回傳之資料為 JSONObject 物件 */
           JSONObject query = ch.getById(id);
           resp.put("status", "200");
           resp.put("message", "單筆案件資料取得成功");
           resp.put("response", query);
         }
         else if(!parent_id.isEmpty()) {
-        	/** 透過 orderHelper 物件之 getAll() 方法取回所有訂單之資料，回傳之資料為 JSONObject 物件 */
+        	/** 透過 CaseHelper 物件之 getByParentId() 方法取回資料，回傳之資料為 JSONObject 物件 */
             JSONObject query = ch.getByParentId(parent_id);
             resp.put("status", "200");
             resp.put("message", "家長會員編號，案件資料取得成功");
             resp.put("response", query);
         }
         else if(!subject.isEmpty()) {
-            /** 透過 orderHelper 物件之 getAll() 方法取回所有訂單之資料，回傳之資料為 JSONObject 物件 */
+            /** 透過 CaseHelper 物件之 getBySubject() 方法取回資料，回傳之資料為 JSONObject 物件 */
             JSONObject query = ch.getBySubject(subject);
             resp.put("status", "200");
             resp.put("message", "科目，案件資料取得成功");
             resp.put("response", query);
         }
         else if(!teachExperience.isEmpty()) {
-            /** 透過 orderHelper 物件之 getAll() 方法取回所有訂單之資料，回傳之資料為 JSONObject 物件 */
+            /** 透過 CaseHelper 物件之 getByExperience() 方法取回資料，回傳之資料為 JSONObject 物件 */
             JSONObject query = ch.getByExperience(teachExperience);
             resp.put("status", "200");
             resp.put("message", "教學經驗，案件資料取得成功");
             resp.put("response", query);
         }
         else {
-            /** 透過 orderHelper 物件之 getAll() 方法取回所有案件之資料，回傳之資料為 JSONObject 物件 */
+            /** 透過 CaseHelper 物件之 getAll() 方法取回所有案件之資料，回傳之資料為 JSONObject 物件 */
             JSONObject query = ch.getAll();
             resp.put("status", "200");
             resp.put("message", "所有案件資料取得成功");
@@ -96,7 +92,7 @@ public class CaseController extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	       /** 透過JsonReader類別將Request之JSON格式資料解析並取回 */
+	    /** 透過JsonReader類別將Request之JSON格式資料解析並取回 */
         JsonReader jsr = new JsonReader(request);
         JSONObject jso = jsr.getObject();
         
@@ -116,13 +112,14 @@ public class CaseController extends HttpServlet {
 
         
         /** 後端檢查是否有欄位為空值，若有則回傳錯誤訊息 */
-        if(grade.isEmpty()) {
+        if(grade.isEmpty()||subject.isEmpty()||teach_county.isEmpty()||teach_region.isEmpty()
+        		||wage.isEmpty()||teachtime.isEmpty()||teachExperience.isEmpty()) {
             /** 以字串組出JSON格式之資料 */
             String resp = "{\"status\": \'400\', \"message\": \'欄位不能有空值\', \'response\': \'\'}";
             /** 透過JsonReader物件回傳到前端（以字串方式） */
             jsr.response(resp, response);
         }else {
-            /** 透過MemberHelper物件的create()方法新建一個會員至資料庫 */
+            /** 透過CaseHelper物件的create()方法新建一個案件至資料庫 */
             JSONObject data = ch.create(c);
             
             /** 新建一個JSONObject用於將回傳之資料進行封裝 */
@@ -161,13 +158,13 @@ public class CaseController extends HttpServlet {
         Case c =new Case(id,parent_id,grade,subject,teach_county,teach_region
         		,wage,teachtime,teachExperience,state);
         
-        /** 透過Member物件的update()方法至資料庫更新該名會員資料，回傳之資料為JSONObject物件 */
+        /** 透過Case物件的update()方法至資料庫更新該案件資料，回傳之資料為JSONObject物件 */
         JSONObject data = c.update();
         
         /** 新建一個JSONObject用於將回傳之資料進行封裝 */
         JSONObject resp = new JSONObject();
         resp.put("status", "200");
-        resp.put("message", "成功! 更新會員資料...");
+        resp.put("message", "成功! 更新案件資料...");
         resp.put("response", data);
         
         /** 透過JsonReader物件回傳到前端（以JSONObject方式） */

@@ -40,14 +40,11 @@ public class Interview {
         return jso;
     }
     
-    public JSONObject update() {	//1218 min
+    public JSONObject update() {
         /** 新建一個JSONObject用以儲存更新後之資料 */
         JSONObject data = new JSONObject();
         /** 檢查該名會員是否已經在資料庫 */
         if(this.case_id != 0) {
-        	/** 若有則將目前更新後之資料更新至資料庫中 */
-        	//ch.updateLoginTimes(this);
-        	
         	/** 透過CaseHelper物件，更新目前之老師會員資料置資料庫中
         	 * *傳入此Case物件並回傳一個JSONObject物件
         	 */
