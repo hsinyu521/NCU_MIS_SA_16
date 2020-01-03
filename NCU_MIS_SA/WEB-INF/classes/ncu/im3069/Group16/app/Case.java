@@ -8,6 +8,7 @@ public class Case{
 
     private int id;
     private int parent_id;
+    private String parent_name;
     private String grade;
     private String subject;
     private String teach_county;
@@ -81,7 +82,21 @@ public class Case{
 		//this.modified=modified;
 		//this.created=created;
     }
-
+    
+    //首頁會用到的那個
+    public Case (int id, int parent_id, String parent_name, String subject, String grade,
+    		String teachCounty, String teachRegion, String teachExperience, String wage) {
+    	this.id = id;
+    	this.parent_id = parent_id;
+    	this.parent_name = parent_name;
+    	this.subject = subject;
+    	this.grade = grade;
+    	this.teach_county = teachCounty;
+    	this.teach_region = teachRegion;
+    	this.teachExperience = teachExperience;
+    	this.wage = wage;
+    }
+    
     /**
      * *設定案件id和編號
      */
@@ -95,6 +110,10 @@ public class Case{
 
     public int getParent_id() {
         return this.parent_id;
+    }
+    
+    public String getParentName() {
+    	return this.parent_name;
     }
 
     public String getGrade() {
@@ -159,6 +178,7 @@ public class Case{
         JSONObject jso = new JSONObject();
         jso.put("id", getId());
         jso.put("parent_id", getParent_id());
+        jso.put("parent_name", getParentName());	//
         jso.put("grade", getGrade());
         jso.put("subject", getSubject());
         jso.put("teach_county", getCounty());

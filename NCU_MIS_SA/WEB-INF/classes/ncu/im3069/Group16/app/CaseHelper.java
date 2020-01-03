@@ -160,7 +160,11 @@ public class CaseHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT * FROM `sa16`.`cases` WHERE `state`= ?";
+            //String sql = "SELECT * FROM `sa16`.`cases` WHERE `state`= ?";
+            String sql = "SELECT cases.id, cases.parent_id, parents.name, cases.subject, cases.grade, cases.teachCounty, cases.teachRegion, cases.teachExperience, cases.wage " + 
+            		"FROM sa16.cases " + 
+            		"INNER JOIN parents ON cases.parent_id = parents.id " + 
+            		"WHERE state = ?;";
             
             /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
             pres = conn.prepareStatement(sql);
@@ -178,19 +182,21 @@ public class CaseHelper {
                 /** 將 ResultSet 之資料取出 */
                 int id = rs.getInt("id");    
                 int parent_id = rs.getInt("parent_id");
-                String grade = rs.getString("grade");
+                String parent_name = rs.getString("name");
                 String subject = rs.getString("subject");
+                String grade = rs.getString("grade");
                 String teachCounty = rs.getString("teachCounty");
                 String teachRegion = rs.getString("teachRegion");
-                String wage = rs.getString("wage");
-                String teachTime = rs.getString("teachTime");
+                //String teachTime = rs.getString("teachTime");
                 String teachExperience = rs.getString("teachExperience");
-                int state = rs.getInt("state");
+                String wage = rs.getString("wage");
+                //int state = rs.getInt("state");
                 //Timestamp modified = rs.getTimestamp("modified");
                 //Timestamp created = rs.getTimestamp("created");
                 
                 /** 將每一筆商品資料產生一名新Product物件 */
-                c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state);
+                //c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state);
+                c = new Case(id, parent_id, parent_name, subject, grade, teachCounty, teachRegion, teachExperience, wage);
                 /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
                 jsa.put(c.getCaseData());
             }
@@ -357,8 +363,10 @@ public class CaseHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT * FROM `sa16`.`cases` WHERE `subject` = ? AND `state`= ?";
-            
+            String sql = "SELECT cases.id, cases.parent_id, parents.name, cases.subject, cases.grade, cases.teachCounty, cases.teachRegion, cases.teachExperience, cases.wage "
+            		+ "FROM sa16.cases "
+            		+ "INNER JOIN parents ON cases.parent_id = parents.id "
+            		+ "WHERE subject = ? AND state = ?";
             /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
             pres = conn.prepareStatement(sql);
             pres.setString(1, sub);
@@ -376,19 +384,16 @@ public class CaseHelper {
                 /** 將 ResultSet 之資料取出 */ 
             	int id = rs.getInt("id"); 
                 int parent_id = rs.getInt("parent_id");
+                String parent_name = rs.getString("name");
                 String grade = rs.getString("grade");
                 String subject = rs.getString("subject");
                 String teachCounty = rs.getString("teachCounty");
                 String teachRegion = rs.getString("teachRegion");
                 String wage = rs.getString("wage");
-                String teachTime = rs.getString("teachTime");
                 String teachExperience = rs.getString("teachExperience");
-                int state = rs.getInt("state");
-                //Timestamp modified = rs.getTimestamp("modified");
-                //Timestamp created = rs.getTimestamp("created");
                 
                 /** 將每一筆商品資料產生一名新Product物件 */
-                c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state);
+                c = new Case(id, parent_id, parent_name, subject, grade, teachCounty, teachRegion, teachExperience, wage);
                 /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
                 jsa.put(c.getCaseData());
             }
@@ -425,7 +430,11 @@ public class CaseHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT * FROM `sa16`.`cases` WHERE `teachExperience` = ? AND `state`= ?";
+            //String sql = "SELECT * FROM `sa16`.`cases` WHERE `teachExperience` = ? AND `state`= ?";
+            String sql = "SELECT cases.id, cases.parent_id, parents.name, cases.subject, cases.grade, cases.teachCounty, cases.teachRegion, cases.teachExperience, cases.wage "
+            		+ "FROM sa16.cases "
+            		+ "INNER JOIN parents ON cases.parent_id = parents.id "
+            		+ "WHERE teachExperience = ? AND state = ?";
             
             /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
             pres = conn.prepareStatement(sql);
@@ -441,22 +450,19 @@ public class CaseHelper {
             /** 透過 while 迴圈移動pointer，取得每一筆回傳資料 */
             while(rs.next()) {
                 
-                /** 將 ResultSet 之資料取出 */ 
+            	/** 將 ResultSet 之資料取出 */ 
             	int id = rs.getInt("id"); 
                 int parent_id = rs.getInt("parent_id");
+                String parent_name = rs.getString("name");
                 String grade = rs.getString("grade");
                 String subject = rs.getString("subject");
                 String teachCounty = rs.getString("teachCounty");
                 String teachRegion = rs.getString("teachRegion");
                 String wage = rs.getString("wage");
-                String teachTime = rs.getString("teachTime");
                 String teachExperience = rs.getString("teachExperience");
-                int state = rs.getInt("state");
-                //Timestamp modified = rs.getTimestamp("modified");
-                //Timestamp created = rs.getTimestamp("created");
                 
                 /** 將每一筆商品資料產生一名新Product物件 */
-                c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state);
+                c = new Case(id, parent_id, parent_name, subject, grade, teachCounty, teachRegion, teachExperience, wage);
                 /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
                 jsa.put( c.getCaseData());
             }

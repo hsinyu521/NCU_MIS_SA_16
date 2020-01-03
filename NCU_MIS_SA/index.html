@@ -179,7 +179,7 @@
 	    });
 	  };
 	
-		  getAllCaseData();
+	  getAllCaseData();
       
       
       function updateTable(data) {
@@ -187,7 +187,7 @@
           var table_html = '';
           $.each(data, function(index, value) {
               table_html += '<tr><td>'+ '<a href="case_detail.html?id=' + value['id'] + '">' + value['id'] + '</a></td>';
-              table_html += '<td>' + value['parent_id'] + '</td>';
+              table_html += '<td>' + value['parent_name'] + '</td>';
               table_html += '<td>' + value['subject'] + '</td>';
               table_html += '<td>' + value['grade'] + '</td>';
               table_html += '<td>' + value['teach_county'] +value['teach_region'] + '</td>';
