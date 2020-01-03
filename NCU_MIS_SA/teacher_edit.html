@@ -24,7 +24,7 @@
     				<div class="list"> 老師會員中心</div>
    					<div class="list">
         					<ul> 
-            					<li><a href="teacher_edit.html">修改老師會員資料</a></li>
+            					<li><a id="editURL" href="">修改老師會員資料</a></li>
             					<li><a href="teacher_interview.html">面試管理</a></li>
             					<li><a href="teacher_match.html">成交紀錄</a></li>
         					</ul>
@@ -77,6 +77,11 @@
 </body>
 
 		<script type="text/javascript">
+		  	//取得網址參數
+		  	var url_string = window.location.href;
+		  	var url = new URL(url_string);
+		  	var teacherID = url.searchParams.get("id");
+		  
 			$(document).ready(function(){
 				getLogin();
 				var $form = $('#submit');
@@ -103,7 +108,7 @@
 				else{
 					// 將資料組成JSON格式
                     var data_object = {
-                        "id": loginTID,
+                        "id": teacherID,
                         "password": new_password,
                         "cellphone": new_tel
                     };
@@ -139,7 +144,7 @@
                     type: "GET",
                     url: "api/teacher.do",
                     crossDomain: true,
-                    data: "id="+loginTID,
+                    data: "id="+teacherID,
                     cache: false,
                     dataType: 'json',
                     timeout: 5000,
@@ -160,7 +165,8 @@
             }
 			
 			//預設都是0，如果有人登入會去改，若其他部分又去取東西再用這個
-	        var loginTID=0;
+	        var loginMID=0;
+			var loginTID=0;
 	        var loginEmail;
 	    	
 	        function getLogin(){
@@ -173,12 +179,18 @@
 	    			timeout: 5000,
 	    			success: function (response) {
 	    				if(response.status == 200){
-	    					if(response['response']['memberType']!="teacher"){
+	    					if(response['response']['memberType']=="parent"){
 	    						noTLogin();
+	    					}
+	    					else if (response['response']['memberType']=="teacher" && teacherID == response['response']['id']){
+	    						updateLogIn(response);
+	    						getMember();
+	    						document.getElementById("editURL").href="teacher_edit.html?id="+teacherID;
 	    					}
 	    					else{
 	    						updateLogIn(response);
 	    						getMember();
+	    						document.getElementById("editURL").href="teacher_edit.html?id="+teacherID;
 	    					}
 	    				}
 	    				else{	//沒有登入
@@ -196,12 +208,17 @@
 	    	function updateLogIn(response){
 	    		$("#teacher_name").empty();
 	          	var label_html = "";
+	          	var typeStr = "";
 	          	var name = response['response']['name'];
-	          	var typeStr = "老師";
-	          	//alert(type);
 	          	
-	          	loginTID = response['response']['id'];
-	          	//alert("loginTID: "+loginTID);
+	          	if(response['response']['memberType']=="teacher"){
+	          		typeStr = "老師";
+	          		loginTID = response['response']['id'];
+	          	}
+	          	else{
+	          		typeStr = "管理者";
+	          		loginMID = response['response']['id'];
+	          	}
 	          	
 	          	label_html += '<label> '+ name + typeStr +'，您好</label>';
 	          	label_html += '<button id="logoutBtn">登出</button>';
@@ -223,7 +240,7 @@
 	    			success: function (response) {
 	    				//如果你們前端登入成功要新跳視窗出來就打在這
 	    				if (response.status == 200) {
-	    					loginPID=0;
+	    					loginMID=0;
 	    					loginTID=0;
 	    					alert(response.message);
 	    					noTLogin();
@@ -237,7 +254,7 @@
 	    	
 	    	//沒會員登入的長相
 	    	function noTLogin(){
-	    		alert("未登入老師會員，將跳轉至首頁!");
+	    		alert("未登入老師會員或管理者，將跳轉至首頁!");
 	    		window.location.assign("http://localhost:8090/NCU_MIS_SA_Group16/");
 	    	}
 

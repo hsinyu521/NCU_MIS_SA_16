@@ -61,7 +61,7 @@
 		</div>
 
 		<div id="table2">
-			<a href="parent_change_information.html" class="button"><input type="button" value="修改家長會員資訊"  id="parent_information"></a><br>
+			<a id = "editURL" href="" class="button"><input type="button" value="修改家長會員資訊"  id="parent_information"></a><br>
 			<a href="add_case.html" class="button"><input type="button" value="新增案件"  id="add_case"></a><br>
 			<a href="parent_interview.html" class="button"><input type="button" value="面試管理"  id="interview"></a><br>
 			<a href="log_in.html" class="button"><input type="button" value="管理案件狀態"  id="management"></a><br>
@@ -73,6 +73,11 @@
 </body>
 
 		<script type="text/javascript">
+			//取得網址參數
+		  	var url_string = window.location.href;
+		  	var url = new URL(url_string);
+		  	var parentID = url.searchParams.get("id");
+		  	
 			$(document).ready(function(){
 				getLogin();
 				var $form = $('#submit');
@@ -99,7 +104,7 @@
 				else{
 					// 將資料組成JSON格式
                     var data_object = {
-                        "id": loginPID,
+                        "id": parentID,
                         "password": new_password,
                         "cellphone": new_tel
                     };
@@ -135,7 +140,7 @@
                     type: "GET",
                     url: "api/parent.do",
                     crossDomain: true,
-                    data: "id="+loginPID,
+                    data: "id="+parentID,
                     cache: false,
                     dataType: 'json',
                     timeout: 5000,
@@ -157,6 +162,7 @@
 			
 			//如果有人登入會去改，若其他部分又去取東西再用這個
 		    var loginPID=0;
+			var loginMID=0;
 			
 		    function getLogin(){
 				$.ajax({
@@ -168,12 +174,23 @@
 					timeout: 5000,
 					success: function (response) {
 						if(response.status == 200){
-							if(response['response']['memberType']!="parent"){
+							if(response['response']['memberType']=="teacher"){
 								noPLogin();
 							}
+							else if (response['response']['memberType']=="parent"){
+								if(parentID == response['response']['id']){
+									updateLogIn(response);
+		    						getMember();
+		    						document.getElementById("editURL").href="parent_edit.html?id="+parentID;
+								}
+								else{
+									noPLogin();
+								}
+	    					}
 							else{
 								updateLogIn(response);
-								getMember();	//顯示原值
+	    						getMember();
+	    						document.getElementById("editURL").href="parent_edit.html?id="+parentID;
 							}
 						}
 						else{	//沒有登入
@@ -192,11 +209,16 @@
 				$("#parent_name").empty();
 		      	var label_html = "";
 		      	var name = response['response']['name'];
-		      	var typeStr = "家長";
-		      	//alert(type);
+		      	var typeStr = "";
 		      	
-		      	loginPID = response['response']['id'];
-		      	//alert("loginPID: "+loginPID);
+		      	if(response['response']['memberType']=="parent"){
+	          		typeStr = "家長";
+	          		loginPID = response['response']['id'];
+	          	}
+	          	else{
+	          		typeStr = "管理者";
+	          		loginMID = response['response']['id'];
+	          	}
 		      	
 		      	label_html += '<label> '+ name + typeStr +'，您好</label>';
 		      	label_html += '<button id="logoutBtn">登出</button>';
@@ -219,6 +241,7 @@
 						//如果你們前端登入成功要新跳視窗出來就打在這
 						if (response.status == 200) {
 							loginPID=0;
+							loginMID=0;
 							alert(response.message);
 							noPLogin();
 						}
@@ -231,7 +254,7 @@
 			
 			//沒會員登入的長相
 			function noPLogin(){
-				alert("未登入家長會員，將跳轉至首頁!");
+				alert("未登入家長會員或管理者，將跳轉至首頁!");
 				window.location.assign("http://localhost:8090/NCU_MIS_SA_Group16/");
 			}
 		</script>

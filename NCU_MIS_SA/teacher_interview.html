@@ -26,7 +26,7 @@
     			<div class="list"> 老師會員中心</div>
    					<div class="list">
         					<ul> <!--修改名稱與連結 Chu 12/25 8:27pm-->
-            					<li><a href="teacher_edit.html">修改老師會員資料</a></li>
+            					<li><a id="editURL" href="">修改老師會員資料</a></li>
             					<li><a href="teacher_interview.html">面試管理</a></li>
             					<li><a href="teacher_match.html">成交紀錄</a></li>
         					</ul>
@@ -125,6 +125,7 @@
     					}
     					else{
     						updateLogIn(response);
+    						document.getElementById("editURL").href="teacher_edit.html?id="+loginTID;
     						getInterview();
     					}
     				}
