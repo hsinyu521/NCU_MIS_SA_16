@@ -90,7 +90,7 @@ public class InterviewController extends HttpServlet {
 
 	     
 	     /** 後端檢查是否有欄位為空值，若有則回傳錯誤訊息 */
-	     if(2>3) {
+	     if(case_id == 0 || teacher_id==0) {
 	         /** 以字串組出JSON格式之資料 */
 	         String resp = "{\"status\": \'400\', \"message\": \'欄位不能有空值\', \'response\': \'\'}";
 	         /** 透過JsonReader物件回傳到前端（以字串方式） */
