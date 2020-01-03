@@ -114,7 +114,7 @@ public class InterviewHelper {
 
 	        return response;
 	    }
-	    public JSONObject getByCaseId(String ca_id) {
+	    public JSONObject getByParentId(String p_id) {
 	        JSONArray jsa = new JSONArray();
 	        Interview i = null;
 	        /** 記錄實際執行之SQL指令 */
@@ -126,11 +126,15 @@ public class InterviewHelper {
 	            /** 取得資料庫之連線 */
 	            conn = DBMgr.getConnection();
 	            /** SQL指令 */
-	            String sql = "SELECT * FROM `sa16`.`interviews` WHERE `interviews`.`case_id` = ?";
+	            String sql = "SELECT parents.id, cases.parent_id, cases.id, cases.wage, interview.cases_id, interview.state, interview.teachers_id,teachers.name, teachers.id"+
+	            		" FROM sa16.parents INNER JOIN cases ON parents.id = cases.parent_id"+
+	            		" INNER JOIN interview ON cases.id = interview.cases_id"+
+	            		" INNER JOIN teachers ON interview.teachers_id = teachers.id"+
+	            		" WHERE parents.id = ?;";
 	            
 	            /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
 	            pres = conn.prepareStatement(sql);
-	            pres.setString(1, ca_id);
+	            pres.setString(1, p_id);
 	            /** 執行查詢之SQL指令並記錄其回傳之資料 */
 	            rs = pres.executeQuery();
 
@@ -142,15 +146,18 @@ public class InterviewHelper {
 	            while(rs.next()) {
 	                
 	                /** 將 ResultSet 之資料取出 */ 
-	            	int case_id = rs.getInt("case_id"); 
-	                int teacher_id = rs.getInt("teacher_id");	              
+	            	int caseID = rs.getInt("id"); 
+	                int parentID = rs.getInt("parent_id");	
+	                int teacherID = rs.getInt("teachers_id");	
+	                String tname = rs.getString("name");
+	                String wage = rs.getString("wage");
 	                int state = rs.getInt("state");
 
 	                
 	                /** 將每一筆商品資料產生一名新Product物件 */
-	                i = new Interview(case_id, teacher_id, state);
+	                i = new Interview(caseID, parentID, teacherID, tname, wage, state);
 	                /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
-	                jsa.put( i.getInterviewData());
+	                jsa.put( i.getPInterviewData());
 	            }
 
 	        } catch (SQLException e) {

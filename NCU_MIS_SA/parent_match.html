@@ -52,70 +52,49 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-	    getAllMember();
 	    getLogin();
 	});
 	
-    // 全域變數紀錄SQL指令下的次數
-    var sql_num = 0;
-
-    function getAllMember() {
-        // 發出POST的GET請求取得所有會員列表
-        $.ajax({
+    var states = ['面試','成功','失敗'];
+    
+    function getInterview(){
+    	
+    	$.ajax({
             type: "GET",
-            url: "api/teacher.do",
+            url: "api/interview.do",
+            data: "parent_id="+loginPID,
             crossDomain: true,
             cache: false,
             dataType: 'json',
             timeout: 5000,
             success: function (response) {
                 if(response.status == 200){
-                    updateTable(response.response.data);
-                    updateSQLTable(response.response);
+              	  updateTable(response.response.data);
                 }
                 console.log(response);
             },
             error: function () {
                 alert("無法連線到伺服器！");
             }
-        });
+      });
     }
-
-    // 更新會員列表表格
-    function updateTable(data) {
+    
+ 	//更新表格
+    function updateTable(data) {	//做出html要的表單形式
         $("#table > tbody").empty();
         var table_html = '';
-        $.each(data, function(index, value) {
-            table_html += '<tr><td scope="row">' + value['id']+ '</td>';
-            table_html += '<td>' + value['name'] + '</td>';
-            table_html += '<td>' + value['cellphone'] + '</td>';
-        })
+        $.each(data, function(index, value) {	//data為陣列
+        	if(states[value['state']] =="成功"){
+        		table_html += '<tr><td scope="row">'+ '<a href="case_detail.html?id=' + value['case_id'] + '">' + value['case_id'] + '</a></td>';
+                table_html += '<td>' + value['Tname'] + '</td>';
+                table_html += '<td>' + value['wage']+ '</td></tr>';
+        	}
+        });
 
         $("#table > tbody").append(table_html);
     }
-
-    // 更新SQL指令歷史表格
-    function updateSQLTable(data) {
-        $("#sql_log > tbody").empty();
-        var time = (data.time / 1000000).toFixed(2);
-        var table_html = "";
-
-        sql_num = 0;
-        sql_num += 1
-
-        table_html += '<tr>';
-        table_html += '<td>' + sql_num + '</td>';
-        table_html += '<td>' + data.sql + '</td>';
-        table_html += '<td style="text-align: right">' + '0' + '</td>';
-        table_html += '<td style="text-align: right">' + data.row + '</td>';
-        table_html += '<td style="text-align: right">' + data.row + '</td>';
-        table_html += '<td style="text-align: right">' + time + '</td>';
-        table_html += '</tr>';
-        $("#sql_log > tbody").append(table_html);
-        $("#sql_summary").html("(default) " + data.row + " queries took " + time + " ms");
-    }
-    
-   
+	
+  
     //如果有人登入會去改，若其他部分又去取東西再用這個
     var loginPID=0;
 	
@@ -134,6 +113,7 @@
 					}
 					else{
 						updateLogIn(response);
+						getInterview();
 					}
 				}
 				else{	//沒有登入

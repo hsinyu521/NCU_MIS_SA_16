@@ -8,11 +8,13 @@ public class Interview {
     private int teacher_id;
     private int state;
     private int parent_id;
-    private String Tphone;
+    private String Pphone;
+    private String Tname;
     private String subject;
     private String teachCounty;
     private String teachRegion;
     private String wage;
+    
     
     
     private InterviewHelper ih = InterviewHelper.getHelper();
@@ -31,10 +33,20 @@ public class Interview {
     public Interview(int case_id, int parent_id, String cellphone, String subject, String teachCounty, String teachRegion, String wage, int state) {
     	this.case_id = case_id;
     	this.parent_id = parent_id;
-    	this.Tphone = cellphone;
+    	this.Pphone = cellphone;
     	this.subject = subject;
     	this.teachCounty = teachCounty;
     	this.teachRegion = teachRegion;
+    	this.wage = wage;
+    	this.state = state;
+    }
+    
+    //家長面試管理的constructor
+    public Interview(int case_id,int parent_id, int teacher_id, String teacher_name, String wage, int state){
+    	this.case_id = case_id;
+    	this.parent_id = parent_id;
+    	this.teacher_id = teacher_id;
+    	this.Tname = teacher_name;
     	this.wage = wage;
     	this.state = state;
     }
@@ -55,8 +67,12 @@ public class Interview {
     	return this.parent_id;
     }
     
-    public String getTPhone() {
-    	return this.Tphone;
+    public String getPPhone() {
+    	return this.Pphone;
+    }
+    
+    public String getTName() {
+    	return this.Tname;
     }
     
     public String getSubject() {
@@ -88,10 +104,22 @@ public class Interview {
     	JSONObject jso = new JSONObject();
         jso.put("case_id", getCaseId());
         jso.put("parent_id", getParentId());
-        jso.put("Tphone", getTPhone());
+        jso.put("Tphone", getPPhone());
         jso.put("subject", getSubject());
         jso.put("teachCounty", getCounty());
         jso.put("teachRegion", getRegion());
+        jso.put("wage", getWage());
+        jso.put("state", getState());
+
+        return jso;
+    }
+    
+    public JSONObject getPInterviewData() {
+    	JSONObject jso = new JSONObject();
+        jso.put("case_id", getCaseId());
+        jso.put("parent_id", getParentId());
+        jso.put("teacher_id", getTeacherId());
+        jso.put("Tname", getTName());
         jso.put("wage", getWage());
         jso.put("state", getState());
 

@@ -38,7 +38,7 @@ public class InterviewController extends HttpServlet {
      JsonReader jsr = new JsonReader(request);
 
      /** 取出經解析到 JsonReader 之 Request 參數 */
-     String case_id = jsr.getParameter("case_id");
+     String parent_id = jsr.getParameter("parent_id");
      String teacher_id = jsr.getParameter("teacher_id");
      //String state = jsr.getParameter("state");
 
@@ -46,9 +46,9 @@ public class InterviewController extends HttpServlet {
      JSONObject resp = new JSONObject();
 
      /** 判斷該字串是否存在，若存在代表要取回個別訂單之資料，否則代表要取回全部資料庫內訂單之資料 */
-     if (!case_id.isEmpty()) {
+     if (!parent_id.isEmpty()) {
        /** 透過 orderHelper 物件的 getByID() 方法自資料庫取回該筆訂單之資料，回傳之資料為 JSONObject 物件 */
-       JSONObject query = ih.getByCaseId(case_id);
+       JSONObject query = ih.getByParentId(parent_id);
        resp.put("status", "200");
        resp.put("message", "案件編號取得面試資料成功");
        resp.put("response", query);
