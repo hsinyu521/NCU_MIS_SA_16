@@ -68,34 +68,6 @@
 	    });
 	    
 	    var states = ['面試','成功','失敗'];
-        function getAllCase() {
-            /*$.ajax({
-                type: "GET",
-                url: "api/product.do",
-                crossDomain: true,
-                cache: false,
-                dataType: 'json',
-                timeout: 5000,
-                success: function (response) {
-                    if (response.status == 200) {
-                	var product_panel = '';
-
-                	$.each(response.response.data, function (){
-                		//product_panel += addProduct(this);
-                	})
-
-                	$("#product_panel").append(product_panel);
-                	setButtonFunction();
-                	checkIfExistInCart();
-                    }
-                },
-                error: function () {
-                    alert("無法連線到伺服器！");
-                }
-            });
-        */}
-
-        //getAllCase();
         
         function getInterview(){
         	
@@ -124,11 +96,13 @@
             $("#interview_list > tbody").empty();
             var table_html = '';
             $.each(data, function(index, value) {	//data為陣列
-            	table_html += '<tr><td scope="row">' + value['case_id'] + '</td>';
-                table_html += '<td>' + value['Tphone'] + '</td>';
-                table_html += '<td>' + value['subject'] + '</td>';
-                table_html += '<td>' + value['teachCounty']+ value['teachRegion'] + '</td>';
-                table_html += '<td>' + states[value['state']] + '</td></tr>';
+            	table_html += '<tr><td scope="row">'+ '<a href="case_detail.html?id=' + value['case_id'] + '">' + value['case_id'] + '</a></td>';
+                    table_html += '<td>' + value['Tphone'] + '</td>';
+                    table_html += '<td>' + value['subject'] + '</td>';
+                    table_html += '<td>' + value['teachCounty']+ value['teachRegion'] + '</td>';
+                    table_html += '<td>' + states[value['state']] + '</td></tr>';
+            
+
             })
 
             $("#interview_list > tbody").append(table_html);

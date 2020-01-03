@@ -5,8 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -14,7 +12,7 @@ import org.json.JSONObject;
 import ncu.im3069.Group16.util.DBMgr;
 
 public class InterviewHelper {
-	   private static InterviewHelper ih;
+	    private static InterviewHelper ih;
 	    private Connection conn = null;
 	    private PreparedStatement pres = null;
 	    
@@ -117,7 +115,6 @@ public class InterviewHelper {
 	        return response;
 	    }
 	    public JSONObject getByCaseId(String ca_id) {
-	        JSONObject data = new JSONObject();
 	        JSONArray jsa = new JSONArray();
 	        Interview i = null;
 	        /** 記錄實際執行之SQL指令 */
@@ -175,7 +172,6 @@ public class InterviewHelper {
 	        return response;
 	    }
 	    public JSONObject getByTeacherId(String t_id) {
-	        JSONObject data = new JSONObject();
 	        JSONArray jsa = new JSONArray();
 	        Interview i = null;
 	        /** 記錄實際執行之SQL指令 */
@@ -188,7 +184,7 @@ public class InterviewHelper {
 	            conn = DBMgr.getConnection();
 	            /** SQL指令 */
 	            //String sql = "SELECT * FROM `sa16`.`interviews` WHERE `interviews`.`teacher_id` = ?";
-	            String sql = "SELECT cases.id, cases.parent_id, parents.cellphone, cases.subject, cases.teachCounty, cases.teachRegion, interview.state " + 
+	            String sql = "SELECT cases.id, cases.parent_id, parents.cellphone, cases.subject, cases.teachCounty, cases.teachRegion, cases.wage, interview.state " + 
 	            		"FROM sa16.cases " + 
 	            		"INNER JOIN interview ON cases.id = interview.cases_id " + 
 	            		"INNER JOIN parents ON cases.parent_id = parents.id WHERE interview.teachers_id = ?;";
@@ -212,11 +208,12 @@ public class InterviewHelper {
 	                String subject = rs.getString("subject");
 	                String teachCounty = rs.getString("teachCounty");
 	                String teachRegion = rs.getString("teachRegion");
+	                String wage = rs.getString("wage");
 	                int state = rs.getInt("state");
 	                
 	                /** 將每一筆商品資料產生一名新Product物件 */
 	                //i = new Interview(case_id, teacher_id, state);
-	                i = new Interview(caseID, parentID, cellphone, subject, teachCounty, teachRegion, state);
+	                i = new Interview(caseID, parentID, cellphone, subject, teachCounty, teachRegion, wage, state);
 	                /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
 	                jsa.put( i.getTInterviewData());
 	            }

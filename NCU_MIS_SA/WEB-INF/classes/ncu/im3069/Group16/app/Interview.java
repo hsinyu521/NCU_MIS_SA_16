@@ -12,6 +12,7 @@ public class Interview {
     private String subject;
     private String teachCounty;
     private String teachRegion;
+    private String wage;
     
     
     private InterviewHelper ih = InterviewHelper.getHelper();
@@ -27,13 +28,14 @@ public class Interview {
     }
     
     //老師面試管理的constructor
-    public Interview(int case_id, int parent_id, String cellphone, String subject, String teachCounty, String teachRegion, int state) {
+    public Interview(int case_id, int parent_id, String cellphone, String subject, String teachCounty, String teachRegion, String wage, int state) {
     	this.case_id = case_id;
     	this.parent_id = parent_id;
     	this.Tphone = cellphone;
     	this.subject = subject;
     	this.teachCounty = teachCounty;
     	this.teachRegion = teachRegion;
+    	this.wage = wage;
     	this.state = state;
     }
     
@@ -69,6 +71,10 @@ public class Interview {
     	return this.teachRegion;
     }
     
+    public String getWage() {
+    	return this.wage;
+    }
+    
     public JSONObject getInterviewData() {
         JSONObject jso = new JSONObject();
         jso.put("case_id", getCaseId());
@@ -86,6 +92,7 @@ public class Interview {
         jso.put("subject", getSubject());
         jso.put("teachCounty", getCounty());
         jso.put("teachRegion", getRegion());
+        jso.put("wage", getWage());
         jso.put("state", getState());
 
         return jso;
