@@ -60,21 +60,23 @@
                 <h2>最近案件</h2>
                 <hr/>
             </div>
-            <table id="case_list" border="1" solid #888888>
-                <thead>
-                <tr>
-                    <td>案件編號</td>
-                    <td>聯絡人</td>
-                    <td>科目</td>
-                    <td>對象</td>
-                    <td>上課地點</td>
-                    <td>教學經驗</td>
-                    <td>時薪</td>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+            
+            <table id="case_list">
+       			<thead>
+			        <tr>
+			          <th>案件編號</th>
+			          <th>聯絡人</th>
+			          <th>科目</th>
+			          <th>對象</th>
+			          <th>上課地點</th>
+			          <th>教學經驗</th>
+			          <th>時薪</th>
+			          <th></th>
+			        </tr>
+       			 </thead>
+     			<tbody>
+       			</tbody>
+      		</table>
         </div>
     </div>
 </div>
@@ -186,7 +188,7 @@
           $("#case_list > tbody").empty();
           var table_html = '';
           $.each(data, function(index, value) {
-              table_html += '<tr><td>'+ '<a href="case_detail.html?id=' + value['id'] + '">' + value['id'] + '</a></td>';
+              table_html += '<tr><td scope="row">'+ '<a href="case_detail.html?id=' + value['id'] + '">' + value['id'] + '</a></td>';
               table_html += '<td>' + value['parent_name'] + '</td>';
               table_html += '<td>' + value['subject'] + '</td>';
               table_html += '<td>' + value['grade'] + '</td>';
