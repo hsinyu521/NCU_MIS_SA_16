@@ -105,7 +105,7 @@ public class InterviewController extends HttpServlet {
 	         /** 透過JsonReader物件回傳到前端（以字串方式） */
 	         jsr.response(resp, response);
 	     }
-	     else {
+	     else if(!ih.checkDuplicate(i)){
 	         /** 透過MemberHelper物件的create()方法新建一個會員至資料庫 */
 	         JSONObject data = ih.create(i);
 	         
