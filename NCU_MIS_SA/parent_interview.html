@@ -49,11 +49,7 @@
         </thead>
         <tbody>
         </tbody>
-        <tr>
-            <td><input type="radio" name="teacher" value="id_2"></td>
-            <td>以上皆不適任</td>
-            <td></td>
-        </tr>
+
 
     </table>
 
@@ -66,66 +62,8 @@
 <div id="Footer">®安心168家教網 created by 2019</div>
 
 <script type="text/javascript">
-    // 全域變數紀錄SQL指令下的次數
-    var sql_num = 0;
 
-    function getAllMember() {
-        // 發出POST的GET請求取得所有會員列表
-        $.ajax({
-            type: "GET",
-            url: "api/teacher.do",
-            crossDomain: true,
-            cache: false,
-            dataType: 'json',
-            timeout: 5000,
-            success: function (response) {
-                if(response.status == 200){
-                    updateTable(response.response.data);
-                    updateSQLTable(response.response);
-                }
-                console.log(response);
-            },
-            error: function () {
-                alert("無法連線到伺服器！");
-            }
-        });
-    }
-
-    // 更新會員列表表格
-    function updateTable(data) {
-        $("#table > tbody").empty();
-        var table_html = '';
-        $.each(data, function(index, value) {
-            table_html += '<tr><td scope="row">' + '<input type="radio" name="teacher" value="'+value['id']+'">' + '</td>';
-            table_html += '<td>' + value['name'] + '</td>';
-            table_html += '<td>' + value['cellphone'] + '</td>';
-        })
-
-        $("#table > tbody").append(table_html);
-    }
-
-    // 更新SQL指令歷史表格
-    function updateSQLTable(data) {
-        $("#sql_log > tbody").empty();
-        var time = (data.time / 1000000).toFixed(2);
-        var table_html = "";
-
-        sql_num = 0;
-        sql_num += 1
-
-        table_html += '<tr>';
-        table_html += '<td>' + sql_num + '</td>';
-        table_html += '<td>' + data.sql + '</td>';
-        table_html += '<td style="text-align: right">' + '0' + '</td>';
-        table_html += '<td style="text-align: right">' + data.row + '</td>';
-        table_html += '<td style="text-align: right">' + data.row + '</td>';
-        table_html += '<td style="text-align: right">' + time + '</td>';
-        table_html += '</tr>';
-        $("#sql_log > tbody").append(table_html);
-        $("#sql_summary").html("(default) " + data.row + " queries took " + time + " ms");
-    }
     $(document).ready(function() {
-        getAllMember();
 
         var $submit = $('#submit');
         $submit.click(function(){
@@ -155,6 +93,7 @@
 					}
 					else{
 						updateLogIn(response);
+						getCaseIdList();
 					}
 				}
 				else{	//沒有登入
@@ -215,6 +154,167 @@
 		alert("未登入家長會員，將跳轉至首頁!");
 		window.location.assign("http://localhost:8090/NCU_MIS_SA_Group16/");
 	}
+	
+	var i;
+	//抓取案件編號
+	function addOption(list,data){
+		var l = document.getElementById(list);
+		$.each(data, function(index, value) {
+		var i = document.getElementById(list).length;
+		//alert("i:"+i);
+		//alert("value"+value['id']);
+		l.options[i]=new Option(String(value['id']),String(value['id']));
+		});
+	}
+	
+    function getCaseIdList(){
+		$.ajax({
+			type: "GET",
+            url: "api/case.do",
+            data: "parent_id=" + loginPID,
+            crossDomain: true,
+            cache: false,
+            dataType: 'json',
+            timeout: 5000,
+            success: function (response) {
+                if(response.status == 200){
+                	addOption("caseID",response.response.data);
+                }
+                console.log(response);
+            },
+            error: function () {
+                alert("無法連線到伺服器！");
+            }
+		});
+	}
+    
+    //////////////////////////////////////////////////////////////
+	 var cid;
+	  $('#caseID').change(function() {
+	    	cid = document.getElementById("caseID").value;
+	    	if(cid != "num"){
+	    		//alert(cid);
+		    	getInterview(cid);
+			    $('#submit').click(function() {
+			        //alert('你點了更新按鈕');
+			        //alert("cid:"+cid);
+			        updateInterview(cid);
+			        updateInterview(cid,$('input[name=teacher]:checked').val());
+			    });
+	    	}
+	    	else{
+	    		alert("請重新選擇案件編號");
+	    	}
+	    });
+    
+    function getInterview(cid){
+    	$.ajax({
+            type: "GET",
+            url: "api/interview.do",
+            data: "case_id="+cid,
+            crossDomain: true,
+            cache: false,
+            dataType: 'json',
+            timeout: 5000,
+            success: function (response) {
+                if(response.status == 200){
+              	  updateTable(response.response.data);
+                }
+                console.log(response);
+            },
+            error: function () {
+                alert("無法連線到伺服器！");
+            }
+      });
+    }
+    var trow;
+    var tea_id = new Array();
+ 	//更新表格
+    function updateTable(data) {	//做出html要的表單形式
+        $("#table > tbody").empty();
+        var table_html = '';
+        trow = 0;
+        $.each(data, function(index, value) {	//data為陣列
+        		table_html += '<tr><td><input type="radio" name="teacher" value="'+value['teacher_id']+'"></td>'
+                table_html += '<td>' + value['Tname'] + '</td>';
+                table_html += '<td>' + value['Tphone']+ '</td>';
+                tea_id[trow++] = value['teacher_id'];
+        });
+        table_html +='<tr><td><input type="radio" name="teacher" value="id_2"></td>'+
+        '<td>以上皆不適任</td></tr>';
+
+        $("#table > tbody").append(table_html);
+    }
+ 	
+ 	function updateInterview(cid,tid){
+			for(var i = 0;i < trow;i++){
+				if(tea_id[i] == tid){
+					  // 將資料組成JSON格式
+					  var data_object = {
+							  "case_id":cid,
+							  "teacher_id":tid,
+							  "state":1
+						};
+					  // 將JSON格式轉換成字串
+					  var data_string = JSON.stringify(data_object);
+					  
+					  // 發出POST的PUT請求
+					  $.ajax({
+						  type: "PUT",
+						  url: "api/interview.do",
+						  data: data_string,
+						  crossDomain: true,
+						  cache: false,
+						  dataType: 'json',
+						  timeout: 5000,
+						  success: function (response) {
+							  //$('#flashMessage').html(response.message);
+							  //$('#flashMessage').show();
+							  if(response.status == 200){
+								  alert("2更新成功");
+							  }
+						  },
+						  error: function () {
+							  alert("無法連線到伺服器！");
+						  }
+					  });
+				}
+				else{
+					  // 將資料組成JSON格式
+					  var data_object = {
+							  "case_id":cid,
+							  "teacher_id":tea_id[i],
+							  "state":2
+						};
+					  // 將JSON格式轉換成字串
+					  var data_string = JSON.stringify(data_object);
+					  
+					  // 發出POST的PUT請求
+					  $.ajax({
+						  type: "PUT",
+						  url: "api/interview.do",
+						  data: data_string,
+						  crossDomain: true,
+						  cache: false,
+						  dataType: 'json',
+						  timeout: 5000,
+						  success: function (response) {
+							  //$('#flashMessage').html(response.message);
+							  //$('#flashMessage').show();
+							  if(response.status == 200){
+								  alert("2更新成功");
+							  }
+						  },
+						  error: function () {
+							  alert("無法連線到伺服器！");
+						  }
+					  });
+				}
+			}
+
+ 	}
+    
+	
 </script>
 
 

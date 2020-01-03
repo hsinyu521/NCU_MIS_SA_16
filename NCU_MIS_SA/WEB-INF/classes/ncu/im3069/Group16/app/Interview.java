@@ -10,6 +10,7 @@ public class Interview {
     private int parent_id;
     private String Pphone;
     private String Tname;
+    private String Tphone;
     private String subject;
     private String teachCounty;
     private String teachRegion;
@@ -51,6 +52,15 @@ public class Interview {
     	this.state = state;
     }
     
+    //案件編號面試管理的constructor
+    public Interview(int case_id, int teacher_id, int state, String teacher_name, String teacher_cellphone){
+    	this.case_id = case_id;
+    	this.teacher_id = teacher_id;
+    	this.state = state;
+    	this.Tname = teacher_name;
+    	this.Tphone = teacher_cellphone;
+    }
+    
     public int getCaseId() {
     	return this.case_id;
     }
@@ -73,6 +83,10 @@ public class Interview {
     
     public String getTName() {
     	return this.Tname;
+    }
+    
+    public String getTPhone() {
+    	return this.Tphone;
     }
     
     public String getSubject() {
@@ -104,7 +118,7 @@ public class Interview {
     	JSONObject jso = new JSONObject();
         jso.put("case_id", getCaseId());
         jso.put("parent_id", getParentId());
-        jso.put("Tphone", getPPhone());
+        jso.put("Pphone", getPPhone());
         jso.put("subject", getSubject());
         jso.put("teachCounty", getCounty());
         jso.put("teachRegion", getRegion());
@@ -122,6 +136,16 @@ public class Interview {
         jso.put("Tname", getTName());
         jso.put("wage", getWage());
         jso.put("state", getState());
+
+        return jso;
+    }
+    public JSONObject getCInterviewData() {
+    	JSONObject jso = new JSONObject();
+        jso.put("case_id", getCaseId());
+        jso.put("teacher_id", getTeacherId());
+        jso.put("state", getState());
+        jso.put("Tname", getTName());
+        jso.put("Tphone", getTPhone());
 
         return jso;
     }

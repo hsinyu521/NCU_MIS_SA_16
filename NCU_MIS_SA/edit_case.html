@@ -340,11 +340,8 @@
 		  
 		  var timeRule = /([0-9]+):([0-5][0-9]|6[0])/;
 		  
-		  if(grade.length==0 || wage.length==0 || teachTime.length==0) {
+		  if(grade.length==0 || wage.length==0 || teachTime.length==0||wage.length==0) {
 			  alert("所有欄位皆為必填");
-		  }
-		  else if(wage<=0) {
-			  alert("請輸入合理的薪資待遇！");
 		  }
 		  else if(!timeRule.test(teachTime)){
 			  alert("上課時間格式不符！");
