@@ -71,6 +71,7 @@ public class InterviewHelper {
 	        return response;
 
 	    }
+
 	    public JSONObject update(Interview in) {
 	        /** 紀錄回傳之資料 */
 	        JSONArray jsa = new JSONArray();
@@ -92,7 +93,7 @@ public class InterviewHelper {
 	            pres.setInt(1, state);
 	            pres.setInt(2, case_id);
 	            pres.setInt(3, teacher_id);
-
+	            pres.executeUpdate();
 	            /** 紀錄真實執行的SQL指令，並印出 **/
 	            exexcute_sql = pres.toString();
 	            System.out.println(exexcute_sql);
@@ -148,7 +149,7 @@ public class InterviewHelper {
 	            while(rs.next()) {
 	                
 	                /** 將 ResultSet 之資料取出 */ 
-	            	int caseID = rs.getInt("id"); 
+	            	int caseID = rs.getInt("cases_id"); 
 	                int parentID = rs.getInt("parent_id");	
 	                int teacherID = rs.getInt("teachers_id");	
 	                String tname = rs.getString("name");
@@ -180,6 +181,7 @@ public class InterviewHelper {
 	        response.put("data", jsa);
 	        return response;
 	    }
+
 	    public JSONObject getByTeacherId(String t_id) {
 	        JSONArray jsa = new JSONArray();
 	        Interview i = null;
@@ -211,7 +213,7 @@ public class InterviewHelper {
 	            /** 透過 while 迴圈移動pointer，取得每一筆回傳資料 */
 	            while(rs.next()) {
 	                /** 將 ResultSet 之資料取出 */ 
-	            	int caseID = rs.getInt("id"); 
+	            	int caseID = rs.getInt("cases_id"); 
 	                int parentID = rs.getInt("parent_id");	              
 	                String cellphone = rs.getString("cellphone");
 	                String subject = rs.getString("subject");

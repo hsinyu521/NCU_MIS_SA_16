@@ -131,18 +131,20 @@ public class InterviewController extends HttpServlet {
         int case_id = jso.getInt("case_id");
         int teacher_id = jso.getInt("teacher_id");
         int state = jso.getInt("state");
-        
+        int casestate = jso.getInt("casestate");
 
         /** 透過傳入之參數，新建一個以這些參數之會員Member物件 */
         Interview i =new Interview(case_id,teacher_id,state);
-        
-        /** 透過Case物件的update()方法至資料庫更新該案件資料，回傳之資料為JSONObject物件 */
+        Case c = new Case(case_id,casestate);
+        /** 透過Interview物件的update()方法至資料庫更新該案件資料，回傳之資料為JSONObject物件 */
+        JSONObject data1 = c.update1();
         JSONObject data = i.update();
         
         /** 新建一個JSONObject用於將回傳之資料進行封裝 */
         JSONObject resp = new JSONObject();
         resp.put("status", "200");
         resp.put("message", "成功! 更新案件資料...");
+        resp.put("response", data1);
         resp.put("response", data);
         
         /** 透過JsonReader物件回傳到前端（以JSONObject方式） */

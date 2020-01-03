@@ -97,6 +97,11 @@ public class Case{
     	this.wage = wage;
     }
     
+    public Case(int id,int state) {
+    	this.id = id;
+    	this.state = state;
+    }
+    
     /**
      * *設定案件id和編號
      */
@@ -164,6 +169,18 @@ public class Case{
         	 * *傳入此Case物件並回傳一個JSONObject物件
         	 */
         	data = ch.update(this);
+        }
+        
+        return data;
+    }
+    public JSONObject update1() {	//1218 min
+        /** 新建一個JSONObject用以儲存更新後之資料 */
+        JSONObject data = new JSONObject();
+        if(this.id != 0) {
+        	/** 透過CaseHelper物件，更新目前之老師會員資料置資料庫中
+        	 * *傳入此Case物件並回傳一個JSONObject物件
+        	 */
+        	data = ch.update1(this);
         }
         
         return data;

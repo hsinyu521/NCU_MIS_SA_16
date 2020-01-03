@@ -163,7 +163,10 @@
 		var i = document.getElementById(list).length;
 		//alert("i:"+i);
 		//alert("value"+value['id']);
-		l.options[i]=new Option(String(value['id']),String(value['id']));
+		if(value['state']==0){
+			l.options[i]=new Option(String(value['id']),String(value['id']));
+		}
+			
 		});
 	}
 	
@@ -238,9 +241,9 @@
         		table_html += '<tr><td><input type="radio" name="teacher" value="'+value['teacher_id']+'"></td>'
                 table_html += '<td>' + value['Tname'] + '</td>';
                 table_html += '<td>' + value['Tphone']+ '</td>';
-                tea_id[trow++] = value['teacher_id'];
+                tea_id[trow++] = String(value['teacher_id']);
         });
-        table_html +='<tr><td><input type="radio" name="teacher" value="id_2"></td>'+
+        table_html +='<tr><td><input type="radio" name="teacher" value="no"></td>'+
         '<td>以上皆不適任</td></tr>';
 
         $("#table > tbody").append(table_html);
@@ -253,7 +256,8 @@
 					  var data_object = {
 							  "case_id":cid,
 							  "teacher_id":tid,
-							  "state":1
+							  "state":1,
+							  "casestate":1
 						};
 					  // 將JSON格式轉換成字串
 					  var data_string = JSON.stringify(data_object);
@@ -284,7 +288,8 @@
 					  var data_object = {
 							  "case_id":cid,
 							  "teacher_id":tea_id[i],
-							  "state":2
+							  "state":2,
+							  "casestate":1
 						};
 					  // 將JSON格式轉換成字串
 					  var data_string = JSON.stringify(data_object);
