@@ -29,7 +29,7 @@ public class CaseHelper {
             conn = DBMgr.getConnection();
             /** SQL指令 */
             String sql = "INSERT INTO `sa16`.`cases`(`parent_id`, `grade`, `subject`, `teachCounty`, `teachRegion`, `wage`, `teachTime`, `teachExperience`, `state`, `modified`, `created`)"
-                    + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+                    + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
             /** 取得所需之參數 */
             int parent_id = ca.getParent_id();
@@ -42,7 +42,6 @@ public class CaseHelper {
             String teachExperience = ca.getTeachExperience();
             int state = ca.getState();
 
-            
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pres.setInt(1, parent_id);
@@ -98,7 +97,7 @@ public class CaseHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "Update `sa16`.`cases` SET `grade` = ? ,`subject` = ? , `teachCounty` = ? , `teachRegion` = ?,`wage` = ? ,`teachTime` = ? ,`teachExperience` = ?,`modified` = ?,`state` =? WHERE `id` = ?";
+            String sql = "Update `sa16`.`cases` SET `grade` = ? ,`subject` = ? , `teachCounty` = ? , `teachRegion` = ?,`wage` = ? , `teachTime` = ? , `teachExperience` = ?, `modified` = ?, `state` =? WHERE `id` = ?";
             /** 取得所需之參數 */
             int id = ca.getId();            		
             String grade = ca.getGrade();
@@ -138,7 +137,6 @@ public class CaseHelper {
             /** 關閉連線並釋放所有資料庫相關之資源 **/
             DBMgr.close(pres, conn);
         }
-
         
         /** 將SQL指令和資料，封裝成JSONObject回傳 */
         JSONObject response = new JSONObject();
@@ -205,7 +203,6 @@ public class CaseHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            //String sql = "SELECT * FROM `sa16`.`cases` WHERE `state`= ?";
             String sql = "SELECT cases.id, cases.parent_id, parents.name, cases.subject, cases.grade, cases.teachCounty, cases.teachRegion, cases.teachExperience, cases.wage " + 
             		"FROM sa16.cases " + 
             		"INNER JOIN parents ON cases.parent_id = parents.id " + 
@@ -232,17 +229,12 @@ public class CaseHelper {
                 String grade = rs.getString("grade");
                 String teachCounty = rs.getString("teachCounty");
                 String teachRegion = rs.getString("teachRegion");
-                //String teachTime = rs.getString("teachTime");
                 String teachExperience = rs.getString("teachExperience");
                 String wage = rs.getString("wage");
-                //int state = rs.getInt("state");
-                //Timestamp modified = rs.getTimestamp("modified");
-                //Timestamp created = rs.getTimestamp("created");
                 
-                /** 將每一筆商品資料產生一名新Product物件 */
-                //c = new Case(id, parent_id, grade, subject, teachCounty, teachRegion, wage, teachTime, teachExperience, state);
+                /** 將每一筆商品資料產生一名新Case物件 */
                 c = new Case(id, parent_id, parent_name, subject, grade, teachCounty, teachRegion, teachExperience, wage);
-                /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
+                /** 取出該項案件之資料並封裝至 JSONsonArray 內 */
                 jsa.put(c.getCaseData());
             }
 

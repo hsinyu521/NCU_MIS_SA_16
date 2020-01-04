@@ -7,6 +7,7 @@ public class Interview {
     private int case_id;
     private int teacher_id;
     private int state;
+    //join table
     private int parent_id;
     private String Pphone;
     private String Tname;
@@ -16,8 +17,6 @@ public class Interview {
     private String teachCounty;
     private String teachRegion;
     private String wage;
-    
-    
     
     private InterviewHelper ih = InterviewHelper.getHelper();
     
@@ -160,17 +159,14 @@ public class Interview {
     public JSONObject update() {
         /** 新建一個JSONObject用以儲存更新後之資料 */
         JSONObject data = new JSONObject();
-        /** 檢查該名會員是否已經在資料庫 */
+        /** 檢查該面試是否已經在資料庫 */
         if(this.case_id != 0) {
         	/** 若有則將目前更新後之資料更新至資料庫中 */
-        	//ch.updateLoginTimes(this);
-        	
-        	/** 透過CaseHelper物件，更新目前之老師會員資料置資料庫中
-        	 * *傳入此Case物件並回傳一個JSONObject物件
+        	/** 透過InterviewHelper物件，更新目前資料置資料庫中
+        	 * *傳入此Interview物件並回傳一個JSONObject物件
         	 */
         	data = ih.update(this);
         }
-        
         return data;
     }
 

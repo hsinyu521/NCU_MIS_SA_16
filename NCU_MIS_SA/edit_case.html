@@ -268,11 +268,8 @@
 	  $('#case_id_list').change(function() {
 	    	cid = document.getElementById("case_id_list").value;
 	    	if(cid != "num"){
-	    		//alert(cid);
 		    	getCaseData(cid);
 			    $('#submit').click(function() {
-			        //alert('你點了更新按鈕');
-			        //alert("cid:"+cid);
 			        updateCase(cid);
 			    });
 	    	}
@@ -377,6 +374,7 @@
 					  //$('#flashMessage').show();
 					  if(response.status == 200){
 						  alert("更新成功");
+						  window.location.assign("/NCU_MIS_SA_Group16/edit_case.html");
 					  }
 				  },
 				  error: function () {

@@ -38,16 +38,13 @@ public class InterviewHelper {
 	            /** 取得所需之參數 */
 	            int case_id = in.getCaseId();
 	            int teacher_id = in.getTeacherId();
-	            //int state = in.getState();
-
 	            
 	            /** 將參數回填至SQL指令當中 */
 	            pres = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 	            pres.setInt(1, case_id);
 	            pres.setInt(2, teacher_id);
-	           // pres.setInt(3, state);
 
-	            /** 執行新增之SQL指令並記錄影響之行數 */
+	            /** 執行新增之SQL指令 */
 	            pres.executeUpdate();
 	            
 	            /** 紀錄真實執行的SQL指令，並印出 **/
@@ -64,12 +61,11 @@ public class InterviewHelper {
 	            DBMgr.close(pres, conn);
 	        }
 
-	        /** 將SQL指令、花費時間與影響行數，封裝成JSONObject回傳 */
+	        /** 將SQL指令封裝成JSONObject回傳 */
 	        JSONObject response = new JSONObject();
 	        response.put("sql", exexcute_sql);
 
 	        return response;
-
 	    }
 
 	    public JSONObject update(Interview in) {
@@ -110,7 +106,7 @@ public class InterviewHelper {
 	        }
 
 	        
-	        /** 將SQL指令、花費時間與影響行數，封裝成JSONObject回傳 */
+	        /** 將SQL指令和資料，封裝成JSONObject回傳 */
 	        JSONObject response = new JSONObject();
 	        response.put("sql", exexcute_sql);
 	        response.put("data", jsa);
@@ -157,9 +153,9 @@ public class InterviewHelper {
 	                int state = rs.getInt("state");
 
 	                
-	                /** 將每一筆商品資料產生一名新Product物件 */
+	                /** 將每一筆面試資料產生一名新Interview物件 */
 	                i = new Interview(caseID, parentID, teacherID, tname, wage, state);
-	                /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
+	                /** 取出該項面試之資料並封裝至 JSONsonArray 內 */
 	                jsa.put( i.getPInterviewData());
 	            }
 
@@ -174,8 +170,7 @@ public class InterviewHelper {
 	            DBMgr.close(rs, pres, conn);
 	        }
 	        
-	        /** 將SQL指令、花費時間、影響行數與所有會員資料之JSONArray，封裝成JSONObject回傳 */
-	        
+	        /** 將SQL指令與面試資料之JSONArray，封裝成JSONObject回傳 */
 	        JSONObject response = new JSONObject();
 	        response.put("sql", exexcute_sql);
 	        response.put("data", jsa);
@@ -194,7 +189,6 @@ public class InterviewHelper {
 	            /** 取得資料庫之連線 */
 	            conn = DBMgr.getConnection();
 	            /** SQL指令 */
-	            //String sql = "SELECT * FROM `sa16`.`interviews` WHERE `interviews`.`teacher_id` = ?";
 	            String sql = "SELECT cases.id, cases.parent_id, parents.cellphone, cases.subject, cases.teachCounty, cases.teachRegion, cases.wage, interview.state, cases.grade " + 
 	            		"FROM sa16.cases " + 
 	            		"INNER JOIN interview ON cases.id = interview.cases_id " + 
@@ -223,10 +217,9 @@ public class InterviewHelper {
 	                String wage = rs.getString("wage");
 	                int state = rs.getInt("state");
 	                
-	                /** 將每一筆商品資料產生一名新Product物件 */
-	                //i = new Interview(case_id, teacher_id, state);
+	                /** 將每一筆面試資料產生一名新Interview物件 */
 	                i = new Interview(caseID, parentID, cellphone, subject, grade, teachCounty, teachRegion, wage, state);
-	                /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
+	                /** 取出該項面試之資料並封裝至 JSONsonArray 內 */
 	                jsa.put( i.getTInterviewData());
 	            }
 
@@ -241,8 +234,7 @@ public class InterviewHelper {
 	            DBMgr.close(rs, pres, conn);
 	        }
 	        
-	        /** 將SQL指令、花費時間、影響行數與所有會員資料之JSONArray，封裝成JSONObject回傳 */
-	        
+	        /** 將SQL指令與面試資料之JSONArray，封裝成JSONObject回傳 */
 	        JSONObject response = new JSONObject();
 	        response.put("sql", exexcute_sql);
 	        response.put("data", jsa);
@@ -261,7 +253,6 @@ public class InterviewHelper {
 	            /** 取得資料庫之連線 */
 	            conn = DBMgr.getConnection();
 	            /** SQL指令 */
-	            //String sql = "SELECT * FROM `sa16`.`interviews` WHERE `interviews`.`teacher_id` = ?";
 	            String sql = "SELECT cases.id, interview.cases_id, interview.state, interview.teachers_id,teachers.name,teachers.cellphone, teachers.id"+
 	            		" FROM sa16.cases "+
 	            		" INNER JOIN interview ON cases.id = interview.cases_id"+
@@ -287,10 +278,9 @@ public class InterviewHelper {
 	                String tphone = rs.getString("cellphone");
 	                
 	                
-	                /** 將每一筆商品資料產生一名新Product物件 */
-	                //i = new Interview(case_id, teacher_id, state);
+	                /** 將每一筆面試資料產生一名新Interview物件 */
 	                i = new Interview(caseID, teacherID, state, tname, tphone);
-	                /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
+	                /** 取出該項面試之資料並封裝至 JSONsonArray 內 */
 	                jsa.put( i.getCInterviewData());
 	            }
 
@@ -305,14 +295,13 @@ public class InterviewHelper {
 	            DBMgr.close(rs, pres, conn);
 	        }
 	        
-	        /** 將SQL指令、花費時間、影響行數與所有會員資料之JSONArray，封裝成JSONObject回傳 */
-	        
+	        /** 將SQL指令與面試資料之JSONArray，封裝成JSONObject回傳 */
 	        JSONObject response = new JSONObject();
 	        response.put("sql", exexcute_sql);
 	        response.put("data", jsa);
 	        return response;
 	    }
-	    public boolean checkDuplicate(Interview i){	//1212 4pm by min
+	    public boolean checkDuplicate(Interview i){
 	        /** 紀錄SQL總行數，若為「-1」代表資料庫檢索尚未完成 */
 	        int row = -1;
 	        /** 儲存JDBC檢索資料庫後回傳之結果，以 pointer 方式移動到下一筆資料 */

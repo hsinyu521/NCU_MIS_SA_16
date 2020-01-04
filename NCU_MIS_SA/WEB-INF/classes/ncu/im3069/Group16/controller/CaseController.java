@@ -47,9 +47,9 @@ public class CaseController extends HttpServlet {
         /** 新建一個 JSONObject 用於將回傳之資料進行封裝 */
         JSONObject resp = new JSONObject();
 
-        /** 判斷該字串是否存在，若存在代表要取回個別訂單之資料，否則代表要取回全部資料庫內訂單之資料 */
+        /** 判斷該字串是否存在，若存在代表要取回個別案件之資料，否則代表要取回全部資料庫內案件之資料 */
         if (!id.isEmpty()) {
-          /** 透過 CaseHelper 物件的 getByID() 方法自資料庫取回該筆訂單之資料，回傳之資料為 JSONObject 物件 */
+          /** 透過 CaseHelper 物件的 getByID() 方法自資料庫取回資料，回傳之資料為 JSONObject 物件 */
           JSONObject query = ch.getById(id);
           resp.put("status", "200");
           resp.put("message", "單筆案件資料取得成功");
@@ -95,7 +95,6 @@ public class CaseController extends HttpServlet {
 	    /** 透過JsonReader類別將Request之JSON格式資料解析並取回 */
         JsonReader jsr = new JsonReader(request);
         JSONObject jso = jsr.getObject();
-        
         
         int parent_id = jso.getInt("parent_id");
         String grade = jso.getString("grade");
@@ -153,8 +152,7 @@ public class CaseController extends HttpServlet {
         String teachExperience = jso.getString("teachExperience");
         int state = jso.getInt("state");
         
-
-        /** 透過傳入之參數，新建一個以這些參數之會員Member物件 */
+        /** 透過傳入之參數，新建一個以這些參數之會員Case物件 */
         Case c =new Case(id,parent_id,grade,subject,teach_county,teach_region
         		,wage,teachtime,teachExperience,state);
         

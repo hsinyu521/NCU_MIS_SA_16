@@ -38,7 +38,6 @@ public class Case{
      */
     public Case(int parent_id,String grade,String subject,String teach_county, String teach_region
     		,String wage,String teachtime,String teachExperience) {
-    	//1223 hsin 應該還是要state(不用放在參數)，然後每次新增都是0
     			this.parent_id=parent_id;
     			this.grade=grade;
     			this.subject=subject;
@@ -68,7 +67,6 @@ public class Case{
      */
     public Case(int id,int parent_id,String grade,String subject,String teach_county, String teach_region
     		,String wage,String teachtime,String teachExperience,int state) {
-    	//1224 hsin老師更改和顯示都是用這個建構子，所以所有的資料都要有(外鍵、狀態、時間)
         this.id = id;
         this.parent_id = parent_id;
 		this.grade=grade;
@@ -79,8 +77,6 @@ public class Case{
 		this.teachtime=teachtime;
 		this.teachExperience=teachExperience;
 		this.state=state;
-		//this.modified=modified;
-		//this.created=created;
     }
     
     //首頁會用到的那個
@@ -96,7 +92,7 @@ public class Case{
     	this.teachExperience = teachExperience;
     	this.wage = wage;
     }
-    
+    //面試管理會用到
     public Case(int id,int state) {
     	this.id = id;
     	this.state = state;
@@ -161,7 +157,7 @@ public class Case{
         return this.modified;
     }
 
-    public JSONObject update() {	//1218 min
+    public JSONObject update() {
         /** 新建一個JSONObject用以儲存更新後之資料 */
         JSONObject data = new JSONObject();
         if(this.id != 0) {
@@ -173,7 +169,8 @@ public class Case{
         
         return data;
     }
-    public JSONObject update1() {	//1218 min
+    //面試管理會用到
+    public JSONObject update1() {
         /** 新建一個JSONObject用以儲存更新後之資料 */
         JSONObject data = new JSONObject();
         if(this.id != 0) {
@@ -182,7 +179,6 @@ public class Case{
         	 */
         	data = ch.update1(this);
         }
-        
         return data;
     }
 
@@ -195,7 +191,7 @@ public class Case{
         JSONObject jso = new JSONObject();
         jso.put("id", getId());
         jso.put("parent_id", getParent_id());
-        jso.put("parent_name", getParentName());	//
+        jso.put("parent_name", getParentName());
         jso.put("grade", getGrade());
         jso.put("subject", getSubject());
         jso.put("teach_county", getCounty());
@@ -209,8 +205,5 @@ public class Case{
 
         return jso;
     }
-
-
-
 
 }
