@@ -213,7 +213,7 @@ public class InterviewHelper {
 	            /** 透過 while 迴圈移動pointer，取得每一筆回傳資料 */
 	            while(rs.next()) {
 	                /** 將 ResultSet 之資料取出 */ 
-	            	int caseID = rs.getInt("cases_id"); 
+	            	int caseID = rs.getInt("id"); 
 	                int parentID = rs.getInt("parent_id");	              
 	                String cellphone = rs.getString("cellphone");
 	                String subject = rs.getString("subject");
