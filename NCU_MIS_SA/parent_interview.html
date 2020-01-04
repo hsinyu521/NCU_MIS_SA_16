@@ -19,7 +19,7 @@
     <div clase="list"> 家長會員中心</div>
     <div class="list">
         <ul> <!--修改名稱與連結 Chu 12/25 8:27pm-->
-            <li><a href="parent_change_information.html">修改家長會員資料</a></li>
+            <li><a id="editURL" href="">修改家長會員資料</a></li>
             <li><a href="add_case.html">新增案件</a></li>
             <li><a href="parent_interview.html">面試管理</a></li>
             <li><a href="edit_case.html">修改案件/管理案件狀態</a></li> 
@@ -93,6 +93,7 @@
 					}
 					else{
 						updateLogIn(response);
+						document.getElementById("editURL").href="parent_edit.html?id="+loginPID;
 						getCaseIdList();
 					}
 				}
