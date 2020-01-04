@@ -46,6 +46,9 @@
 	  var url = new URL(url_string);
 	  var id = url.searchParams.get("id");
 	  
+	  var casePID=0;
+	  var casePPhone="";
+	  
 	  function getCaseData() {
 		  $.ajax({
 	          type: "GET",
@@ -58,6 +61,7 @@
 	          success: function (response) {
 	              if(response.status == 200){
 	            	  updateHTML(response.response.data);
+	            	  casePID = response.response.data['parent_id'];	//設定當下case的家長會員id
 	              }
 	          },
 	          error: function () {
@@ -67,41 +71,56 @@
 	  }
 	  
 	  getCaseData();
-	  
 
+	  function getPPhone(){
+		  $.ajax({
+              type: "GET",
+              url: "api/parent.do",
+              crossDomain: true,
+              data: "id="+casePID,
+              cache: false,
+              dataType: 'json',
+              timeout: 5000,
+              success: function (response) {
+                  if(response.status == 200){
+                	  casePPhone = response['response']['data'][0]['cellphone'];
+                	  alert("應徵囉，此案件聯絡人手機為："+casePPhone);
+                  }
+                  console.log(response);
+              },
+              error: function () {
+                  alert("無法連線到伺服器！");
+              }
+          });
+	  }
 	  
 		function submit(){
-
-            //先在前端確認資料皆填了(value長度皆不為0)再送去後端
-            //grade.length==0 || subject.length==0 || teachCounty.length==0 || teachRegion.length==0 || wage.length==0 || teachTime.length==0 || teachExperience.length==0
-            if(2>3){
-            	alert("所有欄位皆必填!!!");
-            }
-            else{
-            	var data_object = {
-            		"case_id": id,
-            		"teacher_id": loginTID,
-            	};
-            	var data_string = JSON.stringify(data_object);
-            	$.ajax({
-                            type: "POST",
-                            url: "api/interview.do",
-                            data: data_string,
-                            crossDomain: true,
-                            cache: false,
-                            dataType: 'json',
-                            timeout: 5000,
-                            success: function (response) {
-                            	alert("get respose");
-                                $('#flashMessage').html(response.message);
-                                $('#flashMessage').show();
-                            },
-                            error: function () {
-                                alert("無法連線到伺服器！");
-                            }
-                    });
-            }
-         }
+			var data_object = {
+           		"case_id": id,
+            	"teacher_id": loginTID,
+            };
+            var data_string = JSON.stringify(data_object);
+            $.ajax({
+            	type: "POST",
+            	url: "api/interview.do",
+            	data: data_string,
+            	crossDomain: true,
+            	cache: false,
+            	dataType: 'json',
+            	timeout: 5000,
+            	success: function (response) {
+            		if(response.status==200){
+            			getPPhone();
+            		}
+            		else{
+            			alert(response.message);
+            		}
+            	},
+            	error: function () {
+            		alert("無法連線到伺服器！");
+            	}
+            });
+        }
 	  
 	  function updateHTML(data) {
 		  $("#id").html(data['id']);
@@ -123,6 +142,7 @@
 	//看有沒有人登入
 	var loginPID = 0;
 	var loginTID = 0;
+	var loginMID = 0;
 		
 	function getLogin(){
 		$.ajax({
@@ -159,13 +179,22 @@
 		if(type=="teacher"){
 			typeStr = "老師";
 			loginTID = response['response']['id'];
+			$('#submit').attr('disabled', false);
 			//alert("loginTID: "+loginTID);
 		}
-		else{
+		else if(type=="parent") {
 			typeStr = "家長";
 			loginPID = response['response']['id'];
+			$('#submit').attr('disabled', true);
 			//alert("loginPID: "+ loginPID);
 		}
+		else {
+			typeStr = "管理者";
+			loginMID = response['response']['id'];
+			$('#submit').attr('disabled', true);
+			//alert("loginPID: "+ loginPID);
+		}
+		
 		label_html += '<label> '+ name + typeStr +'，您好</label>';
 		label_html += '<button id="logoutBtn">登出</button>';
 		$("#member_name").append(label_html);
