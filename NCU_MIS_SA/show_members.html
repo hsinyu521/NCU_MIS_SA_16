@@ -5,7 +5,7 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <head>
-  <title>會員清單</title>
+  <title>管理者清單</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
   <link rel="stylesheet" href="assets/css/main.css" />
@@ -88,13 +88,13 @@
         </div>
 
 
-          <!-- Content -->
+        <!-- Content -->
         <div id="content" class="col-8 col-12-medium imp-medium">
 
           <!-- Post -->
           <article class="box post">
             <header>
-              <h2><strong id="list_name">家長會員清單</strong><span class="button" id="changeMember" style="font-size:small;display:inline;">檢視老師會員清單</span></h2> 
+              <h2><strong id="list_name">家長會員清單</strong><span class="button" id="changeMember" style="font-size:small;display:inline;">檢視老師會員清單</span></h2>
             </header>
             <table id="table">
               <thead>
@@ -116,31 +116,31 @@
         </div>
 
 
-        </div>
-
       </div>
+
     </div>
-  </section>
+</div>
+</section>
 
 
-  <!-- Footer -->
-  <section id="footer">
-    <div class="container" >
-      <header>
-        <h2>Questions or comments? <strong>Get in touch:</strong></h2>
-      </header>
-      <ul class="links" style="text-align: center;">
-        <li class="icon solid fa-home">  國立中央大學 資訊管理學系 NCU MIS</li>
-        <li class="icon solid fa-envelope icons">  SA_Group16＠g.ncu.edu.tw </li>
-        <li class="icon solid fa-phone icons">  03) 422-7151 分機66500 </li>
-      </ul>
-    </div>
-    <div id="copyright" class="container">
-      <ul class="links">
-        <li>&copy; 安心168家教網 since2019. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-      </ul>
-    </div>
-  </section>
+<!-- Footer -->
+<section id="footer">
+  <div class="container" >
+    <header>
+      <h2>Questions or comments? <strong>Get in touch:</strong></h2>
+    </header>
+    <ul class="links" style="text-align: center;">
+      <li class="icon solid fa-home">  國立中央大學 資訊管理學系 NCU MIS</li>
+      <li class="icon solid fa-envelope icons">  SA_Group16＠g.ncu.edu.tw </li>
+      <li class="icon solid fa-phone icons">  03) 422-7151 分機66500 </li>
+    </ul>
+  </div>
+  <div id="copyright" class="container">
+    <ul class="links">
+      <li>&copy; 安心168家教網 since2019. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+    </ul>
+  </div>
+</section>
 
 </div>
 
@@ -230,10 +230,10 @@
             table_html += '<td>' + value['cellphone'] + '</td>';
             table_html += '<td>' + value['gender'] + '</td>';
             if (nowShow==0){
-                table_html += '<td>' + '<a href="parent_edit.html?id=' + value['id'] + '">編輯</a>';
+                table_html += '<td>' + '<a href="parent_edit.html?id=' + value['id'] + '">編輯</a></td>';
               }
               else{
-                table_html += '<td>' + '<a href="teacher_edit.html?id=' + value['id'] + '">編輯</a>';
+                table_html += '<td>' + '<a href="teacher_edit.html?id=' + value['id'] + '">編輯</a></td>';
               }
             table_html += '<td>' + '<a href="javascript: deleteMember(' + value['id'] + ');">刪除</a></td></tr>';
         })
