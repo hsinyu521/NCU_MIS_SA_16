@@ -12,6 +12,7 @@ public class Interview {
     private String Tname;
     private String Tphone;
     private String subject;
+    private String grade;
     private String teachCounty;
     private String teachRegion;
     private String wage;
@@ -31,11 +32,12 @@ public class Interview {
     }
     
     //老師面試管理的constructor
-    public Interview(int case_id, int parent_id, String cellphone, String subject, String teachCounty, String teachRegion, String wage, int state) {
+    public Interview(int case_id, int parent_id, String cellphone, String subject, String grade, String teachCounty, String teachRegion, String wage, int state) {
     	this.case_id = case_id;
     	this.parent_id = parent_id;
     	this.Pphone = cellphone;
     	this.subject = subject;
+    	this.grade = grade;
     	this.teachCounty = teachCounty;
     	this.teachRegion = teachRegion;
     	this.wage = wage;
@@ -93,6 +95,10 @@ public class Interview {
     	return this.subject;
     }
     
+    public String getGrade() {
+    	return this.grade;
+    }
+    
     public String getCounty() {
     	return this.teachCounty;
     }
@@ -120,6 +126,7 @@ public class Interview {
         jso.put("parent_id", getParentId());
         jso.put("Pphone", getPPhone());
         jso.put("subject", getSubject());
+        jso.put("grade", getGrade());
         jso.put("teachCounty", getCounty());
         jso.put("teachRegion", getRegion());
         jso.put("wage", getWage());

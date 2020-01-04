@@ -195,7 +195,7 @@ public class InterviewHelper {
 	            conn = DBMgr.getConnection();
 	            /** SQL指令 */
 	            //String sql = "SELECT * FROM `sa16`.`interviews` WHERE `interviews`.`teacher_id` = ?";
-	            String sql = "SELECT cases.id, cases.parent_id, parents.cellphone, cases.subject, cases.teachCounty, cases.teachRegion, cases.wage, interview.state " + 
+	            String sql = "SELECT cases.id, cases.parent_id, parents.cellphone, cases.subject, cases.teachCounty, cases.teachRegion, cases.wage, interview.state, cases.grade " + 
 	            		"FROM sa16.cases " + 
 	            		"INNER JOIN interview ON cases.id = interview.cases_id " + 
 	            		"INNER JOIN parents ON cases.parent_id = parents.id WHERE interview.teachers_id = ?;";
@@ -217,6 +217,7 @@ public class InterviewHelper {
 	                int parentID = rs.getInt("parent_id");	              
 	                String cellphone = rs.getString("cellphone");
 	                String subject = rs.getString("subject");
+	                String grade = rs.getString("grade");
 	                String teachCounty = rs.getString("teachCounty");
 	                String teachRegion = rs.getString("teachRegion");
 	                String wage = rs.getString("wage");
@@ -224,7 +225,7 @@ public class InterviewHelper {
 	                
 	                /** 將每一筆商品資料產生一名新Product物件 */
 	                //i = new Interview(case_id, teacher_id, state);
-	                i = new Interview(caseID, parentID, cellphone, subject, teachCounty, teachRegion, wage, state);
+	                i = new Interview(caseID, parentID, cellphone, subject, grade, teachCounty, teachRegion, wage, state);
 	                /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
 	                jsa.put( i.getTInterviewData());
 	            }
