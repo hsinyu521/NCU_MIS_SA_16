@@ -1,107 +1,229 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
+<!--
+	Strongly Typed by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>修改案件</title>
-    <script src="statics/js/jquery-3.4.1.min.js" ></script>
-    <link rel="stylesheet" type="text/css" href="statics/css/edit_case.css">
-
+  <title>修改/管理案件狀態</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <link rel="stylesheet" href="assets/css/main.css" />
 </head>
 
+<body class="left-sidebar is-preload">
+<div id="page-wrapper">
 
-<body>
-<div id="container">
+  <!-- Header -->
+  <section id="header">
+    <div class="container">
 
-    <div id="Header">
-        <a href="index.html"><img src="statics/img/Logo.png" alt="Italian Trulli" width="200" height="100"></a>
-        <h1>修改案件</h1>
-        <label id="parent_name"></label>
-    </div>
-
-    <div id="Sidebar">
-        <p></p>
-        <div class="list"> 家長會員中心</div>
-        <div class="list">
-            <ul>  <!--修改名稱與連結 Chu 12/25 8:27pm-->
-            	<li><a href="parent_change_information.html">修改家長會員資料</a></li>
-            	<li><a href="add_case.html">新增案件</a></li>
-            	<li><a href="parent_interview.html">面試管理</a></li>
-            	<li><a href="edit_case.html">修改案件/管理案件狀態</a></li> 
-            	<li><a href="parent_match.html">成交紀錄</a></li>
+      <!-- Logo -->
+      <h1 id="logo"><a href="index.html">Tutor 168 修改/管理案件</a></h1>
+      <p>A best website finding your personal teacher!</p>
+      <!-- Nav -->
+      <nav id="nav">
+        <ul>
+          <li><a class="icon solid fa-home" href="index.html"><span>首頁</span></a></li>
+          <li><a class="icon fa-chart-bar" href="#"><span>註冊</span></a>
+            <ul>
+              <li><a href="teacher_register.html">老師會員註冊</a></li>
+              <li><a href="parent_register.html">家長會員註冊</a></li>
             </ul>
+          </li>
+          <li>
+            <a href="#" class="icon solid fa-retweet"><span>登入</span></a>
+            <ul>
+              <li><a href="teacher_login.html">老師會員登入</a></li>
+              <li><a href="parent_login.html">家長會員登入</a></li>
+            </ul>
+          </li>
+          <li>
+            <a id="memberCenterHref" href="#" class="icon solid fa-cog"><span>會員中心</span></a>
+            <ul>
+              <li><a href="teacher_interview.html">老師面試管理</a></li>
+              <li><a href="parent_interview.html">家長面試管理</a></li>
+            </ul>
+          </li>
+          <li><a class="icon solid fa-sitemap" href="#"><span>管理者中心</span></a>
+            <ul>
+              <li><a href="manager_login.html">管理者登入</a></li>
+              <li><a href="show_members.html">檢視會員清單</a></li>
+              <li><a href="show_managers.html">檢視管理者清單</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <!-- 顯示登入者姓名 -->
+      <div id="parent_name" align="right">
+        <label></label>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main -->
+  <section id="main">
+    <div class="container">
+      <div class="row">
+
+        <!-- Sidebar -->
+        <div id="sidebar" class="col-4 col-12-medium">
+
+          <!-- Excerpts -->
+          <section>
+            <h2>家長會員中心</h2>
+            <ul class="divided">
+              <li>
+
+                <!-- Excerpt -->
+                <article class="box excerpt">
+                  <ul><a href="parent_interview.html" class="button">面試管理</a></ul>
+                  <ul><a href="parent_match.html" class="button">成交紀錄</a></ul>
+                  <ul><a href="add_case.html" class="button">新增案件</a></ul>
+                  <ul><a href="edit_case.html" class="button">修改/管理案件狀態</a></ul>
+                  <ul><a id="editURL" href="" class="button">修改家長會員資料</a></ul>
+                </article>
+              </li>
+            </ul>
+          </section>
+          <section></section>
         </div>
-    </div>
 
-    <div id="Body">
-		<form id="caseID">
-        	<select id="case_id_list">
-            	<option value="num">請選擇案件編號</option>
-            	
-        	</select>
-    	</form>
-        <div id="flashMessage" class="message" style="display: none;"></div>
-        <div id="case_state">
-            <div>
-                <label for="case_state">案件狀態</label>
-                <input name="state" maxlength="50" type="radio" value="0" required="required">開放
-                <input name="state" type="radio" value="1" >關閉
+        <!-- Content -->
+        <div id="content" class="col-8 col-12-medium imp-medium">
+
+          <!-- Post -->
+          <article class="box post">
+            <header>
+              <h2> <strong>修改/管理案件狀態</strong></h2>
+            </header>
+
+            <div class="row">
+              <div class="col-6 col-12-medium">
+                <section>
+                  <div class="row gtr-50">
+                    <div id="caseID" class="col-12">
+                      <select id="case_id_list" style="width:80%;font-weight: bold">
+                        <option value="num">--- 請選擇案件編號--- </option>
+                      </select>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="col-6 col-12-medium">
+                <section>
+                  <div class="row gtr-50">
+                    <div id="case_state" class="col-12">
+                      <label for="case_state" style="font-weight: bold">案件狀態</label>
+                      <input name="state" maxlength="50" type="radio" value="0" required="required">開放
+                      <input name="state" type="radio" value="1" >關閉
+                    </div>
+                  </div>
+                </section>
+              </div>
             </div>
+
+            <p></p><hr>
+
+            <div class="row">
+              <div class="col-6 col-12-medium">
+                <h3 style="text-align: center">案件內容</h3>
+                <section>
+                  <form method="post" action="#">
+                    <div class="row gtr-50">
+                      <div class="col-12">
+                        <label for="grade" style="display: inline;">上課對象</label>
+                        <input id="grade" placeholder="範例：國中三年級" type="text" />
+                      </div>
+                      <div class="col-12">
+                        <label style="display: inline-block;">上課科目</label><br />
+                        國文<input type="radio" value="國" name="subject">
+                        英文<input type="radio" value="英" name="subject">
+                        數學<input type="radio" value="數" name="subject">
+                        物理<input type="radio" value="物" name="subject">
+                        化學<input type="radio" value="化" name="subject">
+                        生物<input type="radio" value="生" name="subject">
+                      </div>
+                      <div class="col-12">
+                        <label style="display: block;">上課地點</label>
+                        <select id="county-list" name="county-list" onchange="changeCollege(this.selectedIndex)" style="width: 49%;display: inline;"></select>
+                        <select id="area-list" name="area-list" style="width: 49%;display: inline;"></select>
+                      </div>
+                      <div class="col-12">
+                        <label for="wage" style="display: inline;">薪資待遇 (元/hr)</label>
+                        <input type="text" id="case_wage" min="0" placeholder="請輸入正整數">
+                      </div>
+                      <div class="col-12">
+                        <label for="teachtime" style="display: inline;">上課時間</label>
+                        <input type="text" id="case_time" placeholder="範例：每週三 8-10pm">
+                      </div>
+                    </div>
+                  </form>
+                </section>
+              </div>
+              <div class="col-6 col-12-medium">
+                <h3 style="text-align: center">老師條件需求</h3>
+                <section>
+                  <form method="post" action="#">
+                    <div class="row gtr-50">
+                      <div class="col-12 ">
+                        <label for="teacher_exp" >老師教學經歷</label>
+                        <select name="teachExperience" id="teacher_exp">
+                          <option selected disabled>---請選擇教學經驗---</option>
+                          <option value="無經驗">無經驗</option>
+                          <option value="一年以下">一年以下</option>
+                          <option value="兩年以下">兩年以下</option>
+                          <option value="三年以下">三年以下</option>
+                          <option value="四年以下">四年以下</option>
+                          <option value="五年以上">五年以上</option>
+                        </select>
+                      </div>
+                    </div>
+                  </form>
+                </section>
+              </div>
+              <div class="col-12">
+                <div class="form-button-submit button icon solid fa-envelope" id="submit" style="float:right;">更新</div>
+              </div>
+
+          </article>
         </div>
-
-
-        <form id="content" accept-charset="utf-8">
-            <div style="display:none;"><input type="hidden" name="_method" value="POST"></div>
-            <div class="input text">
-                <label for="grade">對象</label>
-                <input name="teachTime" type="text" id="grade" >
-            </div>
-            <div class="input text required">
-                <label for="student_subject">上課科目</label>
-                <input name="subject" maxlength="50" type="radio" id="student_subject" value="國" required="required">國
-                <input type="radio" value="英" name="subject">英
-                <input type="radio" value="數" name="subject">數
-                <input type="radio" value="物" name="subject">物
-                <input type="radio" value="化" name="subject">化
-                <input type="radio" value="生" name="subject">生
-            </div>
-            <div class="input text required">
-                <label for="student_teachCounty">上課地點</label>
-                <select id="county-list" name="teachCounty" onchange="changeCollege(this.selectedIndex)"></select>
-                <select id="area-list" name="teachRegion"></select>
-            </div>
-            <div class="input text">
-                <label for="case_wage">薪資待遇</label>
-                <input name="wage" type="number" id="case_wage" min="0" placeholder="請輸入正整數">元/hr
-            </div>
-            <div class="input text">
-                <label for="case_time">上課時間</label>
-                <input name="teachTime" type="text" id="case_time" placeholder="請輸入 hh:mm的格式">
-            </div>
-            <div class="input text">
-                <label for="teacher_exp">教學經驗</label>
-                <select name="teachExperience" id="teacher_exp">
-                    <option value="無經驗">無經驗</option>
-                    <option value="一年以下">一年以下</option>
-                    <option value="兩年以下">兩年以下</option>
-                    <option value="三年以下">三年以下</option>
-                    <option value="四年以下">四年以下</option>
-                    <option value="五年以上">五年以上</option>
-                </select>
-            </div>
-
-            <div class="submit"><input type="button" value="更新" id="submit"></div>
-        </form>
-
-
+      </div>
     </div>
+  </section>
 
-    <div style='clear:both;'></div>
-
-    <div id="Footer">
-        ®安心168家教網 created by 2019
+  <!-- Footer -->
+  <section id="footer">
+    <div class="container" >
+      <header>
+        <h2>Questions or comments? <strong>Get in touch:</strong></h2>
+      </header>
+      <ul class="links" style="text-align: center;">
+        <li class="icon solid fa-home">  國立中央大學 資訊管理學系 NCU MIS</li>
+        <li class="icon solid fa-envelope icons">  SA_Group16＠g.ncu.edu.tw </li>
+        <li class="icon solid fa-phone icons">  03) 422-7151 分機66500 </li>
+      </ul>
     </div>
+    <div id="copyright" class="container">
+      <ul class="links">
+        <li>&copy; 安心168家教網 since2019. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+      </ul>
+    </div>
+  </section>
+
 </div>
 
+<!-- Scripts -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/jquery.dropotron.min.js"></script>
+<script src="assets/js/browser.min.js"></script>
+<script src="assets/js/breakpoints.min.js"></script>
+<script src="assets/js/util.js"></script>
+<script src="assets/js/main.js"></script>
+
+
+<!-- 我們自己的JS -->
 <script type="text/javascript">
 	$(document).ready(function() {
 		getLogin();
@@ -116,8 +238,6 @@
         inner=inner+'<option value='+colleges[i]+'>'+colleges[i]+'</option>';
     }
     collegeSelect.innerHTML=inner;
-
-
     var sectors=new Array();
     sectors[0]=['士林區','大同區','大安區','中山區','中正區','內湖區','文山區','北投區','松山區','信義區','南港區','萬華區'];
     sectors[1]=['板橋區','中和區','永和區','土城區','三峽區','鶯歌區','樹林區','新莊區','三重區','蘆洲區','五股區','泰山區','林口區','八里區','淡水區','三芝區','石門區','金山區','萬里區','汐止區','瑞芳區	','貢寮區','平溪區','雙溪區','新店區','深坑區','石碇區','坪林區	','烏來區'];
@@ -168,6 +288,7 @@
 					}
 					else{
 						updateLogIn(response);
+						document.getElementById("editURL").href="parent_edit.html?id="+loginPID;
 						getCaseIdList();
 					}
 				}
@@ -340,9 +461,9 @@
 		  if(grade.length==0 || wage.length==0 || teachTime.length==0||wage.length==0) {
 			  alert("所有欄位皆為必填");
 		  }
-		  else if(!timeRule.test(teachTime)){
+		  /* else if(!timeRule.test(teachTime)){
 			  alert("上課時間格式不符！");
-		  }
+		  } */
 		  else {
 			  // 將資料組成JSON格式
 			  var data_object = {
@@ -383,9 +504,8 @@
 			  });
 		}
 	}
-
-
 </script>
+
 
 </body>
 </html>
