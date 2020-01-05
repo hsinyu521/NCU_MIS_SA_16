@@ -108,11 +108,11 @@
                   <div class="row aln-center">
                     <div class="col-6 col-12-small required" >
                       <label for="member_name" style="text-align:left;">姓名</label>
-                      <input type="text" name="name" maxlength="50" id="member_name" required="required" disabled>
+                      <input type="text" class="disabled" name="name" maxlength="50" id="member_name" required="required" disabled>
                     </div>
                     <section></section>
 
-                    <div class="col-6 col-12-small required" >
+                    <div class="col-6 col-12-small required disabled" >
                       <label for="member_email" style="text-align:left;">email</label>
                       <input type="email" name="email" maxlength="50" id="member_email" required="required" disabled>
                     </div>
@@ -132,7 +132,7 @@
                         </div>
                         <div class="col-6 col-12-small">
                           <label for="select_gender">性別</label>
-                          <select id="select_gender" class="form-select-button" disabled>
+                          <select id="select_gender" class="form-select-button disabled" disabled>
                             <option value="1">男</option>
                             <option value="2">女</option>
                           </select>
@@ -329,6 +329,8 @@
 	          	else{
 	          		typeStr = "管理者";
 	          		loginMID = response['response']['id'];
+	          		document.getElementById("sidebar").innerHTML = "<div id=\"sidebar\" class=\"col-4 col-12-medium\"><section><h2>管理者中心</h2><ul class=\"divided\"><li><article class=\"box excerpt\"><ul><a href=\"add_manager.html\" class=\"button\">新增管理者</a></ul><ul><a href=\"show_members.html\" class=\"button\">檢視會員清單</a></ul>\</article>\</li></ul></section><section></section></div>";
+
 	          	}
 		      	
 		      	label_html += '<label> '+ name + typeStr +'，您好</label>';
