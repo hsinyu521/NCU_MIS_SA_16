@@ -111,12 +111,12 @@
                       </div>
                       <div class="col-12">
                         <label style="display: inline-block;">上課科目</label><br />
-                        國文<input type="radio" value="國文" name="subject">
-                        英文<input type="radio" value="英文" name="subject">
-                        數學<input type="radio" value="數學" name="subject">
-                        物理<input type="radio" value="物裡" name="subject">
-                        化學<input type="radio" value="化學" name="subject">
-                        生物<input type="radio" value="生務" name="subject">
+                        國文<input type="radio" value="國" name="subject">
+                        英文<input type="radio" value="英" name="subject">
+                        數學<input type="radio" value="數" name="subject">
+                        物理<input type="radio" value="物" name="subject">
+                        化學<input type="radio" value="化" name="subject">
+                        生物<input type="radio" value="生" name="subject">
                       </div>
                       <div class="col-12">
                         <label style="display: block;">上課地點</label>
@@ -143,7 +143,7 @@
                       <div class="col-12 ">
                         <label for="express" >老師教學經歷</label>
                         <select id="express" name="express">
-                          <option selected disabled>---請選擇教學經驗---</option>
+                          <option selected disabled value="請選擇">---請選擇教學經驗---</option>
                           <option value="無經驗">無經驗</option>
                           <option value="一年以下">一年以下</option>
                           <option value="兩年以下">兩年以下</option>
@@ -263,13 +263,15 @@
 			var teachExperience = e.value;
 			
 			var timeRule = /([0-9]+):([0-5][0-9]|6[0])/;
-		
+			var wageRule = /[1-9][0-9]+/;
+			
+			//alert(teachExperience);
             //先在前端確認資料皆填了(value長度皆不為0)再送去後端
-            if(grade.length==0 || wage.length==0 || teachTime.length==0 || subject==null) {
+            if(grade.length==0 || wage.length==0 || teachTime.length==0 || subject==null || teachExperience=="請選擇") {
 			  //檢驗空白
 			  alert("所有欄位皆為必填");
 		  	}
-		  	else if(wage<=0) {
+		  	else if(!wageRule.test(wage)){
 		  		alert("請輸入合理的薪資待遇！");
 		  	}
 		 	/* else if(!timeRule.test(teachTime)){
