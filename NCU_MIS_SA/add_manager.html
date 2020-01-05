@@ -4,14 +4,14 @@
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
-<html>
 <head>
   <title>新增管理者</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
   <link rel="stylesheet" href="assets/css/main.css" />
 </head>
-<body class="no-sidebar is-preload">
+
+<body class="left-sidebar is-preload">
 <div id="page-wrapper">
 
   <!-- Header -->
@@ -19,7 +19,7 @@
     <div class="container">
 
       <!-- Logo -->
-      <h1 id="logo"><a href="index.html">Tutor 168</a></h1>
+      <h1 id="logo"><a href="index.html">Tutor 168 新增管理者</a></h1>
       <p>A best website finding your personal teacher!</p>
       <!-- Nav -->
       <nav id="nav">
@@ -64,77 +64,99 @@
   <!-- Main -->
   <section id="main">
     <div class="container">
-      <div id="content">
+      <div class="row">
 
-        <!-- Post -->
-        <article class="box post">
-          <header>
-            <h2><strong>新增管理者</strong> </h2>
-            <h3>請輸入新增的管理者資料</h3>
-          </header>
+        <!-- Sidebar -->
+        <div id="sidebar" class="col-4 col-12-medium">
 
-          <div id="flashMessage" class="message" style="display: none;"></div>
+          <!-- Excerpts -->
+          <section>
+            <h2>管理者中心</h2>
+            <ul class="divided">
+              <li>
+
+                <!-- Excerpt -->
+                <article class="box excerpt">
+                  <ul><a href="add_manager.html" class="button">新增管理者</a></ul>
+                  <ul><a href="show_members.html" class="button">檢視會員清單</a></ul>
+                  <ul><a href="show_managers.html" class="button">檢視管理者清單</a></ul>
+                </article>
+              </li>
+            </ul>
+          </section>
+          <section></section>
+        </div>
 
 
-          <div class="col-6 col-12-medium">
-            <section id="features">
-              <form accept-charset="UTF-8" >
-                <div><input type="hidden" name="_method" value="POST"></div>
-                <div class="row aln-center">
-                  <div class="col-6 col-12-small" >
-                    <label for="member_name" style="text-align:left;">姓名</label>
-                    <input type="text" name="name" placeholder="請輸入管理者的姓名" maxlength="50" id="member_name" required="required">
+        <!-- Content -->
+        <div id="content" class="col-8 col-12-medium imp-medium">
+
+          <!-- Post -->
+          <article class="box post">
+            <header>
+              <h2><strong>新增管理者</strong></h2>
+              <h3>請輸入新增的管理者資料</h3>
+            </header>
+            <div class="col-6 col-12-medium">
+              <section id="features">
+                <form accept-charset="UTF-8" >
+                  <div><input type="hidden" name="_method" value="POST"></div>
+                  <div class="row aln-center">
+                    <div class="col-6 col-12-small" >
+                      <label for="member_name" style="text-align:left;">姓名</label>
+                      <input type="text" name="name" placeholder="請輸入管理者的姓名" maxlength="50" id="member_name" required="required">
+                    </div>
+                    <section></section>
+                    <div class="col-6 col-12-small" >
+                      <label for="member_email" style="text-align:left;">email</label>
+                      <input type="email" name="email" placeholder="請輸入管理者的email" maxlength="50" id="member_email" required="required">
+                    </div>
+                    <section></section>
+                    <div class="col-6 col-12-small" >
+                      <label for="member_password" style="text-align:left;">密碼</label>
+                      <input type="password" name="password" placeholder="長度至少8，且至少包含一個數字和英文字母！" maxlength="30" id="member_password" required="required">
+                    </div>
+                    <section></section>
+                    <div class="col-12">
+                      <a href="#" class="form-button-submit button icon solid fa-envelope" id="submit">新增</a>
+                    </div>
                   </div>
+
                   <section></section>
-                  <div class="col-6 col-12-small" >
-                    <label for="member_email" style="text-align:left;">email</label>
-                    <input type="email" name="email" placeholder="請輸入管理者的email" maxlength="50" id="member_email" required="required">
-                  </div>
-                  <section></section>
-                  <div class="col-6 col-12-small" >
-                    <label for="member_password" style="text-align:left;">密碼</label>
-                    <input type="password" name="password" placeholder="長度至少8，且至少包含一個數字和英文字母！" maxlength="30" id="member_password" required="required">
-                  </div>
-                  <section></section>
-                  <div class="col-12">
-                    <a href="#" class="form-button-submit button icon solid fa-envelope" id="submit">新增</a>
-                  </div>
-                </div>
+                </form>
+              </section>
+            </div>
 
-                <section></section>
-                <hr>
-                <section></section>
-                <h5>不想新增嗎?
-                  <a href="show_managers.html" class="form-button-submit button icon solid fa-envelope">回到管理者清單</a>
-                </h5>
-              </form>
-            </section>
-          </div>
+          </article>
 
-        </article>
+        </div>
+
 
       </div>
-    </div>
-  </section>
 
-  <!-- Footer -->
-  <section id="footer">
-    <div class="container" >
-      <header>
-        <h2>Questions or comments? <strong>Get in touch:</strong></h2>
-      </header>
-      <ul class="links" style="text-align: center;">
-        <li class="icon solid fa-home">  國立中央大學 資訊管理學系 NCU MIS</li>
-        <li class="icon solid fa-envelope icons">  SA_Group16＠g.ncu.edu.tw </li>
-        <li class="icon solid fa-phone icons">  03) 422-7151 分機66500 </li>
-      </ul>
     </div>
-    <div id="copyright" class="container">
-      <ul class="links">
-        <li>&copy; 安心168家教網 since2019. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-      </ul>
-    </div>
-  </section>
+</div>
+</section>
+
+
+<!-- Footer -->
+<section id="footer">
+  <div class="container" >
+    <header>
+      <h2>Questions or comments? <strong>Get in touch:</strong></h2>
+    </header>
+    <ul class="links" style="text-align: center;">
+      <li class="icon solid fa-home">  國立中央大學 資訊管理學系 NCU MIS</li>
+      <li class="icon solid fa-envelope icons">  SA_Group16＠g.ncu.edu.tw </li>
+      <li class="icon solid fa-phone icons">  03) 422-7151 分機66500 </li>
+    </ul>
+  </div>
+  <div id="copyright" class="container">
+    <ul class="links">
+      <li>&copy; 安心168家教網 since2019. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+    </ul>
+  </div>
+</section>
 
 </div>
 
@@ -146,9 +168,7 @@
 <script src="assets/js/util.js"></script>
 <script src="assets/js/main.js"></script>
 
-
 <!-- 我們自己的JS -->
-
 	<script type="text/javascript">
 		$(document).ready(function(){
 			getLogin();

@@ -151,10 +151,18 @@ public class TeacherController extends HttpServlet {
         
         /** 新建一個JSONObject用於將回傳之資料進行封裝 */
         JSONObject resp = new JSONObject();
-        resp.put("status", "200");
-        resp.put("message", "老師會員移除成功！");
-        resp.put("response", query);
-
+        
+        if(query.getInt("row")==1) {
+        	resp.put("status", "200");
+            resp.put("message", "老師會員移除成功！");
+            resp.put("response", query);
+        }
+        else {
+        	resp.put("status", "400");
+            resp.put("message", "老師會員移除失敗！該老師已有面試資料！");
+            resp.put("response", query);
+        }
+        
         /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
         jsr.response(resp, response);
     }
